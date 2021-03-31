@@ -1,1 +1,5 @@
-export const a = 1;
+import VEditor from "./v-editor";
+
+export {
+  VEditor
+}

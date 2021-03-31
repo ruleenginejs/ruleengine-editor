@@ -1,16 +1,22 @@
 <template>
-  <div />
+  <editor-page />
 </template>
 
 <script>
+import EditorPage from "./views/editor-page";
+
 export default {
-  name: "App"
+  name: "App",
+  components: {
+    EditorPage
+  }
 };
 </script>
 
 <style>
 @import "tailwindcss/base";
 
-body {
+html, body, #app {
+  @apply w-full h-full;
 }
 </style>
