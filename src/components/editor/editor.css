@@ -1,0 +1,4 @@
+.v-editor {
+  /* sizes */
+  @apply w-full h-full;
+}
