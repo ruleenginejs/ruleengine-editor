@@ -1,4 +1,5 @@
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { createModel } from "./graph-model";
 
 class Editor {
   constructor({
@@ -9,12 +10,12 @@ class Editor {
     cvZoom,
     emit
   }) {
-    this.value = value;
+    debugger;
+    this.model = ref(createModel(value.value));
     this.dataSource = dataSource;
     this.editable = editable;
     this.emit = emit;
     this.canvas = ref(null);
-    this.selected = ref(true);
 
     this.viewport = computed({
       get: () => cvViewport.value,
@@ -23,6 +24,10 @@ class Editor {
     this.zoom = computed({
       get: () => cvZoom.value,
       set: (val) => this.emit("update:cvZoom", val)
+    });
+
+    watch(value, () => {
+      this.model.value = createModel(value.value);
     });
   }
 }
