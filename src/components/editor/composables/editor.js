@@ -10,12 +10,11 @@ class Editor {
     cvZoom,
     emit
   }) {
-    debugger;
     this.model = ref(createModel(value.value));
     this.dataSource = dataSource;
     this.editable = editable;
     this.emit = emit;
-    this.canvas = ref(null);
+    this.graph = ref(null);
 
     this.viewport = computed({
       get: () => cvViewport.value,

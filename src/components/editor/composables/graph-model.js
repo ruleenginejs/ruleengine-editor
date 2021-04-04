@@ -1,15 +1,15 @@
 import { reactive, ref } from "vue"
-import { isPlainObject } from "is-plain-object";
-import { isDefined } from "./types";
+import isPlainObject from "is-plain-object";
+import { isDefined } from "@/utils/types";
 import { createNode } from "./graph-node-model";
 import { createConnection } from "./graph-connection-model";
 
-let _nextId = 0;
-
 export class GraphModel {
+  static _nextId = 0;
+  static _defaultPortName = "default";
+
   constructor(value) {
-    debugger;
-    this.id = ref(++_nextId);
+    this.id = ref(++GraphModel._nextId);
     this.error = ref(null);
     this.selected = ref(true);
     this.nodes = reactive([]);
@@ -30,12 +30,15 @@ export class GraphModel {
   }
 
   _parseValue(value) {
-    debugger;
     if (value === null || value === undefined) {
       return;
     }
     if (isDefined(value) && isPlainObject(value)) {
-      this._parseData(value);
+      try {
+        this._parseData(value);
+      } catch (err) {
+        this.error.value = err;
+      }
       return;
     }
     if (typeof value !== "string") {
@@ -50,7 +53,7 @@ export class GraphModel {
       if (isDefined(data) && isPlainObject(data)) {
         this._parseData(data);
       } else {
-        this.error.value = new Error("The value must contain an object json format");
+        this.error.value = new Error("The value must contain an object");
       }
     } catch (err) {
       this.error.value = err;
@@ -58,7 +61,6 @@ export class GraphModel {
   }
 
   _parseData(data) {
-    debugger;
     const { title, description, steps } = data;
 
     if (typeof title === "string" && title.length > 0) {
@@ -72,7 +74,6 @@ export class GraphModel {
   }
 
   _parseSteps(steps) {
-    debugger;
     if (!Array.isArray(steps)) {
       return;
     }
@@ -82,37 +83,62 @@ export class GraphModel {
       if (isDefined(step) && isPlainObject(step)) {
         const node = createNode(step);
         this.nodes.push(node);
-        connections.push({ srcId: node.id, connectionItems: step.connect });
+        connections.push({ srcNodeId: node.id.value, connectionItems: step.connect });
       }
     }
     this._parseConnections(connections);
   }
 
   _parseConnections(connectionDataArray) {
-    debugger;
-    const nodeIdsMap = this.nodes.reduce((res, item) => {
-      res[item.id] = true;
-      return res;
-    }, {});
-    for (let i = 0, len = connectionDataArray.len; i < len; i++) {
-      const { srcId, connectionItems } = connectionDataArray[i];
-      if (isDefined(srcId) && Array.isArray(connectionItems)) {
-        const fromNodeId = srcId;
-        if (!nodeIdsMap[fromNodeId]) continue;
+    const nodesById = this._getNodesById();
 
-        for (let j = 0, len2 = connectionItems.length; j < len2; j++) {
-          const connectionItem = connectionItems[j];
-          if (isDefined(connectionItem) && isPlainObject(connectionItem)) {
-            const toNodeId = connectionItem.stepId;
-            if (!nodeIdsMap[toNodeId]) continue;
-            this.connections.push(createConnection(
-              fromNodeId, toNodeId,
-              connectionItem.srcOutPort, connectionItem.dstInPort
-            ))
-          }
+    for (let i = 0, len = connectionDataArray.length; i < len; i++) {
+      const { srcNodeId, connectionItems } = connectionDataArray[i];
+      if (!Array.isArray(connectionItems)) {
+        continue;
+      }
+
+      const srcNode = nodesById[srcNodeId];
+      if (!srcNode) {
+        continue;
+      }
+
+      for (let k = 0, len2 = connectionItems.length; k < len2; k++) {
+        const connectionItem = connectionItems[k];
+        if (!isDefined(connectionItem) || !isPlainObject(connectionItem)) {
+          continue;
         }
+
+        const destNode = nodesById[connectionItem.stepId];
+        if (!destNode) {
+          continue;
+        }
+
+        const srcOutPortName = connectionItem.srcOutPort || GraphModel._defaultPortName;
+        const srcPort = srcNode.findOutPortByName(srcOutPortName);
+        if (!srcPort) {
+          continue;
+        }
+
+        const destInPortName = connectionItem.dstInPort || GraphModel._defaultPortName;
+        const destPort = destNode.findInPortByName(destInPortName);
+        if (!destPort) {
+          continue;
+        }
+
+        this.connections.push(createConnection(
+          srcNode, srcPort,
+          destNode, destPort
+        ));
       }
     }
+  }
+
+  _getNodesById() {
+    return this.nodes.reduce((res, node) => {
+      res[node.id] = node;
+      return res;
+    }, {});
   }
 }
 

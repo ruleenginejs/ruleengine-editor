@@ -1,3 +1,5 @@
 {
-  "editor.untitledNode": "Step {0}"
+  "editor.untitledNode": "Step {0}",
+  "editor.errorMessage": "The document could not be displayed because the content is in an invalid format.",
+  "editor.errorDetails": "See more details: {0}"
 }

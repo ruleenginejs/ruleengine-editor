@@ -1,18 +1,22 @@
 <template>
   <div class="v-editor">
-    <v-split-view :snap-offset="svSnapOffset" :resize-delay="resizeDelay">
+    <v-editor-error v-if="model.error" :error="model.error" />
+    <v-split-view
+      v-else
+      :snap-offset="svSnapOffset"
+      :resize-delay="resizeDelay"
+    >
       <v-split-pane>
-        <v-graph-canvas
+        <v-editor-graph
+          :model="model"
           v-model:viewport="viewport"
           v-model:zoom="zoom"
-          v-model:selected="selected"
           :min-zoom="cvMinZoom"
           :max-zoom="cvMaxZoom"
           :edge-sizes="cvEdgeSizes"
           :resize-delay="resizeDelay"
-          ref="canvas"
-        >
-        </v-graph-canvas>
+          ref="graph"
+        />
       </v-split-pane>
       <v-split-pane :size="`${sidebarSize}px`">
         <v-sidebar :lt-border="sidebarBorder" w-full h-full></v-sidebar>
@@ -27,9 +31,10 @@ import useEditor from "./composables/use-editor";
 import {
   VSplitView,
   VSplitPane,
-  VSidebar,
-  VGraphCanvas
+  VSidebar
 } from "@ruleenginejs/ruleengine-ui-kit-vue";
+import VEditorGraph from "./v-editor-graph";
+import VEditorError from "./v-editor-error";
 
 const defaultEdgeSizes = Object.freeze({
   edgeBottomSize: { in: 10, out: 0 }
@@ -41,11 +46,12 @@ export default {
     VSplitView,
     VSplitPane,
     VSidebar,
-    VGraphCanvas
+    VEditorGraph,
+    VEditorError
   },
   props: {
     value: {
-      type: String,
+      type: [String, Object],
       default: null
     },
     dataSource: {
@@ -104,14 +110,14 @@ export default {
       cvZoom,
       emit
     });
-    const { viewport, zoom, selected, canvas } = editor;
+    const { viewport, zoom, graph, model } = editor;
 
     return {
       instance: editor,
       viewport,
       zoom,
-      selected,
-      canvas
+      graph,
+      model
     };
   }
 };

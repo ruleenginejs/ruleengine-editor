@@ -1,0 +1,12 @@
+.v-editor-error {
+  /* visual styles */
+  @apply text-13sp bg-editor-background text-editor-foreground;
+
+  /* sizes */
+  @apply w-full h-full pt-5sp pl-2.5;
+}
+
+.v-editor-error p {
+  /* sizes */
+  @apply my-13sp;
+}

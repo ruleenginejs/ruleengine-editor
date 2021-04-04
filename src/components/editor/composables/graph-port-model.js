@@ -1,11 +1,11 @@
+import { notEmptyString } from "@/utils/types";
 import { ref, computed } from "vue";
 
-let _nextId = 0;
-
 export class GraphPortModel {
+  static _nextId = 0;
+
   constructor(name, type) {
-    debugger;
-    if (typeof name === "string" && name.length > 0) {
+    if (notEmptyString(name)) {
       this.name = ref(name);
     } else {
       this.name = ref("default");
@@ -17,8 +17,8 @@ export class GraphPortModel {
       this.type = ref("in");
     }
 
-    this.id = ref(++_nextId);
-    this.direction = computed(() => this.type === "in" ? "left" : "right");
+    this.id = ref(++GraphPortModel._nextId);
+    this.direction = computed(() => this.type.value === "in" ? "left" : "right");
     this.linkLimit = ref(1);
   }
 }

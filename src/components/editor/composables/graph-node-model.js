@@ -1,18 +1,14 @@
 import localize from "@/utils/localize";
-import { isPlainObject } from "is-plain-object";
+import isPlainObject from "is-plain-object";
 import merge from "merge";
 import { reactive, ref } from "vue"
 import { GraphNodeType, validateNodeType } from "./graph-node-type";
 import { createPort } from "./graph-port-model";
-import { isDefined } from "./types";
-
-let _nextId = 0;
-
-function notEmptyString(value) {
-  return typeof value === "string" && value.length > 0;
-}
+import { isDefined, notEmptyString } from "@/utils/types";
 
 export class GraphNodeModel {
+  static _nextId = 0;
+
   constructor(options) {
     debugger;
     options = options || {};
@@ -20,11 +16,11 @@ export class GraphNodeModel {
     if (notEmptyString(options.id) || typeof options.id === "number") {
       this.id = ref(options.id);
     } else {
-      this.id = ref(++_nextId);
+      this.id = ref(++GraphNodeModel._nextId);
     }
 
-    if (isDefined(options.type) && validateNodeType(options.type)) {
-      this.type = ref(options.type);
+    if (isDefined(options.type) && validateNodeType(options.type.toLowerCase())) {
+      this.type = ref(options.type.toLowerCase());
     } else {
       this.type = ref(GraphNodeType.Single);
     }
@@ -88,6 +84,14 @@ export class GraphNodeModel {
     };
 
     return result;
+  }
+
+  findOutPortByName(portName) {
+    return this.outPorts.find(port => port.name === portName);
+  }
+
+  findInPortByName(portName) {
+    return this.inPorts.find(port => port.name === portName);
   }
 }
 

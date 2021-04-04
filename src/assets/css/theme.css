@@ -1,0 +1,5 @@
+:root {
+  /* editor */
+  --editor-background: var(--background);
+  --editor-foreground: var(--foreground);
+}
