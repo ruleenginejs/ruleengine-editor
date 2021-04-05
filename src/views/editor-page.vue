@@ -16,7 +16,9 @@ const pipeline = {
           dstInPort: "test"
         }
       ],
-      canvasPosition: [10, 20]
+      canvas: {
+        position: [100, 50]
+      }
     },
     {
       id: 2,
@@ -28,7 +30,11 @@ const pipeline = {
         in: ["test"],
         out: ["test2"]
       },
-      connect: [{ stepId: 3 }]
+      connect: [{ stepId: 3 }],
+      canvas: {
+        position: [100, 50],
+        color: "#1795D4"
+      }
     },
     {
       id: 3,

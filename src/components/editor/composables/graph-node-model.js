@@ -1,7 +1,7 @@
 import localize from "@/utils/localize";
 import isPlainObject from "is-plain-object";
 import merge from "merge";
-import { reactive, ref } from "vue"
+import { reactive, ref, computed } from "vue"
 import { GraphNodeType, validateNodeType } from "./graph-node-type";
 import { createPort } from "./graph-port-model";
 import { isDefined, notEmptyString } from "@/utils/types";
@@ -58,11 +58,18 @@ export class GraphNodeModel extends SelectableModel {
       this.handlerFile = ref(null);
     }
 
-    const position = this._parsePosition(options.canvasPosition);
+    const position = this._parsePosition(options.canvas);
     this.positionX = ref(position.x);
     this.positionY = ref(position.y);
 
     this.isErrorNode = ref(this.type.value === GraphNodeType.Error);
+    this.headerColor = ref(this._parseHeaderColor(options.canvas));
+
+    this.linkRule = this.linkRule.bind(this);
+
+    this.hasHandler = computed(() => {
+      return isDefined(this.handlerSource.value) || isDefined(this.handlerFile.value)
+    });
   }
 
   static _updateNextId(num) {
@@ -100,22 +107,40 @@ export class GraphNodeModel extends SelectableModel {
     return result;
   }
 
-  _parsePosition(value) {
-    if (!Array.isArray(value)) {
+  _parsePosition(canvasOptions) {
+    if (!isDefined(canvasOptions) || !isPlainObject(canvasOptions)) {
       return { x: 0, y: 0 };
     }
 
-    let x = value[0];
+    const position = canvasOptions.position;
+    if (!Array.isArray(position)) {
+      return { x: 0, y: 0 };
+    }
+
+    let x = position[0];
     if (typeof x !== "number") {
       x = 0;
     }
 
-    let y = value[1];
+    let y = position[1];
     if (typeof y !== "number") {
       y = 0;
     }
 
     return { x, y };
+  }
+
+  _parseHeaderColor(canvasOptions) {
+    if (!isDefined(canvasOptions) || !isPlainObject(canvasOptions)) {
+      return null;
+    }
+
+    const color = canvasOptions.color;
+    if (notEmptyString(color)) {
+      return color;
+    }
+
+    return null;
   }
 
   _getNameFromTypeOrDefault(type, id) {
@@ -137,6 +162,10 @@ export class GraphNodeModel extends SelectableModel {
 
   findInPortByName(portName) {
     return this.inPorts.find(port => port.name === portName);
+  }
+
+  linkRule() {
+    debugger;
   }
 }
 

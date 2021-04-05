@@ -15,14 +15,33 @@
         v-for="node in circleNodes"
         :key="node.id"
         :id="node.id"
+        :title="node.name"
         v-model:x="node.positionX"
         v-model:y="node.positionY"
-        :selected="node.selected"
         :error="node.isErrorNode"
+        :linkRule="node.linkRule"
+        :selected="node.selected"
+        @update:selected="onObjectSelected(node, $event)"
+      />
+      <v-graph-node
+        v-for="node in stepNodes"
+        :key="node.id"
+        :id="node.id"
         :title="node.name"
+        v-model:x="node.positionX"
+        v-model:y="node.positionY"
+        :headerColor="node.headerColor"
+        :linkRule="node.linkRule"
+        :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
       >
-      </v-graph-circle-node>
+        <template #header-left-icon>
+          <v-icon-doc-text />
+        </template>
+        <template v-if="node.hasHandler" #header-right-icon>
+          <v-icon-script />
+        </template>
+      </v-graph-node>
     </template>
   </v-graph-canvas>
 </template>
@@ -30,7 +49,10 @@
 <script>
 import {
   VGraphCanvas,
-  VGraphCircleNode
+  VGraphCircleNode,
+  VGraphNode,
+  VIconDocText,
+  VIconScript
 } from "@ruleenginejs/ruleengine-ui-kit-vue";
 import { toRefs } from "@vue/reactivity";
 import useEditorGraph from "./composables/use-editor-graph";
@@ -39,7 +61,10 @@ export default {
   name: "v-editor-graph",
   components: {
     VGraphCanvas,
-    VGraphCircleNode
+    VGraphCircleNode,
+    VGraphNode,
+    VIconDocText,
+    VIconScript
   },
   props: {
     model: {
