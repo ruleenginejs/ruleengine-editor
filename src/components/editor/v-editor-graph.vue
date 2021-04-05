@@ -19,10 +19,14 @@
         v-model:x="node.positionX"
         v-model:y="node.positionY"
         :error="node.isErrorNode"
-        :linkRule="node.linkRule"
+        :link-rule="nodeLinkRule"
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
-      />
+      >
+        <template #port>
+          <v-graph-port :id="node.onePort.id" />
+        </template>
+      </v-graph-circle-node>
       <v-graph-node
         v-for="node in stepNodes"
         :key="node.id"
@@ -30,8 +34,8 @@
         :title="node.name"
         v-model:x="node.positionX"
         v-model:y="node.positionY"
-        :headerColor="node.headerColor"
-        :linkRule="node.linkRule"
+        :header-color="node.headerColor"
+        :link-rule="nodeLinkRule"
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
       >
@@ -40,6 +44,38 @@
         </template>
         <template v-if="node.hasHandler" #header-right-icon>
           <v-icon-script />
+        </template>
+        <template #left>
+          <v-graph-port
+            v-for="port in node.inPorts"
+            :key="port.id"
+            :id="port.id"
+            :error="port.isErrorPort"
+            :disabled="port.disabled"
+            :link-limit="port.linkLimit"
+            :link-rule="portLinkRule"
+            :selected="port.selected"
+            @update:selected="onObjectSelected(port, $event)"
+            direction="left"
+          >
+            {{ port.name }}
+          </v-graph-port>
+        </template>
+        <template #right>
+          <v-graph-port
+            v-for="port in node.outPorts"
+            :key="port.id"
+            :id="port.id"
+            :error="port.isErrorPort"
+            :disabled="port.disabled"
+            :link-limit="port.linkLimit"
+            :link-rule="portLinkRule"
+            :selected="port.selected"
+            @update:selected="onObjectSelected(port, $event)"
+            direction="right"
+          >
+            {{ port.name }}
+          </v-graph-port>
         </template>
       </v-graph-node>
     </template>
@@ -51,6 +87,7 @@ import {
   VGraphCanvas,
   VGraphCircleNode,
   VGraphNode,
+  VGraphPort,
   VIconDocText,
   VIconScript
 } from "@ruleenginejs/ruleengine-ui-kit-vue";
@@ -63,6 +100,7 @@ export default {
     VGraphCanvas,
     VGraphCircleNode,
     VGraphNode,
+    VGraphPort,
     VIconDocText,
     VIconScript
   },
@@ -107,6 +145,8 @@ export default {
       cvSelected,
       circleNodes,
       stepNodes,
+      nodeLinkRule,
+      portLinkRule,
       onObjectSelected
     } = graph;
 
@@ -118,6 +158,8 @@ export default {
       cvSelected,
       circleNodes,
       stepNodes,
+      nodeLinkRule,
+      portLinkRule,
       onObjectSelected
     };
   }

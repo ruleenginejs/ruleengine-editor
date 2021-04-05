@@ -39,6 +39,7 @@ export class GraphNodeModel extends SelectableModel {
     const ports = this._parsePorts(options.ports);
     this.inPorts = reactive(ports.in);
     this.outPorts = reactive(ports.out);
+    this.onePort = this.outPorts[0];
 
     if (isDefined(options.props) && isPlainObject(options.props)) {
       this.props = reactive(merge.recursive(true, options.props, {}));
@@ -64,8 +65,6 @@ export class GraphNodeModel extends SelectableModel {
 
     this.isErrorNode = ref(this.type.value === GraphNodeType.Error);
     this.headerColor = ref(this._parseHeaderColor(options.canvas));
-
-    this.linkRule = this.linkRule.bind(this);
 
     this.hasHandler = computed(() => {
       return isDefined(this.handlerSource.value) || isDefined(this.handlerFile.value)
@@ -162,10 +161,6 @@ export class GraphNodeModel extends SelectableModel {
 
   findInPortByName(portName) {
     return this.inPorts.find(port => port.name === portName);
-  }
-
-  linkRule() {
-    debugger;
   }
 }
 

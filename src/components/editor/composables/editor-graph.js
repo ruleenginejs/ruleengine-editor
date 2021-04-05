@@ -43,6 +43,9 @@ class EditorGraph {
       this.invalidateCanvasSize();
     }, resizeDelay.value);
 
+    this.nodeLinkRule = this.nodeLinkRule.bind(this);
+    this.portLinkRule = this.portLinkRule.bind(this);
+
     this.onObjectSelected(model.value, true);
   }
 
@@ -65,6 +68,14 @@ class EditorGraph {
 
   invalidateCanvasSize() {
     this.canvas.value?.getCanvas().invalidateSize();
+  }
+
+  nodeLinkRule() {
+    debugger;
+  }
+
+  portLinkRule() {
+    debugger;
   }
 }
 
