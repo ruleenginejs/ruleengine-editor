@@ -15,7 +15,8 @@ const pipeline = {
           stepId: 2,
           dstInPort: "test"
         }
-      ]
+      ],
+      canvasPosition: [10, 20]
     },
     {
       id: 2,

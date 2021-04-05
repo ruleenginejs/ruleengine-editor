@@ -1,4 +1,7 @@
 .v-editor {
   /* sizes */
   @apply w-full h-full;
+
+  /* selection */
+  @apply select-none;
 }

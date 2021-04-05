@@ -3,20 +3,23 @@ import isPlainObject from "is-plain-object";
 import { isDefined } from "@/utils/types";
 import { createNode } from "./graph-node-model";
 import { createConnection } from "./graph-connection-model";
+import { SelectableModel } from "./selectable-model";
 
-export class GraphModel {
+export class GraphModel extends SelectableModel {
   static _nextId = 0;
   static _defaultPortName = "default";
 
   constructor(value) {
+    super();
+
     this.id = ref(++GraphModel._nextId);
     this.error = ref(null);
-    this.selected = ref(true);
     this.nodes = reactive([]);
     this.connections = reactive([]);
     this.versionId = ref(0);
     this.title = ref(null);
     this.description = ref(null);
+
     this._parseValue(value);
   }
 
@@ -139,6 +142,15 @@ export class GraphModel {
       res[node.id] = node;
       return res;
     }, {});
+  }
+
+  getNodesByType(...nodeTypes) {
+    return this.nodes.filter(node => {
+      if (nodeTypes.length === 1) {
+        return node.type === nodeTypes[0];
+      }
+      return nodeTypes.includes(node.type);
+    });
   }
 }
 

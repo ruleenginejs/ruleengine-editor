@@ -1,26 +1,45 @@
 <template>
   <v-graph-canvas
-    v-model:viewport="canvasViewport"
-    v-model:zoom="canvasZoom"
-    v-model:selected="canvasSelected"
+    v-model:viewport="cvViewport"
+    v-model:zoom="cvZoom"
+    :selected="model.selected"
     :min-zoom="minZoom"
     :max-zoom="maxZoom"
     :edge-sizes="edgeSizes"
     :resize-delay="resizeDelay"
+    @update:selected="onObjectSelected(model, $event)"
     ref="canvas"
   >
+    <template #node>
+      <v-graph-circle-node
+        v-for="node in circleNodes"
+        :key="node.id"
+        :id="node.id"
+        v-model:x="node.positionX"
+        v-model:y="node.positionY"
+        :selected="node.selected"
+        :error="node.isErrorNode"
+        :title="node.name"
+        @update:selected="onObjectSelected(node, $event)"
+      >
+      </v-graph-circle-node>
+    </template>
   </v-graph-canvas>
 </template>
 
 <script>
-import { VGraphCanvas } from "@ruleenginejs/ruleengine-ui-kit-vue";
+import {
+  VGraphCanvas,
+  VGraphCircleNode
+} from "@ruleenginejs/ruleengine-ui-kit-vue";
 import { toRefs } from "@vue/reactivity";
 import useEditorGraph from "./composables/use-editor-graph";
 
 export default {
   name: "v-editor-graph",
   components: {
-    VGraphCanvas
+    VGraphCanvas,
+    VGraphCircleNode
   },
   props: {
     model: {
@@ -56,13 +75,23 @@ export default {
   setup(props, { emit }) {
     const { model, viewport, zoom } = toRefs(props);
     const graph = useEditorGraph({ model, viewport, zoom, emit });
-    const { canvasViewport, canvasZoom, canvasSelected } = graph;
+    const {
+      cvViewport,
+      cvZoom,
+      cvSelected,
+      circleNodes,
+      stepNodes,
+      onObjectSelected
+    } = graph;
 
     return {
       instance: graph,
-      canvasViewport,
-      canvasZoom,
-      canvasSelected
+      cvViewport,
+      cvZoom,
+      cvSelected,
+      circleNodes,
+      stepNodes,
+      onObjectSelected
     };
   }
 };

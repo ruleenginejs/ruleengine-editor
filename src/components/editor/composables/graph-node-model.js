@@ -5,11 +5,13 @@ import { reactive, ref } from "vue"
 import { GraphNodeType, validateNodeType } from "./graph-node-type";
 import { createPort } from "./graph-port-model";
 import { isDefined, notEmptyString } from "@/utils/types";
+import { SelectableModel } from "./selectable-model";
 
-export class GraphNodeModel {
+export class GraphNodeModel extends SelectableModel {
   static _nextId = 0;
 
   constructor(options) {
+    super();
     options = options || {};
 
     if (notEmptyString(options.id) || typeof options.id === "number") {
@@ -55,6 +57,12 @@ export class GraphNodeModel {
     } else {
       this.handlerFile = ref(null);
     }
+
+    const position = this._parsePosition(options.canvasPosition);
+    this.positionX = ref(position.x);
+    this.positionY = ref(position.y);
+
+    this.isErrorNode = ref(this.type.value === GraphNodeType.Error);
   }
 
   static _updateNextId(num) {
@@ -92,14 +100,32 @@ export class GraphNodeModel {
     return result;
   }
 
+  _parsePosition(value) {
+    if (!Array.isArray(value)) {
+      return { x: 0, y: 0 };
+    }
+
+    let x = value[0];
+    if (typeof x !== "number") {
+      x = 0;
+    }
+
+    let y = value[1];
+    if (typeof y !== "number") {
+      y = 0;
+    }
+
+    return { x, y };
+  }
+
   _getNameFromTypeOrDefault(type, id) {
     switch (type) {
       case GraphNodeType.Start:
-        return "Start";
+        return "s";
       case GraphNodeType.End:
-        return "End";
+        return "e";
       case GraphNodeType.Error:
-        return "Error";
+        return "error";
       default:
         return localize("editor.untitledNode", id);
     }
