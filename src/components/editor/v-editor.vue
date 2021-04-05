@@ -6,9 +6,11 @@
       :snap-offset="svSnapOffset"
       :resize-delay="resizeDelay"
       @resize="onSvResize"
+      @created="onSvCreated"
     >
       <v-split-pane>
         <v-editor-graph
+          v-if="svReady"
           :model="model"
           v-model:viewport="viewport"
           v-model:zoom="zoom"
@@ -20,7 +22,12 @@
         />
       </v-split-pane>
       <v-split-pane :size="`${sidebarSize}px`">
-        <v-sidebar :lt-border="sidebarBorder" w-full h-full></v-sidebar>
+        <v-sidebar
+          v-if="svReady"
+          :lt-border="sidebarBorder"
+          w-full
+          h-full
+        ></v-sidebar>
       </v-split-pane>
     </v-split-view>
   </div>
@@ -112,7 +119,16 @@ export default {
       graph,
       emit
     });
-    const { viewport, zoom, graph, model, onSvResize } = editor;
+
+    const {
+      viewport,
+      zoom,
+      graph,
+      model,
+      onSvResize,
+      onSvCreated,
+      svReady
+    } = editor;
 
     return {
       instance: editor,
@@ -120,7 +136,9 @@ export default {
       zoom,
       graph,
       model,
-      onSvResize
+      onSvResize,
+      onSvCreated,
+      svReady
     };
   }
 };

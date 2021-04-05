@@ -23,8 +23,8 @@
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
       >
-        <template #port>
-          <v-graph-port :id="node.onePort.id" />
+        <template v-if="node.isSinglePort" #port>
+          <v-graph-port :id="node.inPorts[0].id" />
         </template>
       </v-graph-circle-node>
       <v-graph-node
@@ -79,6 +79,18 @@
         </template>
       </v-graph-node>
     </template>
+    <template #connection>
+      <v-graph-connection
+        v-for="connection in model.connections"
+        :key="connection.id"
+        :id="connection.id"
+        :from="connection.from"
+        :to="connection.to"
+        :color="connection.color"
+        :selected="connection.selected"
+        @update:selected="onObjectSelected(connection, $event)"
+      />
+    </template>
   </v-graph-canvas>
 </template>
 
@@ -88,6 +100,7 @@ import {
   VGraphCircleNode,
   VGraphNode,
   VGraphPort,
+  VGraphConnection,
   VIconDocText,
   VIconScript
 } from "@ruleenginejs/ruleengine-ui-kit-vue";
@@ -101,6 +114,7 @@ export default {
     VGraphCircleNode,
     VGraphNode,
     VGraphPort,
+    VGraphConnection,
     VIconDocText,
     VIconScript
   },

@@ -25,12 +25,11 @@ class EditorGraph {
       set: (val) => this.emit("update:zoom", val)
     });
 
-    this.circleNodes = computed(() =>
-      model.value.getNodesByType(
-        GraphNodeType.Start,
-        GraphNodeType.End,
-        GraphNodeType.Error
-      ));
+    this.circleNodes = computed(() => model.value.getNodesByType(
+      GraphNodeType.Start,
+      GraphNodeType.End,
+      GraphNodeType.Error
+    ));
 
     this.stepNodes = computed(() => {
       return model.value.getNodesByType(GraphNodeType.Single);

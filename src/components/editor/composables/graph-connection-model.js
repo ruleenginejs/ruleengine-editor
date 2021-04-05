@@ -1,10 +1,13 @@
 import { ref, computed } from "vue";
 import { isDefined } from "@/utils/types";
+import { SelectableModel } from "./selectable-model";
 
-export class GraphConnectionModel {
+export class GraphConnectionModel extends SelectableModel {
   static _nextId = 0;
 
   constructor(srcNode, srcPort, destNode, destPort) {
+    super();
+
     if (!isDefined(srcNode)) {
       throw new Error("Argument srcNode is required");
     }
@@ -33,6 +36,8 @@ export class GraphConnectionModel {
       nodeId: this.destNode.id,
       portId: this.destPort.id
     }));
+
+    this.color = ref(undefined);
   }
 }
 

@@ -21,7 +21,7 @@
     "vue": "^3.0.9"
   },
   "dependencies": {
-    "@ruleenginejs/ruleengine-ui-kit-vue": "^1.0.9",
+    "@ruleenginejs/ruleengine-ui-kit-vue": "^1.0.10",
     "debounce": "^1.2.1",
     "is-plain-object": "^2.0.4",
     "merge": "^2.1.1"

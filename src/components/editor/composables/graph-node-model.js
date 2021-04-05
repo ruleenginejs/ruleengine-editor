@@ -7,6 +7,16 @@ import { createPort } from "./graph-port-model";
 import { isDefined, notEmptyString } from "@/utils/types";
 import { SelectableModel } from "./selectable-model";
 
+const _singlePortNodeTypes = [
+  GraphNodeType.Start,
+  GraphNodeType.End,
+  GraphNodeType.Error
+];
+
+function isSinglePortNodeType(type) {
+  return _singlePortNodeTypes.includes(type);
+}
+
 export class GraphNodeModel extends SelectableModel {
   static _nextId = 0;
 
@@ -36,10 +46,19 @@ export class GraphNodeModel extends SelectableModel {
       this.name = ref(this._getNameFromTypeOrDefault(this.type.value, this.id.value));
     }
 
-    const ports = this._parsePorts(options.ports);
-    this.inPorts = reactive(ports.in);
-    this.outPorts = reactive(ports.out);
-    this.onePort = this.outPorts[0];
+    if (isSinglePortNodeType(this.type.value)) {
+      const ports = this._parsePorts(null);
+      this.isSinglePort = ref(true);
+
+      this.inPorts = reactive([ports.in[0]]);
+      this.outPorts = reactive([ports.in[0]]);
+    } else {
+      const ports = this._parsePorts(options.ports);
+      this.isSinglePort = ref(false);
+
+      this.inPorts = reactive(ports.in);
+      this.outPorts = reactive(ports.out);
+    }
 
     if (isDefined(options.props) && isPlainObject(options.props)) {
       this.props = reactive(merge.recursive(true, options.props, {}));

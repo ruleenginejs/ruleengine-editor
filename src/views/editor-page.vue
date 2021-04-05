@@ -17,7 +17,7 @@ const pipeline = {
         }
       ],
       canvas: {
-        position: [100, 50]
+        position: [50, 50]
       }
     },
     {
@@ -32,13 +32,16 @@ const pipeline = {
       },
       connect: [{ stepId: 3 }],
       canvas: {
-        position: [100, 50],
+        position: [150, 50],
         color: "#1795D4"
       }
     },
     {
       id: 3,
-      type: "end"
+      type: "end",
+      canvas: {
+        position: [600, 150]
+      }
     }
   ]
 };

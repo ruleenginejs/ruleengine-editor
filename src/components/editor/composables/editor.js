@@ -26,15 +26,21 @@ class Editor {
       set: (val) => this.emit("update:cvZoom", val)
     });
 
-    this.onSvResize = this.onSvResize.bind(this);
-
     watch(value, () => {
       this.model.value = createModel(value.value);
     });
+
+    this.svReady = ref(false);
+    this.onSvResize = this.onSvResize.bind(this);
+    this.onSvCreated = this.onSvCreated.bind(this);
   }
 
   onSvResize() {
     this.graph.value?.instance.onResize();
+  }
+
+  onSvCreated() {
+    this.svReady.value = true;
   }
 }
 
