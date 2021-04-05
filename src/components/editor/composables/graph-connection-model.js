@@ -19,19 +19,19 @@ export class GraphConnectionModel {
     }
 
     this.id = ref(++GraphConnectionModel._nextId);
-    this.srcNode = ref(srcNode);
-    this.srcPort = ref(srcPort);
-    this.destNode = ref(destNode);
-    this.destPort = ref(destPort);
+    this.srcNode = srcNode;
+    this.srcPort = srcPort;
+    this.destNode = destNode;
+    this.destPort = destPort;
 
     this.from = computed(() => ({
-      nodeId: this.srcNode.value.id,
-      portId: this.srcPort.value.id
+      nodeId: this.srcNode.id,
+      portId: this.srcPort.id
     }));
 
     this.to = computed(() => ({
-      nodeId: this.destNode.value.id,
-      portId: this.destPort.value.id
+      nodeId: this.destNode.id,
+      portId: this.destPort.id
     }));
   }
 }

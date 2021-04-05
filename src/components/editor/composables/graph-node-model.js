@@ -10,11 +10,14 @@ export class GraphNodeModel {
   static _nextId = 0;
 
   constructor(options) {
-    debugger;
     options = options || {};
 
     if (notEmptyString(options.id) || typeof options.id === "number") {
       this.id = ref(options.id);
+
+      if (typeof this.id.value === "number") {
+        GraphNodeModel._updateNextId(this.id.value);
+      }
     } else {
       this.id = ref(++GraphNodeModel._nextId);
     }
@@ -28,7 +31,7 @@ export class GraphNodeModel {
     if (notEmptyString(options.name)) {
       this.name = ref(options.name);
     } else {
-      this.name = ref(localize("editor.untitledNode", this.id.value));
+      this.name = ref(this._getNameFromTypeOrDefault(this.type.value, this.id.value));
     }
 
     const ports = this._parsePorts(options.ports);
@@ -54,8 +57,11 @@ export class GraphNodeModel {
     }
   }
 
+  static _updateNextId(num) {
+    GraphNodeModel._nextId = Math.max(GraphNodeModel._nextId, num);
+  }
+
   _parsePorts(ports) {
-    debugger;
     const inPorts = new Set(["default"]);
     const outPorts = new Set(["default"]);
 
@@ -84,6 +90,19 @@ export class GraphNodeModel {
     };
 
     return result;
+  }
+
+  _getNameFromTypeOrDefault(type, id) {
+    switch (type) {
+      case GraphNodeType.Start:
+        return "Start";
+      case GraphNodeType.End:
+        return "End";
+      case GraphNodeType.Error:
+        return "Error";
+      default:
+        return localize("editor.untitledNode", id);
+    }
   }
 
   findOutPortByName(portName) {
