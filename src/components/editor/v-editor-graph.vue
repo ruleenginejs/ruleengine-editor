@@ -73,9 +73,10 @@ export default {
   },
   emits: ["update:viewport", "update:zoom"],
   setup(props, { emit }) {
-    const { model, viewport, zoom } = toRefs(props);
-    const graph = useEditorGraph({ model, viewport, zoom, emit });
+    const { model, viewport, zoom, resizeDelay } = toRefs(props);
+    const graph = useEditorGraph({ model, viewport, zoom, resizeDelay, emit });
     const {
+      canvas,
       cvViewport,
       cvZoom,
       cvSelected,
@@ -86,6 +87,7 @@ export default {
 
     return {
       instance: graph,
+      canvas,
       cvViewport,
       cvZoom,
       cvSelected,

@@ -20,14 +20,21 @@ class Editor {
       get: () => cvViewport.value,
       set: (val) => this.emit("update:cvViewport", val)
     });
+
     this.zoom = computed({
       get: () => cvZoom.value,
       set: (val) => this.emit("update:cvZoom", val)
     });
 
+    this.onSvResize = this.onSvResize.bind(this);
+
     watch(value, () => {
       this.model.value = createModel(value.value);
     });
+  }
+
+  onSvResize() {
+    this.graph.value?.instance.onResize();
   }
 }
 

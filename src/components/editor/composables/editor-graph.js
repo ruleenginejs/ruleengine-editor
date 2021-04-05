@@ -1,12 +1,14 @@
 import { computed, ref } from "vue";
 import { GraphNodeType } from "./graph-node-type";
 import { SelectableModel } from "./selectable-model";
+import debounce from "debounce";
 
 class EditorGraph {
   constructor({
     model,
     viewport,
     zoom,
+    resizeDelay,
     emit
   }) {
     this.model = model;
@@ -37,6 +39,10 @@ class EditorGraph {
     this.onObjectSelected = this.onObjectSelected.bind(this);
     this.selectedObject = ref(null);
 
+    this.onResize = debounce(() => {
+      this.invalidateCanvasSize();
+    }, resizeDelay.value);
+
     this.onObjectSelected(model.value, true);
   }
 
@@ -55,6 +61,10 @@ class EditorGraph {
       }
       selectableModel.selected = value;
     }
+  }
+
+  invalidateCanvasSize() {
+    this.canvas.value?.getCanvas().invalidateSize();
   }
 }
 

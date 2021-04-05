@@ -5,6 +5,7 @@
       v-else
       :snap-offset="svSnapOffset"
       :resize-delay="resizeDelay"
+      @resize="onSvResize"
     >
       <v-split-pane>
         <v-editor-graph
@@ -108,16 +109,18 @@ export default {
       editable,
       cvViewport,
       cvZoom,
+      graph,
       emit
     });
-    const { viewport, zoom, graph, model } = editor;
+    const { viewport, zoom, graph, model, onSvResize } = editor;
 
     return {
       instance: editor,
       viewport,
       zoom,
       graph,
-      model
+      model,
+      onSvResize
     };
   }
 };
