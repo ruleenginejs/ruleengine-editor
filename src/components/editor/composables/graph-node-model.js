@@ -48,14 +48,10 @@ export class GraphNodeModel extends SelectableModel {
 
     if (isSinglePortNodeType(this.type.value)) {
       const ports = this._parsePorts(null);
-      this.isSinglePort = ref(true);
-
       this.inPorts = reactive([ports.in[0]]);
       this.outPorts = reactive([ports.in[0]]);
     } else {
       const ports = this._parsePorts(options.ports);
-      this.isSinglePort = ref(false);
-
       this.inPorts = reactive(ports.in);
       this.outPorts = reactive(ports.out);
     }

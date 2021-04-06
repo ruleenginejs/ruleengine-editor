@@ -23,8 +23,8 @@
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
       >
-        <template v-if="node.isSinglePort" #port>
-          <v-graph-port :id="node.inPorts[0].id" />
+        <template #port>
+          <v-graph-port :key="node.inPorts[0].id" :id="node.inPorts[0].id" />
         </template>
       </v-graph-circle-node>
       <v-graph-node

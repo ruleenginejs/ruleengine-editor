@@ -23,7 +23,7 @@
           ref="graph"
         />
       </v-split-pane>
-      <v-split-pane :size="`${sidebarSize}px`">
+      <v-split-pane v-if="sidebarEnabled" :size="`${sidebarSize}px`">
         <v-sidebar
           v-if="svReady"
           :lt-border="sidebarBorder"
@@ -95,6 +95,10 @@ export default {
     edgeSizes: {
       type: Object,
       default: () => defaultEdgeSizes
+    },
+    sidebarEnabled: {
+      type: Boolean,
+      default: true
     },
     sidebarSize: {
       type: Number,
