@@ -1,5 +1,14 @@
 <template>
-  <v-editor :value="value" />
+  <v-editor
+    :value="value"
+    v-model:zoom="zoom"
+    v-model:viewport="viewport"
+    auto-fit
+  />
+  <div class="controls">
+    <button @click="changeValue">Change value</button>
+    <div>Zoom: {{ zoom }}, Viewport: {{ viewport }}</div>
+  </div>
 </template>
 
 <script>
@@ -50,8 +59,24 @@ export default {
   name: "editor-page",
   data() {
     return {
-      value: JSON.stringify(pipeline)
+      value: JSON.stringify(pipeline),
+      zoom: 100,
+      viewport: [100, 100]
     };
+  },
+  methods: {
+    changeValue() {
+      this.value = JSON.stringify({ ...pipeline, title: Date.now() });
+    }
   }
 };
 </script>
+
+<style scoped>
+.controls {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  color: var(--foreground);
+}
+</style>

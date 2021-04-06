@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { computed, ref, watch, onMounted, nextTick } from "vue";
 import { GraphNodeType } from "./graph-node-type";
 import { SelectableModel } from "./selectable-model";
 import debounce from "debounce";
@@ -9,12 +9,28 @@ class EditorGraph {
     viewport,
     zoom,
     resizeDelay,
+    selectedObject,
     emit
   }) {
     this.model = model;
     this.emit = emit;
     this.canvas = ref(null);
 
+    this.linkRule = this.linkRule.bind(this);
+    this.onObjectSelected = this.onObjectSelected.bind(this);
+    this.invalidateCanvasSize = this.invalidateCanvasSize.bind(this);
+    this.onCreated = this.onCreated.bind(this);
+    this.onResize = debounce(this.invalidateCanvasSize, resizeDelay.value);
+
+    this.initComputed({ viewport, zoom, model });
+    this.initWatchers({ selectedObject });
+
+    onMounted(() => {
+      nextTick(this.onCreated);
+    });
+  }
+
+  initComputed({ viewport, zoom, model }) {
     this.cvViewport = computed({
       get: () => viewport.value,
       set: (val) => this.emit("update:viewport", val)
@@ -34,34 +50,34 @@ class EditorGraph {
     this.stepNodes = computed(() => {
       return model.value.getNodesByType(GraphNodeType.Single);
     });
-
-    this.onObjectSelected = this.onObjectSelected.bind(this);
-    this.selectedObject = ref(null);
-
-    this.onResize = debounce(() => {
-      this.invalidateCanvasSize();
-    }, resizeDelay.value);
-
-    this.nodeLinkRule = this.nodeLinkRule.bind(this);
-    this.portLinkRule = this.portLinkRule.bind(this);
-
-    this.onObjectSelected(model.value, true);
   }
 
-  unselectObject() {
-    if (this.selectedObject.value instanceof SelectableModel) {
-      this.selectedObject.value.selected = false;
-      this.selectedObject.value = null;
+  initWatchers({ selectedObject }) {
+    watch(selectedObject, (newValue, oldValue) => {
+      if (oldValue instanceof SelectableModel) {
+        oldValue.selected = false;
+      }
+      if (newValue instanceof SelectableModel) {
+        newValue.selected = true;
+      }
+    });
+
+    if (selectedObject.value instanceof SelectableModel) {
+      selectedObject.value.selected = true;
     }
+  }
+
+  onCreated() {
+    this.emit("created", this);
   }
 
   onObjectSelected(selectableModel, value) {
     if (selectableModel instanceof SelectableModel) {
       if (value) {
-        this.unselectObject();
-        this.selectedObject.value = selectableModel;
+        this.emit("update:selectedObject", selectableModel);
+      } else {
+        selectableModel.selected = false;
       }
-      selectableModel.selected = value;
     }
   }
 
@@ -69,12 +85,30 @@ class EditorGraph {
     this.canvas.value?.getCanvas().invalidateSize();
   }
 
-  nodeLinkRule() {
-    debugger;
+  fitCanvas(maxZoom = null) {
+    const canvas = this.canvas.value?.getCanvas();
+    const bounds = canvas?.getNodeBounds();
+    if (bounds) {
+      this.fitBounds(bounds, maxZoom);
+    }
   }
 
-  portLinkRule() {
-    debugger;
+  fitBounds(bounds, maxZoom = null) {
+    const canvas = this.canvas.value?.getCanvas();
+    if (!canvas && !bounds) return;
+
+    if (typeof maxZoom === "number") {
+      let { center, zoom } = canvas.getBoundsCenterZoom(bounds);
+      if (zoom > maxZoom) {
+        zoom = maxZoom;
+      }
+      canvas.setCenter(center, zoom);
+    } else {
+      canvas.fitBounds(bounds);
+    }
+  }
+
+  linkRule() {
   }
 }
 

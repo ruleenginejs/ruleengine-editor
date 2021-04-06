@@ -12,12 +12,14 @@
         <v-editor-graph
           v-if="svReady"
           :model="model"
-          v-model:viewport="viewport"
-          v-model:zoom="zoom"
-          :min-zoom="cvMinZoom"
-          :max-zoom="cvMaxZoom"
-          :edge-sizes="cvEdgeSizes"
+          v-model:viewport="viewportModel"
+          v-model:zoom="zoomModel"
+          :min-zoom="minZoom"
+          :max-zoom="maxZoom"
+          :edge-sizes="edgeSizes"
           :resize-delay="resizeDelay"
+          v-model:selected-object="selectedObject"
+          @created="onGraphCreated"
           ref="graph"
         />
       </v-split-pane>
@@ -70,23 +72,27 @@ export default {
       type: Boolean,
       default: true
     },
-    cvViewport: {
+    viewport: {
       type: Array,
       default: () => [0, 0]
     },
-    cvZoom: {
+    autoFit: {
+      type: Boolean,
+      default: false
+    },
+    zoom: {
       type: Number,
       default: 100
     },
-    cvMinZoom: {
+    minZoom: {
       type: Number,
       default: 20
     },
-    cvMaxZoom: {
+    maxZoom: {
       type: Number,
       default: 300
     },
-    cvEdgeSizes: {
+    edgeSizes: {
       type: Object,
       default: () => defaultEdgeSizes
     },
@@ -107,38 +113,45 @@ export default {
       default: 100
     }
   },
-  emits: ["change-value", "update:cvViewport", "update:cvZoom"],
+  emits: ["change-value", "update:viewport", "update:zoom"],
   setup(props, { emit }) {
-    const { value, dataSource, editable, cvViewport, cvZoom } = toRefs(props);
+    const { value, dataSource, editable, viewport, zoom, autoFit } = toRefs(
+      props
+    );
     const editor = useEditor({
       value,
       dataSource,
       editable,
-      cvViewport,
-      cvZoom,
+      viewport,
+      zoom,
       graph,
+      autoFit,
       emit
     });
 
     const {
-      viewport,
-      zoom,
+      viewportModel,
+      zoomModel,
       graph,
       model,
       onSvResize,
       onSvCreated,
-      svReady
+      svReady,
+      selectedObject,
+      onGraphCreated
     } = editor;
 
     return {
       instance: editor,
-      viewport,
-      zoom,
+      viewportModel,
+      zoomModel,
       graph,
       model,
       onSvResize,
       onSvCreated,
-      svReady
+      svReady,
+      selectedObject,
+      onGraphCreated
     };
   }
 };

@@ -19,7 +19,7 @@
         v-model:x="node.positionX"
         v-model:y="node.positionY"
         :error="node.isErrorNode"
-        :link-rule="nodeLinkRule"
+        :link-rule="linkRule"
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
       >
@@ -35,7 +35,7 @@
         v-model:x="node.positionX"
         v-model:y="node.positionY"
         :header-color="node.headerColor"
-        :link-rule="nodeLinkRule"
+        :link-rule="linkRule"
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
       >
@@ -53,7 +53,7 @@
             :error="port.isErrorPort"
             :disabled="port.disabled"
             :link-limit="port.linkLimit"
-            :link-rule="portLinkRule"
+            :link-rule="linkRule"
             :selected="port.selected"
             @update:selected="onObjectSelected(port, $event)"
             direction="left"
@@ -69,7 +69,7 @@
             :error="port.isErrorPort"
             :disabled="port.disabled"
             :link-limit="port.linkLimit"
-            :link-rule="portLinkRule"
+            :link-rule="linkRule"
             :selected="port.selected"
             @update:selected="onObjectSelected(port, $event)"
             direction="right"
@@ -146,12 +146,26 @@ export default {
     resizeDelay: {
       type: Number,
       default: undefined
+    },
+    selectedObject: {
+      type: Object,
+      default: null
     }
   },
-  emits: ["update:viewport", "update:zoom"],
+  emits: ["update:viewport", "update:zoom", "update:selectedObject", "created"],
   setup(props, { emit }) {
-    const { model, viewport, zoom, resizeDelay } = toRefs(props);
-    const graph = useEditorGraph({ model, viewport, zoom, resizeDelay, emit });
+    const { model, viewport, zoom, resizeDelay, selectedObject } = toRefs(
+      props
+    );
+    const graph = useEditorGraph({
+      model,
+      viewport,
+      zoom,
+      resizeDelay,
+      selectedObject,
+      emit
+    });
+
     const {
       canvas,
       cvViewport,
@@ -159,8 +173,7 @@ export default {
       cvSelected,
       circleNodes,
       stepNodes,
-      nodeLinkRule,
-      portLinkRule,
+      linkRule,
       onObjectSelected
     } = graph;
 
@@ -172,8 +185,7 @@ export default {
       cvSelected,
       circleNodes,
       stepNodes,
-      nodeLinkRule,
-      portLinkRule,
+      linkRule,
       onObjectSelected
     };
   }

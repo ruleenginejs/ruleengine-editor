@@ -1,4 +1,4 @@
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, nextTick } from "vue";
 import { createModel } from "./graph-model";
 
 class Editor {
@@ -6,33 +6,55 @@ class Editor {
     value,
     dataSource,
     editable,
-    cvViewport,
-    cvZoom,
+    viewport,
+    zoom,
+    autoFit,
     emit
   }) {
     this.model = ref(createModel(value.value));
     this.dataSource = dataSource;
     this.editable = editable;
     this.emit = emit;
+    this.autoFit = autoFit;
     this.graph = ref(null);
-
-    this.viewport = computed({
-      get: () => cvViewport.value,
-      set: (val) => this.emit("update:cvViewport", val)
-    });
-
-    this.zoom = computed({
-      get: () => cvZoom.value,
-      set: (val) => this.emit("update:cvZoom", val)
-    });
-
-    watch(value, () => {
-      this.model.value = createModel(value.value);
-    });
-
     this.svReady = ref(false);
+    this.selectedObject = ref(this.model.value);
+
     this.onSvResize = this.onSvResize.bind(this);
     this.onSvCreated = this.onSvCreated.bind(this);
+    this.onGraphCreated = this.onGraphCreated.bind(this);
+
+    this.initComputed({ viewport, zoom });
+    this.initWatchers({ value });
+  }
+
+  initComputed({ viewport, zoom }) {
+    this.viewportModel = computed({
+      get: () => viewport.value,
+      set: (val) => this.emit("update:viewport", val)
+    });
+
+    this.zoomModel = computed({
+      get: () => zoom.value,
+      set: (val) => this.emit("update:zoom", val)
+    });
+  }
+
+  initWatchers({ value }) {
+    watch(value, () => {
+      this.changeModel(value.value);
+    });
+  }
+
+  changeModel(value) {
+    this.model.value = createModel(value);
+    this.selectedObject.value = this.model.value;
+
+    nextTick(() => {
+      if (this.autoFit.value) {
+        this.fitCanvas(this.zoomModel.value);
+      }
+    });
   }
 
   onSvResize() {
@@ -41,6 +63,16 @@ class Editor {
 
   onSvCreated() {
     this.svReady.value = true;
+  }
+
+  onGraphCreated() {
+    if (this.autoFit.value) {
+      this.fitCanvas(this.zoomModel.value);
+    }
+  }
+
+  fitCanvas(maxZoom = null) {
+    this.graph.value?.instance.fitCanvas(maxZoom);
   }
 }
 
