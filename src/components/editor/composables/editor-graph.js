@@ -68,7 +68,7 @@ class EditorGraph {
   }
 
   onCreated() {
-    this.emit("created", this);
+    this.emit("created");
   }
 
   onObjectSelected(selectableModel, value) {
