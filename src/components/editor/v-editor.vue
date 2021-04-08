@@ -3,20 +3,20 @@
     <v-editor-error v-if="model.error" :error="model.error" />
     <v-split-view
       v-else
-      :snap-offset="svSnapOffset"
+      :snap-offset="splitViewSnapOffset"
       :resize-delay="resizeDelay"
-      @resize="onSvResize"
-      @created="onSvCreated"
+      @resize="onSplitViewResize"
+      @created="onSplitViewCreated"
     >
       <v-split-pane>
         <v-editor-graph
-          v-if="svReady"
+          v-if="splitViewCreated"
           :model="model"
           v-model:viewport="viewportModel"
           v-model:zoom="zoomModel"
           :min-zoom="minZoom"
           :max-zoom="maxZoom"
-          :edge-sizes="edgeSizes"
+          :edge-sizes="edgeScrollSizes"
           :resize-delay="resizeDelay"
           v-model:selected-object="selectedObject"
           @created="onGraphCreated"
@@ -25,7 +25,7 @@
       </v-split-pane>
       <v-split-pane v-if="sidebarEnabled" :size="`${sidebarSize}px`">
         <v-sidebar
-          v-if="svReady"
+          v-if="splitViewCreated"
           :lt-border="sidebarBorder"
           w-full
           h-full
@@ -46,7 +46,7 @@ import {
 import VEditorGraph from "./v-editor-graph";
 import VEditorError from "./v-editor-error";
 
-const defaultEdgeSizes = Object.freeze({
+const defaultEdgeScrollSizes = Object.freeze({
   edgeBottomSize: { in: 10, out: 0 }
 });
 
@@ -92,9 +92,9 @@ export default {
       type: Number,
       default: 300
     },
-    edgeSizes: {
+    edgeScrollSizes: {
       type: Object,
-      default: () => defaultEdgeSizes
+      default: () => defaultEdgeScrollSizes
     },
     sidebarEnabled: {
       type: Boolean,
@@ -108,7 +108,7 @@ export default {
       type: Boolean,
       default: false
     },
-    svSnapOffset: {
+    splitViewSnapOffset: {
       type: Number,
       default: 30
     },
@@ -122,6 +122,7 @@ export default {
     const { value, dataSource, editable, viewport, zoom, autoFit } = toRefs(
       props
     );
+
     const editor = useEditor({
       value,
       dataSource,
@@ -138,9 +139,9 @@ export default {
       zoomModel,
       graph,
       model,
-      onSvResize,
-      onSvCreated,
-      svReady,
+      onSplitViewResize,
+      onSplitViewCreated,
+      splitViewCreated,
       selectedObject,
       onGraphCreated
     } = editor;
@@ -151,9 +152,9 @@ export default {
       zoomModel,
       graph,
       model,
-      onSvResize,
-      onSvCreated,
-      svReady,
+      onSplitViewResize,
+      onSplitViewCreated,
+      splitViewCreated,
       selectedObject,
       onGraphCreated
     };

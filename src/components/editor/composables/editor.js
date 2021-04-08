@@ -1,4 +1,4 @@
-import { computed, ref, watch, nextTick } from "vue";
+import { computed, ref, watch } from "vue";
 import { createModel } from "./graph-model";
 
 class Editor {
@@ -17,11 +17,11 @@ class Editor {
     this.emit = emit;
     this.autoFit = autoFit;
     this.graph = ref(null);
-    this.svReady = ref(false);
+    this.splitViewCreated = ref(false);
     this.selectedObject = ref(this.model.value);
 
-    this.onSvResize = this.onSvResize.bind(this);
-    this.onSvCreated = this.onSvCreated.bind(this);
+    this.onSplitViewResize = this.onSplitViewResize.bind(this);
+    this.onSplitViewCreated = this.onSplitViewCreated.bind(this);
     this.onGraphCreated = this.onGraphCreated.bind(this);
 
     this.initComputed({ viewport, zoom });
@@ -49,20 +49,18 @@ class Editor {
   changeModel(value) {
     this.model.value = createModel(value);
     this.selectedObject.value = this.model.value;
-
-    nextTick(() => {
-      if (this.autoFit.value) {
-        this.fitCanvas(this.zoomModel.value);
-      }
-    });
   }
 
-  onSvResize() {
+  getModel() {
+    return this.model.value;
+  }
+
+  onSplitViewResize() {
     this.graph.value?.instance.onResize();
   }
 
-  onSvCreated() {
-    this.svReady.value = true;
+  onSplitViewCreated() {
+    this.splitViewCreated.value = true;
   }
 
   onGraphCreated() {
