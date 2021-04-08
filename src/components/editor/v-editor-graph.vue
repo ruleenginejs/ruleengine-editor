@@ -16,12 +16,13 @@
         :key="node.id"
         :id="node.id"
         :title="node.name"
-        v-model:x="node.positionX"
-        v-model:y="node.positionY"
+        :x="node.positionX"
+        :y="node.positionY"
         :error="node.isErrorNode"
         :link-rule="linkRule"
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
+        @change-position="onChangeNodePosition(node, $event)"
       >
         <template #port>
           <v-graph-port :key="node.inPorts[0].id" :id="node.inPorts[0].id" />
@@ -32,12 +33,13 @@
         :key="node.id"
         :id="node.id"
         :title="node.name"
-        v-model:x="node.positionX"
-        v-model:y="node.positionY"
+        :x="node.positionX"
+        :y="node.positionY"
         :header-color="node.headerColor"
         :link-rule="linkRule"
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
+        @change-position="onChangeNodePosition(node, $event)"
       >
         <template #header-left-icon>
           <v-icon-doc-text />
@@ -157,6 +159,7 @@ export default {
     const { model, viewport, zoom, resizeDelay, selectedObject } = toRefs(
       props
     );
+
     const graph = useEditorGraph({
       model,
       viewport,
@@ -174,7 +177,8 @@ export default {
       circleNodes,
       stepNodes,
       linkRule,
-      onObjectSelected
+      onObjectSelected,
+      onChangeNodePosition
     } = graph;
 
     return {
@@ -186,7 +190,8 @@ export default {
       circleNodes,
       stepNodes,
       linkRule,
-      onObjectSelected
+      onObjectSelected,
+      onChangeNodePosition
     };
   }
 };

@@ -2,6 +2,7 @@ import { computed, ref, watch, onMounted, nextTick } from "vue";
 import { GraphNodeType } from "./graph-node-type";
 import { SelectableModel } from "./selectable-model";
 import debounce from "debounce";
+import { ChangeNodePosition } from "./commands";
 
 class EditorGraph {
   constructor({
@@ -20,6 +21,7 @@ class EditorGraph {
     this.onObjectSelected = this.onObjectSelected.bind(this);
     this.invalidateCanvasSize = this.invalidateCanvasSize.bind(this);
     this.onCreated = this.onCreated.bind(this);
+    this.onChangeNodePosition = this.onChangeNodePosition.bind(this);
     this.onResize = debounce(this.invalidateCanvasSize, resizeDelay.value);
 
     this.initComputed({ viewport, zoom, model });
@@ -41,11 +43,13 @@ class EditorGraph {
       set: (val) => this.emit("update:zoom", val)
     });
 
-    this.circleNodes = computed(() => model.value.getNodesByType(
-      GraphNodeType.Start,
-      GraphNodeType.End,
-      GraphNodeType.Error
-    ));
+    this.circleNodes = computed(() => {
+      return model.value.getNodesByType(
+        GraphNodeType.Start,
+        GraphNodeType.End,
+        GraphNodeType.Error
+      );
+    });
 
     this.stepNodes = computed(() => {
       return model.value.getNodesByType(GraphNodeType.Single);
@@ -106,6 +110,12 @@ class EditorGraph {
     } else {
       canvas.fitBounds(bounds);
     }
+  }
+
+  onChangeNodePosition(node, e) {
+    this.model.value.applyEdits([
+      ChangeNodePosition.createRaw(node.id, e.newPosition)
+    ]);
   }
 
   linkRule() {

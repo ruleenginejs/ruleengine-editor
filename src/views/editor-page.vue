@@ -4,6 +4,7 @@
     v-model:zoom="zoom"
     v-model:viewport="viewport"
     auto-fit
+    @change-value="onChangeValue"
   />
   <div class="controls">
     <button @click="changeValue">Change value</button>
@@ -67,6 +68,9 @@ export default {
   methods: {
     changeValue() {
       this.value = JSON.stringify({ ...pipeline, title: Date.now() });
+    },
+    onChangeValue(e) {
+      console.log(e);
     }
   }
 };

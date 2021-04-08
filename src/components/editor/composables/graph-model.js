@@ -4,6 +4,7 @@ import { isDefined } from "@/utils/types";
 import { createNode } from "./graph-node-model";
 import { createConnection } from "./graph-connection-model";
 import { SelectableModel } from "./selectable-model";
+import { applyEditCommands, applyReverseEditCommands } from "./command";
 
 export class GraphModel extends SelectableModel {
   static _nextId = 0;
@@ -19,13 +20,13 @@ export class GraphModel extends SelectableModel {
     this.versionId = ref(0);
     this.title = ref(null);
     this.description = ref(null);
+    this.changeListeners = reactive([]);
 
     this._parseValue(value);
   }
 
   getValue() {
-    const value = this._buildValue();
-    return JSON.stringify(value);
+    return this._buildValue();
   }
 
   _buildValue() {
@@ -144,6 +145,10 @@ export class GraphModel extends SelectableModel {
     }, {});
   }
 
+  _increaseVersionId() {
+    this.versionId.value = this.versionId.value + 1;
+  }
+
   getNodesByType(...nodeTypes) {
     return this.nodes.filter(node => {
       if (nodeTypes.length === 1) {
@@ -151,6 +156,55 @@ export class GraphModel extends SelectableModel {
       }
       return nodeTypes.includes(node.type);
     });
+  }
+
+  applyEdits(rawEditCommands, emitChangeEvent = true) {
+    const changes = applyEditCommands(this, rawEditCommands);
+    this._increaseVersionId();
+
+    if (emitChangeEvent) {
+      this.emitChangeEvent(changes);
+    }
+  }
+
+  applyReverseEdits(rawEditCommands, emitChangeEvent = true) {
+    const changes = applyReverseEditCommands(this, rawEditCommands);
+    this._increaseVersionId();
+
+    if (emitChangeEvent) {
+      this.emitChangeEvent(changes);
+    }
+  }
+
+  addChangeListener(listener) {
+    if (typeof listener === "function") {
+      this.changeListeners.push(listener);
+    }
+  }
+
+  removeChangeListener(listener) {
+    const index = this.changeListeners.indexOf(listener);
+    if (index !== -1) {
+      this.changeListeners.splice(index, 1);
+    }
+  }
+
+  removeAllChangeListeners() {
+    this.changeListeners = reactive([]);
+  }
+
+  emitChangeEvent(changes) {
+    for (let i = 0; i < this.changeListeners.length; i++) {
+      const listener = this.changeListeners[i];
+      listener({
+        changes,
+        versionId: this.versionId.value
+      })
+    }
+  }
+
+  destroy() {
+    this.removeAllChangeListeners();
   }
 }
 

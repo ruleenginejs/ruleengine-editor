@@ -23,6 +23,9 @@ class Editor {
     this.onSplitViewResize = this.onSplitViewResize.bind(this);
     this.onSplitViewCreated = this.onSplitViewCreated.bind(this);
     this.onGraphCreated = this.onGraphCreated.bind(this);
+    this.onChangeModelContent = this.onChangeModelContent.bind(this);
+
+    this.model.value.addChangeListener(this.onChangeModelContent);
 
     this.initComputed({ viewport, zoom });
     this.initWatchers({ value });
@@ -47,12 +50,22 @@ class Editor {
   }
 
   changeModel(value) {
+    if (this.model.value) {
+      this.model.value.destroy();
+    }
+
     this.model.value = createModel(value);
+    this.model.value.addChangeListener(this.onChangeModelContent);
+
     this.selectedObject.value = this.model.value;
   }
 
   getModel() {
     return this.model.value;
+  }
+
+  fitCanvas(maxZoom = null) {
+    this.graph.value?.instance.fitCanvas(maxZoom);
   }
 
   onSplitViewResize() {
@@ -69,8 +82,8 @@ class Editor {
     }
   }
 
-  fitCanvas(maxZoom = null) {
-    this.graph.value?.instance.fitCanvas(maxZoom);
+  onChangeModelContent(e) {
+    this.emit("change-value", e);
   }
 }
 
