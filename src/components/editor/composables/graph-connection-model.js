@@ -1,7 +1,7 @@
 import { computed } from "vue";
 import { isDefined } from "@/utils/types";
 import { SelectableModel } from "./selectable-model";
-import { generateUid, createInstance } from "./graph-base-model";
+import { createInstance } from "./graph-base-model";
 
 export class GraphConnectionModel extends SelectableModel {
   constructor(srcNode, srcPort, destNode, destPort) {
@@ -20,7 +20,6 @@ export class GraphConnectionModel extends SelectableModel {
       throw new Error("Argument destPort is required");
     }
 
-    this.id = generateUid();
     this.srcNode = srcNode;
     this.srcPort = srcPort;
     this.destNode = destNode;

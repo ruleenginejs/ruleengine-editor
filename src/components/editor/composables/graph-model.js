@@ -2,17 +2,16 @@ import { computed } from "vue"
 import isPlainObject from "is-plain-object";
 import { isDefined, notEmptyString } from "@/utils/types";
 import { applyEditCommands, applyReverseEditCommands } from "@/utils/edit-command";
-import { createNode } from "./graph-node-model";
+import { createNode, GraphNodeModel } from "./graph-node-model";
 import { createConnection } from "./graph-connection-model";
 import { SelectableModel } from "./selectable-model";
 import { DEFAULT_PORT } from "./graph-port-model";
-import { createInstance, generateUid } from "./graph-base-model";
+import { createInstance } from "./graph-base-model";
 
 export class GraphModel extends SelectableModel {
   constructor(value) {
     super();
 
-    this.id = generateUid();
     this.error = null;
     this.nodes = [];
     this.connections = [];
@@ -21,6 +20,7 @@ export class GraphModel extends SelectableModel {
     this.description = null;
     this.selectedObject = null;
     this._changeListeners = [];
+    this._states = [];
 
     this._parseValue(value);
   }
@@ -220,6 +220,43 @@ export class GraphModel extends SelectableModel {
     return result;
   }
 
+  _savePersistentState() {
+    const state = {
+      selectedNodeId: null,
+      isModelSelected: this.selected
+    }
+    if (!state.isModelSelected && this.selectedObject instanceof GraphNodeModel) {
+      state.selectedNodeId = this.selectedObject.id;
+    }
+    this._states.push(state);
+  }
+
+  _restorePersistentState() {
+    const state = this._states.pop();
+    if (!state) return;
+
+    if (state.isModelSelected) {
+      this.selected = true;
+    } else if (state.selectedNodeId) {
+      const node = this.getNodeById(state.selectedNodeId);
+      if (node) {
+        node.selected = true;
+      }
+    }
+  }
+
+  setValue(value) {
+    this._savePersistentState();
+    this.error = null;
+    this.nodes.splice(0);
+    this.connections.splice(0);
+    this.title = null;
+    this.description = null;
+    this._increaseVersionId();
+    this._parseValue(value);
+    this._restorePersistentState();
+  }
+
   getNodesByType(...nodeTypes) {
     return this.nodes.filter(node => {
       if (nodeTypes.length === 1) {
@@ -227,6 +264,10 @@ export class GraphModel extends SelectableModel {
       }
       return nodeTypes.includes(node.type);
     });
+  }
+
+  getNodeById(nodeId) {
+    return this.nodes.find(node => node.id === nodeId);
   }
 
   applyEdits(rawEditCommands, emitChangeEvent = true) {

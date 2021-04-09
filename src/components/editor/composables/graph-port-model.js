@@ -1,6 +1,6 @@
 import { notEmptyString } from "@/utils/types";
 import { computed } from "vue";
-import { generateUid, createInstance } from "./graph-base-model";
+import { createInstance } from "./graph-base-model";
 import { GraphPortType } from "./graph-port-type";
 import { SelectableModel } from "./selectable-model";
 
@@ -23,7 +23,6 @@ export class GraphPortModel extends SelectableModel {
       this.type = GraphPortType.IN;
     }
 
-    this.id = generateUid();
     this.disabled = false;
     this.linkLimit = 1;
 

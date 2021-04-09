@@ -7,7 +7,7 @@ import { GraphNodeType, isNavNodeType, validateNodeType } from "./graph-node-typ
 import { createPort, DEFAULT_PORT } from "./graph-port-model";
 import { SelectableModel } from "./selectable-model";
 import { GraphPortType } from "./graph-port-type";
-import { createInstance, generateUid, updateNextUid } from "./graph-base-model";
+import { createInstance, updateNextUid } from "./graph-base-model";
 
 export class GraphNodeModel extends SelectableModel {
   constructor(options) {
@@ -20,8 +20,6 @@ export class GraphNodeModel extends SelectableModel {
       if (typeof this.id === "number") {
         updateNextUid(this.id);
       }
-    } else {
-      this.id = generateUid();
     }
 
     if (notEmptyString(options.type) && validateNodeType(options.type.toLowerCase())) {

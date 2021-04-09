@@ -17,6 +17,10 @@ export function createInstance(ctor, ...args) {
 }
 
 export class GraphBaseModel {
+  constructor() {
+    this.id = generateUid();
+  }
+
   getValue() {
     return this._buildValue();
   }
