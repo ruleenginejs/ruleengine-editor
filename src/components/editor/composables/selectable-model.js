@@ -1,7 +1,8 @@
-import { ref } from "vue";
+import { GraphBaseModel } from "./graph-base-model";
 
-export class SelectableModel {
+export class SelectableModel extends GraphBaseModel {
   constructor() {
-    this.selected = ref(false);
+    super();
+    this.selected = false;
   }
 }

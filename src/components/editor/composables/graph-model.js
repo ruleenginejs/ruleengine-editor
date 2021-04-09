@@ -1,39 +1,37 @@
-import { reactive, ref } from "vue"
+import { computed } from "vue"
 import isPlainObject from "is-plain-object";
 import { isDefined } from "@/utils/types";
+import { applyEditCommands, applyReverseEditCommands } from "@/utils/edit-command";
 import { createNode } from "./graph-node-model";
 import { createConnection } from "./graph-connection-model";
 import { SelectableModel } from "./selectable-model";
-import { applyEditCommands, applyReverseEditCommands } from "@/utils/edit-command";
+import { DEFAULT_PORT } from "./graph-port-model";
+import { createInstance, generateUid } from "./graph-base-model";
 
 export class GraphModel extends SelectableModel {
-  static _nextId = 0;
-  static _defaultPortName = "default";
-
   constructor(value) {
     super();
 
-    this.id = ref(++GraphModel._nextId);
-    this.error = ref(null);
-    this.nodes = reactive([]);
-    this.connections = reactive([]);
-    this.versionId = ref(0);
-    this.title = ref(null);
-    this.description = ref(null);
+    this.id = generateUid();
+    this.error = null;
+    this.nodes = [];
+    this.connections = [];
+    this.versionId = 0;
+    this.title = null;
+    this.description = null;
+    this.selectedObject = null;
     this._changeListeners = [];
 
     this._parseValue(value);
   }
 
-  getValue() {
-    return this._buildValue();
-  }
-
-  setValue(value) {
+  _initComputed() {
+    super._initComputed();
+    this.selectedObject = computed(() => this._findSelectedObject());
   }
 
   _buildValue() {
-    return {};
+    return { type: "GraphModel", id: this.id };
   }
 
   _parseValue(value) {
@@ -44,12 +42,12 @@ export class GraphModel extends SelectableModel {
       try {
         this._parseData(value);
       } catch (err) {
-        this.error.value = err;
+        this.error = err;
       }
       return;
     }
     if (typeof value !== "string") {
-      this.error.value = new Error("Argument value must be a string");
+      this.error = new Error("Argument value must be a string");
       return;
     }
     if (!value.length) {
@@ -60,10 +58,10 @@ export class GraphModel extends SelectableModel {
       if (isDefined(data) && isPlainObject(data)) {
         this._parseData(data);
       } else {
-        this.error.value = new Error("The value must contain an object");
+        this.error = new Error("The value must contain an object");
       }
     } catch (err) {
-      this.error.value = err;
+      this.error = err;
     }
   }
 
@@ -71,10 +69,10 @@ export class GraphModel extends SelectableModel {
     const { title, description, steps } = data;
 
     if (typeof title === "string" && title.length > 0) {
-      this.title.value = title;
+      this.title = title;
     }
     if (typeof description === "string" && description.length > 0) {
-      this.description.value = description;
+      this.description = description;
     }
 
     this._parseSteps(steps);
@@ -90,14 +88,17 @@ export class GraphModel extends SelectableModel {
       if (isDefined(step) && isPlainObject(step)) {
         const node = createNode(step);
         this.nodes.push(node);
-        connections.push({ srcNodeId: node.id.value, connectionItems: step.connect });
+        connections.push({ srcNodeId: node.id, connectionItems: step.connect });
       }
     }
-    this._parseConnections(connections);
+    this._parseConnections(this.nodes, connections);
   }
 
-  _parseConnections(connectionDataArray) {
-    const nodesById = this._getNodesById();
+  _parseConnections(nodes, connectionDataArray) {
+    const nodesById = nodes.reduce((res, node) => {
+      res[node.id] = node;
+      return res;
+    }, {});
 
     for (let i = 0, len = connectionDataArray.length; i < len; i++) {
       const { srcNodeId, connectionItems } = connectionDataArray[i];
@@ -121,13 +122,13 @@ export class GraphModel extends SelectableModel {
           continue;
         }
 
-        const srcOutPortName = connectionItem.srcOutPort || GraphModel._defaultPortName;
+        const srcOutPortName = connectionItem.srcOutPort || DEFAULT_PORT;
         const srcPort = srcNode.findOutPortByName(srcOutPortName);
         if (!srcPort) {
           continue;
         }
 
-        const destInPortName = connectionItem.dstInPort || GraphModel._defaultPortName;
+        const destInPortName = connectionItem.dstInPort || DEFAULT_PORT;
         const destPort = destNode.findInPortByName(destInPortName);
         if (!destPort) {
           continue;
@@ -141,15 +142,55 @@ export class GraphModel extends SelectableModel {
     }
   }
 
-  _getNodesById() {
-    return this.nodes.reduce((res, node) => {
-      res[node.id] = node;
-      return res;
-    }, {});
+  _increaseVersionId() {
+    this.versionId = this.versionId + 1;
   }
 
-  _increaseVersionId() {
-    this.versionId.value = this.versionId.value + 1;
+  _findSelectedObject() {
+    if (this.selected) {
+      return this;
+    }
+
+    const node = this._findSelectedNode();
+    if (node) {
+      return node;
+    }
+
+    const port = this._findSelectedPort();
+    if (port) {
+      return port;
+    }
+
+    const connection = this._findSelectedConnection();
+    if (connection) {
+      return connection;
+    }
+
+    return this;
+  }
+
+  _findSelectedNode() {
+    return this.nodes.find(node => node.selected);
+  }
+
+  _findSelectedConnection() {
+    return this.connections.find(connection => connection.selected);
+  }
+
+  _findSelectedPort() {
+    let result = null;
+    for (let i = 0, len = this.nodes.length; i < len; i++) {
+      const ports = this.nodes[i].ports;
+
+      for (let k = 0, len2 = ports.length; k < len2; k++) {
+        const port = ports[k];
+        if (port.selected) {
+          result = port;
+          break;
+        }
+      }
+    }
+    return result;
   }
 
   getNodesByType(...nodeTypes) {
@@ -201,12 +242,12 @@ export class GraphModel extends SelectableModel {
       const listener = this._changeListeners[i];
       listener({
         changes,
-        versionId: this.versionId.value
+        versionId: this.versionId
       })
     }
   }
 }
 
 export function createModel(value) {
-  return new GraphModel(value);
+  return createInstance(GraphModel, value);
 }

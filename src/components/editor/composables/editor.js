@@ -26,7 +26,9 @@ class Editor {
     this.onGraphCreated = this.onGraphCreated.bind(this);
     this.onChangeModelContent = this.onChangeModelContent.bind(this);
 
+    this.model.value.selected = true;
     this.model.value.addChangeListener(this.onChangeModelContent);
+
     this.initWatchers({ value, viewport, zoom });
   }
 
@@ -57,7 +59,7 @@ class Editor {
   }
 
   getValue() {
-    return this.model.value;
+    return this.model.value.getValue();
   }
 
   setValue(value) {

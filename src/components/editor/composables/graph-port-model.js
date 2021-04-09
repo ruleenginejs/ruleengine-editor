@@ -1,36 +1,45 @@
 import { notEmptyString } from "@/utils/types";
-import { ref, computed } from "vue";
+import { computed } from "vue";
+import { generateUid, createInstance } from "./graph-base-model";
+import { GraphPortType } from "./graph-port-type";
 import { SelectableModel } from "./selectable-model";
 
-export class GraphPortModel extends SelectableModel {
-  static _nextId = 0;
-  static _errorPortName = "error";
+export const DEFAULT_PORT = "default";
+export const ERROR_PORT = "error";
 
+export class GraphPortModel extends SelectableModel {
   constructor(name, type) {
     super();
 
     if (notEmptyString(name)) {
-      this.name = ref(name);
+      this.name = name;
     } else {
-      this.name = ref("default");
+      this.name = DEFAULT_PORT;
     }
 
-    if (type === "in" || type === "out") {
-      this.type = ref(type);
+    if (type === GraphPortType.IN || type === GraphPortType.OUT) {
+      this.type = type;
     } else {
-      this.type = ref("in");
+      this.type = GraphPortType.IN;
     }
 
-    this.id = ref(++GraphPortModel._nextId);
-    this.disabled = ref(false);
-    this.linkLimit = ref(1);
+    this.id = generateUid();
+    this.disabled = false;
+    this.linkLimit = 1;
 
-    this.isErrorPort = computed(() => {
-      return this.name.value === GraphPortModel._errorPortName;
-    });
+    this.isErrorPort = false;
+  }
+
+  _initComputed() {
+    super._initComputed();
+    this.isErrorPort = computed(() => this.name === ERROR_PORT);
+  }
+
+  _buildValue() {
+    return { type: "GraphPortModel", id: this.id };
   }
 }
 
 export function createPort(name, type) {
-  return new GraphPortModel(name, type);
+  return createInstance(GraphPortModel, name, type);
 }

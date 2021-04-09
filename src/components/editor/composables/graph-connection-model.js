@@ -1,10 +1,9 @@
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { isDefined } from "@/utils/types";
 import { SelectableModel } from "./selectable-model";
+import { generateUid, createInstance } from "./graph-base-model";
 
 export class GraphConnectionModel extends SelectableModel {
-  static _nextId = 0;
-
   constructor(srcNode, srcPort, destNode, destPort) {
     super();
 
@@ -21,11 +20,19 @@ export class GraphConnectionModel extends SelectableModel {
       throw new Error("Argument destPort is required");
     }
 
-    this.id = ref(++GraphConnectionModel._nextId);
+    this.id = generateUid();
     this.srcNode = srcNode;
     this.srcPort = srcPort;
     this.destNode = destNode;
     this.destPort = destPort;
+    this.color = undefined;
+
+    this.from = null;
+    this.to = null;
+  }
+
+  _initComputed() {
+    super._initComputed();
 
     this.from = computed(() => ({
       nodeId: this.srcNode.id,
@@ -36,11 +43,13 @@ export class GraphConnectionModel extends SelectableModel {
       nodeId: this.destNode.id,
       portId: this.destPort.id
     }));
+  }
 
-    this.color = ref(undefined);
+  _buildValue() {
+    return { type: "GraphConnectionModel", id: this.id };
   }
 }
 
 export function createConnection(srcNode, srcPort, destNode, destPort) {
-  return new GraphConnectionModel(srcNode, srcPort, destNode, destPort);
+  return createInstance(GraphConnectionModel, srcNode, srcPort, destNode, destPort);
 }

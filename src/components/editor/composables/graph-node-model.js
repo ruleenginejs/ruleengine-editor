@@ -1,98 +1,102 @@
-import localize from "@/utils/localize";
+import { computed } from "vue"
 import isPlainObject from "is-plain-object";
 import merge from "merge";
-import { reactive, ref, computed } from "vue"
-import { GraphNodeType, validateNodeType } from "./graph-node-type";
-import { createPort } from "./graph-port-model";
+import localize from "@/utils/localize";
 import { isDefined, notEmptyString } from "@/utils/types";
+import { GraphNodeType, isSinglePortNodeType, validateNodeType } from "./graph-node-type";
+import { createPort, DEFAULT_PORT } from "./graph-port-model";
 import { SelectableModel } from "./selectable-model";
-
-const _singlePortNodeTypes = [
-  GraphNodeType.Start,
-  GraphNodeType.End,
-  GraphNodeType.Error
-];
-
-function isSinglePortNodeType(type) {
-  return _singlePortNodeTypes.includes(type);
-}
+import { GraphPortType } from "./graph-port-type";
+import { createInstance, generateUid, updateNextUid } from "./graph-base-model";
 
 export class GraphNodeModel extends SelectableModel {
-  static _nextId = 0;
-
   constructor(options) {
     super();
     options = options || {};
 
     if (notEmptyString(options.id) || typeof options.id === "number") {
-      this.id = ref(options.id);
+      this.id = options.id;
 
-      if (typeof this.id.value === "number") {
-        GraphNodeModel._updateNextId(this.id.value);
+      if (typeof this.id === "number") {
+        updateNextUid(this.id);
       }
     } else {
-      this.id = ref(++GraphNodeModel._nextId);
+      this.id = generateUid();
     }
 
-    if (isDefined(options.type) && validateNodeType(options.type.toLowerCase())) {
-      this.type = ref(options.type.toLowerCase());
+    if (notEmptyString(options.type) && validateNodeType(options.type.toLowerCase())) {
+      this.type = options.type.toLowerCase();
     } else {
-      this.type = ref(GraphNodeType.Single);
+      this.type = GraphNodeType.Single;
     }
 
     if (notEmptyString(options.name)) {
-      this.name = ref(options.name);
+      this.name = options.name;
     } else {
-      this.name = ref(this._getNameFromTypeOrDefault(this.type.value, this.id.value));
+      this.name = this._getNameFromTypeOrDefault(this.type, this.id);
     }
 
-    if (isSinglePortNodeType(this.type.value)) {
+    if (isSinglePortNodeType(this.type)) {
       const ports = this._parsePorts(null);
-      this.inPorts = reactive([ports.in[0]]);
-      this.outPorts = reactive([ports.in[0]]);
+      this.ports = ports.in.concat(ports.out);
     } else {
       const ports = this._parsePorts(options.ports);
-      this.inPorts = reactive(ports.in);
-      this.outPorts = reactive(ports.out);
+      this.ports = ports.in.concat(ports.out);
     }
 
     if (isDefined(options.props) && isPlainObject(options.props)) {
-      this.props = reactive(merge.recursive(true, options.props, {}));
+      this.props = merge.recursive(true, options.props, {});
     } else {
-      this.props = reactive({});
+      this.props = {};
     }
 
     if (notEmptyString(options.handler)) {
-      this.handlerSource = ref(options.handler);
+      this.handlerSource = options.handler;
     } else {
-      this.handlerSource = ref(null);
+      this.handlerSource = null;
     }
 
     if (notEmptyString(options.handlerFile)) {
-      this.handlerFile = ref(options.handlerFile)
+      this.handlerFile = options.handlerFile;
     } else {
-      this.handlerFile = ref(null);
+      this.handlerFile = null;
     }
 
     const position = this._parsePosition(options.canvas);
-    this.positionX = ref(position.x);
-    this.positionY = ref(position.y);
+    this.positionX = position.x;
+    this.positionY = position.y;
 
-    this.isErrorNode = ref(this.type.value === GraphNodeType.Error);
-    this.headerColor = ref(this._parseHeaderColor(options.canvas));
+    this.isErrorNode = this.type === GraphNodeType.Error;
+    this.headerColor = this._parseHeaderColor(options.canvas);
 
-    this.hasHandler = computed(() => {
-      return isDefined(this.handlerSource.value) || isDefined(this.handlerFile.value)
-    });
+    this.hasHandler = false;
+    this.inPorts = [];
+    this.outPorts = [];
   }
 
-  static _updateNextId(num) {
-    GraphNodeModel._nextId = Math.max(GraphNodeModel._nextId, num);
+  _initComputed() {
+    super._initComputed();
+
+    this.hasHandler = computed(() => {
+      return isDefined(this.handlerSource) || isDefined(this.handlerFile)
+    });
+
+    if (isSinglePortNodeType(this.type)) {
+      this.inPorts = computed(() => [this.ports[0]]);
+      this.outPorts = computed(() => [this.ports[0]]);
+    } else {
+      this.inPorts = computed(() => this.ports.filter(p => p.type === GraphPortType.IN));
+      this.outPorts = computed(() => this.ports.filter(p => p.type === GraphPortType.OUT));
+    }
+  }
+
+  _buildValue() {
+    return { type: "GraphNodeModel", id: this.id };
   }
 
   _parsePorts(ports) {
-    const inPorts = new Set(["default"]);
-    const outPorts = new Set(["default"]);
+    const inPorts = new Set([DEFAULT_PORT]);
+    const outPorts = new Set([DEFAULT_PORT]);
 
     if (isDefined(ports) && isPlainObject(ports)) {
       const { in: _in, out } = ports;
@@ -114,8 +118,8 @@ export class GraphNodeModel extends SelectableModel {
     }
 
     const result = {
-      in: [...inPorts].map(p => createPort(p, "in")),
-      out: [...outPorts].map(p => createPort(p, "out"))
+      in: [...inPorts].map(p => createPort(p, GraphPortType.IN)),
+      out: [...outPorts].map(p => createPort(p, GraphPortType.OUT))
     };
 
     return result;
@@ -180,5 +184,5 @@ export class GraphNodeModel extends SelectableModel {
 }
 
 export function createNode(data) {
-  return new GraphNodeModel(data);
+  return createInstance(GraphNodeModel, data);
 }

@@ -1,4 +1,4 @@
-import { computed, ref, watch, onMounted, nextTick } from "vue";
+import { computed, ref, onMounted, nextTick } from "vue";
 import { GraphNodeType } from "./graph-node-type";
 import { SelectableModel } from "./selectable-model";
 import debounce from "debounce";
@@ -10,7 +10,6 @@ class EditorGraph {
     viewport,
     zoom,
     resizeDelay,
-    selectedObject,
     emit
   }) {
     this.model = model;
@@ -25,7 +24,6 @@ class EditorGraph {
     this.onResize = debounce(this.invalidateCanvasSize, resizeDelay.value);
 
     this.initComputed({ viewport, zoom, model });
-    this.initWatchers({ selectedObject });
 
     onMounted(() => {
       nextTick(this.onCreated);
@@ -56,32 +54,17 @@ class EditorGraph {
     });
   }
 
-  initWatchers({ selectedObject }) {
-    watch(selectedObject, (newValue, oldValue) => {
-      if (oldValue instanceof SelectableModel) {
-        oldValue.selected = false;
-      }
-      if (newValue instanceof SelectableModel) {
-        newValue.selected = true;
-      }
-    });
-
-    if (selectedObject.value instanceof SelectableModel) {
-      selectedObject.value.selected = true;
-    }
-  }
-
   onCreated() {
     this.emit("created");
   }
 
   onObjectSelected(selectableModel, value) {
     if (selectableModel instanceof SelectableModel) {
-      if (value) {
-        this.emit("update:selectedObject", selectableModel);
-      } else {
-        selectableModel.selected = false;
+      const { selectedObject } = this.model.value;
+      if (selectedObject) {
+        selectedObject.selected = false
       }
+      selectableModel.selected = value;
     }
   }
 

@@ -8,7 +8,6 @@ export class ChangeNodePosition extends EditCommand {
   }
 
   static createRaw(nodeId, newPosition) {
-    debugger;
     return EditCommand.getRaw(ChangeNodePosition.NAME, {
       nodeId,
       position: newPosition
