@@ -20,6 +20,7 @@
         :y="node.positionY"
         :error="node.isErrorNode"
         :link-rule="linkRule"
+        :title-length="node.titleLength"
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
         @change-position="onChangeNodePosition(node, $event)"

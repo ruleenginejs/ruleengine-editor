@@ -36,7 +36,7 @@ export class GraphPortModel extends SelectableModel {
   }
 
   _buildValue() {
-    return { type: "GraphPortModel", id: this.id };
+    return this.name;
   }
 }
 

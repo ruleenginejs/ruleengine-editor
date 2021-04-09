@@ -1,6 +1,6 @@
 import { computed } from "vue"
 import isPlainObject from "is-plain-object";
-import { isDefined } from "@/utils/types";
+import { isDefined, notEmptyString } from "@/utils/types";
 import { applyEditCommands, applyReverseEditCommands } from "@/utils/edit-command";
 import { createNode } from "./graph-node-model";
 import { createConnection } from "./graph-connection-model";
@@ -31,7 +31,34 @@ export class GraphModel extends SelectableModel {
   }
 
   _buildValue() {
-    return { type: "GraphModel", id: this.id };
+    const value = {};
+    if (notEmptyString(this.title)) {
+      value.title = this.title;
+    }
+    if (notEmptyString(this.description)) {
+      value.description = this.description;
+    }
+    value.steps = this.nodes.map(node => node.getValue());
+    this._buildConnections(value.steps);
+    return value;
+  }
+
+  _buildConnections(steps) {
+    const connectionValuesBySrcNodeId = this.connections.reduce((res, connection) => {
+      if (!res[connection.srcNode.id]) {
+        res[connection.srcNode.id] = [];
+      }
+      res[connection.srcNode.id].push(connection.getValue());
+      return res;
+    }, {});
+
+    for (let i = 0, len = steps.length; i < len; i++) {
+      const step = steps[i];
+      const connectionValues = connectionValuesBySrcNodeId[step.id];
+      if (connectionValues) {
+        step.connect = connectionValues;
+      }
+    }
   }
 
   _parseValue(value) {

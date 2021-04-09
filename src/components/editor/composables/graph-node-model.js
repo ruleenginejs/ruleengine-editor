@@ -3,7 +3,7 @@ import isPlainObject from "is-plain-object";
 import merge from "merge";
 import localize from "@/utils/localize";
 import { isDefined, notEmptyString } from "@/utils/types";
-import { GraphNodeType, isSinglePortNodeType, validateNodeType } from "./graph-node-type";
+import { GraphNodeType, isNavNodeType, validateNodeType } from "./graph-node-type";
 import { createPort, DEFAULT_PORT } from "./graph-port-model";
 import { SelectableModel } from "./selectable-model";
 import { GraphPortType } from "./graph-port-type";
@@ -30,13 +30,16 @@ export class GraphNodeModel extends SelectableModel {
       this.type = GraphNodeType.Single;
     }
 
+    this.isNavNode = isNavNodeType(this.type);
+    this.isErrorNode = this.type === GraphNodeType.Error;
+
     if (notEmptyString(options.name)) {
       this.name = options.name;
     } else {
       this.name = this._getNameFromTypeOrDefault(this.type, this.id);
     }
 
-    if (isSinglePortNodeType(this.type)) {
+    if (this.isNavNode) {
       const ports = this._parsePorts(null);
       this.ports = ports.in.concat(ports.out);
     } else {
@@ -62,11 +65,17 @@ export class GraphNodeModel extends SelectableModel {
       this.handlerFile = null;
     }
 
+    if (this.isErrorNode) {
+      this.titleLength = 2;
+    } else if (this.isNavNode) {
+      this.titleLength = 1;
+    } else {
+      this.titleLength = undefined;
+    }
+
     const position = this._parsePosition(options.canvas);
     this.positionX = position.x;
     this.positionY = position.y;
-
-    this.isErrorNode = this.type === GraphNodeType.Error;
     this.headerColor = this._parseHeaderColor(options.canvas);
 
     this.hasHandler = false;
@@ -81,7 +90,7 @@ export class GraphNodeModel extends SelectableModel {
       return isDefined(this.handlerSource) || isDefined(this.handlerFile)
     });
 
-    if (isSinglePortNodeType(this.type)) {
+    if (this.isNavNode) {
       this.inPorts = computed(() => [this.ports[0]]);
       this.outPorts = computed(() => [this.ports[0]]);
     } else {
@@ -91,7 +100,54 @@ export class GraphNodeModel extends SelectableModel {
   }
 
   _buildValue() {
-    return { type: "GraphNodeModel", id: this.id };
+    const value = {
+      id: this.id,
+      type: this.type,
+      name: this.name,
+      ports: this._buildPorts()
+    }
+
+    const props = this._buildProps();
+    if (props) {
+      value.props = props;
+    }
+
+    if (!this.isNavNode) {
+      if (isDefined(this.handlerFile)) {
+        value.handlerFile = this.handlerFile;
+      } else if (isDefined(this.handler)) {
+        value.handler = this.handler;
+      } else {
+        value.handlerFile = null;
+      }
+    }
+
+    value.canvas = this._buildCanvas();
+    return value;
+  }
+
+  _buildCanvas() {
+    const value = {
+      position: [this.positionX, this.positionY]
+    }
+    if (isDefined(this.headerColor)) {
+      value.color = this.headerColor;
+    }
+    return value;
+  }
+
+  _buildProps() {
+    if (Object.keys(this.props).length > 0) {
+      return merge.recursive(true, this.props, {});
+    }
+    return null;
+  }
+
+  _buildPorts() {
+    return {
+      in: this.inPorts.map(port => port.getValue()),
+      out: this.outPorts.map(port => port.getValue())
+    }
   }
 
   _parsePorts(ports) {
@@ -164,11 +220,11 @@ export class GraphNodeModel extends SelectableModel {
   _getNameFromTypeOrDefault(type, id) {
     switch (type) {
       case GraphNodeType.Start:
-        return "s";
+        return localize("editor.startNode");
       case GraphNodeType.End:
-        return "e";
+        return localize("editor.endNode");
       case GraphNodeType.Error:
-        return "error";
+        return localize("editor.errorNode");
       default:
         return localize("editor.untitledNode", id);
     }

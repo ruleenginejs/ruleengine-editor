@@ -46,7 +46,11 @@ export class GraphConnectionModel extends SelectableModel {
   }
 
   _buildValue() {
-    return { type: "GraphConnectionModel", id: this.id };
+    return {
+      stepId: this.destNode.id,
+      srcOutPort: this.srcPort.getValue(),
+      dstInPort: this.destPort.getValue()
+    };
   }
 }
 

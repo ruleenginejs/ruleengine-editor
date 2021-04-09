@@ -52,6 +52,12 @@ const pipeline = {
       canvas: {
         position: [600, 150]
       }
+    },
+    {
+      type: "error",
+      canvas: {
+        position: [10, 10]
+      }
     }
   ]
 };

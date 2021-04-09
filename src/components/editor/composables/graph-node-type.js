@@ -12,12 +12,12 @@ export function validateNodeType(value) {
   return graphNodeTypes.indexOf(value) !== -1;
 }
 
-const _singlePortNodeTypes = [
+const _navNodeTypes = [
   GraphNodeType.Start,
   GraphNodeType.End,
   GraphNodeType.Error
 ];
 
-export function isSinglePortNodeType(type) {
-  return _singlePortNodeTypes.includes(type);
+export function isNavNodeType(type) {
+  return _navNodeTypes.includes(type);
 }
