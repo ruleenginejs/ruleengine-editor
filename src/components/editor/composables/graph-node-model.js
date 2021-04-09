@@ -180,21 +180,23 @@ export class GraphNodeModel extends SelectableModel {
   }
 
   _parsePosition(canvasOptions) {
-    if (!isDefined(canvasOptions) || !isPlainObject(canvasOptions)) {
+    if (isDefined(canvasOptions) && isPlainObject(canvasOptions)) {
+      return this._toPoint(canvasOptions.position);
+    }
+    return this._toPoint();
+  }
+
+  _toPoint(point) {
+    if (!Array.isArray(point)) {
       return { x: 0, y: 0 };
     }
 
-    const position = canvasOptions.position;
-    if (!Array.isArray(position)) {
-      return { x: 0, y: 0 };
-    }
-
-    let x = position[0];
+    let x = point[0];
     if (typeof x !== "number") {
       x = 0;
     }
 
-    let y = position[1];
+    let y = point[1];
     if (typeof y !== "number") {
       y = 0;
     }
@@ -234,6 +236,18 @@ export class GraphNodeModel extends SelectableModel {
 
   findInPortByName(portName) {
     return this.inPorts.find(port => port.name === portName);
+  }
+
+  getPositionArray() {
+    return [this.positionX, this.positionY];
+  }
+
+  changePosition(position) {
+    const oldPosition = this.getPositionArray();
+    const { x, y } = this._toPoint(position);
+    this.positionX = x;
+    this.positionY = y;
+    return oldPosition;
   }
 }
 

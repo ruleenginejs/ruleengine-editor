@@ -1,5 +1,6 @@
 <template>
   <v-editor
+    ref="editor"
     :value="value"
     v-model:zoom="zoom"
     v-model:viewport="viewport"
@@ -8,6 +9,7 @@
   />
   <div class="controls">
     <button @click="changeValue">Change value</button>
+    <button @click="revertAllChanges">Revert changes</button>
     <div>Zoom: {{ zoom }}, Viewport: {{ viewport }}</div>
   </div>
 </template>
@@ -68,7 +70,8 @@ export default {
     return {
       value: JSON.stringify(pipeline),
       zoom: 100,
-      viewport: [100, 100]
+      viewport: [100, 100],
+      edits: []
     };
   },
   methods: {
@@ -77,6 +80,15 @@ export default {
     },
     onChangeValue(e) {
       console.log(e);
+      this.edits.push(e.changes);
+    },
+    revertAllChanges() {
+      const changes = [];
+      this.edits.forEach((edit) => changes.push(...edit.reverse()));
+      this.edits = [];
+      this.$refs.editor.instance
+        .getModel()
+        .applyReverseEdits(changes.reverse(), false);
     }
   }
 };

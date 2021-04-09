@@ -272,18 +272,16 @@ export class GraphModel extends SelectableModel {
 
   applyEdits(rawEditCommands, emitChangeEvent = true) {
     const changes = applyEditCommands(this, rawEditCommands);
-    this._increaseVersionId();
-
-    if (emitChangeEvent) {
+    if (changes.length > 0 && emitChangeEvent) {
+      this._increaseVersionId();
       this.emitChangeEvent(changes);
     }
   }
 
   applyReverseEdits(rawEditCommands, emitChangeEvent = true) {
     const changes = applyReverseEditCommands(this, rawEditCommands);
-    this._increaseVersionId();
-
-    if (emitChangeEvent) {
+    if (changes.length > 0 && emitChangeEvent) {
+      this._increaseVersionId();
       this.emitChangeEvent(changes);
     }
   }

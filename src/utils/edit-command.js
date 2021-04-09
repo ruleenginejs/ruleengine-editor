@@ -1,3 +1,6 @@
+import isPlainObject from "is-plain-object";
+import { isDefined } from "./types";
+
 export class EditCommand {
   static _nextId = 0;
 
@@ -8,21 +11,29 @@ export class EditCommand {
     this.uid = ++EditCommand._nextId;
   }
 
-  // eslint-disable-next-line no-unused-vars
   apply(model) {
-    throw new Error("Not implemented");
+    return this._execute(model, this.payload);
+  }
+
+  reverse(model) {
+    return this._execute(model, this.reversePayload);
+  }
+
+  _execute(model, payload) {
+    if (isDefined(payload) && isPlainObject(payload)) {
+      return this.doExecute(model, payload);
+    }
+    return null;
   }
 
   // eslint-disable-next-line no-unused-vars
-  reverse(model) {
-    throw new Error("Not implemented");
-  }
+  doExecute(model, payload) { }
 
   static getRaw(name, payload, reversePayload) {
     return {
       name,
       payload,
-      reversePayload
+      reverse: reversePayload
     }
   }
 }
@@ -73,7 +84,7 @@ export function createEditCommands(rawEditCommands) {
       return null;
     }
 
-    return createCommand(command.name, command.payload, command.reversePayload);
+    return createCommand(command.name, command.payload, command.reverse);
   }).filter(val => !!val);
 }
 
