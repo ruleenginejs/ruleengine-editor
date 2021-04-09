@@ -29,6 +29,9 @@ export class GraphModel extends SelectableModel {
     return this._buildValue();
   }
 
+  setValue(value) {
+  }
+
   _buildValue() {
     return {};
   }
@@ -201,10 +204,6 @@ export class GraphModel extends SelectableModel {
         versionId: this.versionId.value
       })
     }
-  }
-
-  destroy() {
-    this.removeAllChangeListeners();
   }
 }
 

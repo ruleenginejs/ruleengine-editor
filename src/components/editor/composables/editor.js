@@ -1,4 +1,4 @@
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { createModel } from "./graph-model";
 
 class Editor {
@@ -18,7 +18,8 @@ class Editor {
     this.autoFit = autoFit;
     this.graph = ref(null);
     this.splitViewCreated = ref(false);
-    this.selectedObject = ref(this.model.value);
+    this.viewportModel = ref(viewport.value);
+    this.zoomModel = ref(zoom.value);
 
     this.onSplitViewResize = this.onSplitViewResize.bind(this);
     this.onSplitViewCreated = this.onSplitViewCreated.bind(this);
@@ -26,42 +27,49 @@ class Editor {
     this.onChangeModelContent = this.onChangeModelContent.bind(this);
 
     this.model.value.addChangeListener(this.onChangeModelContent);
-
-    this.initComputed({ viewport, zoom });
-    this.initWatchers({ value });
+    this.initWatchers({ value, viewport, zoom });
   }
 
-  initComputed({ viewport, zoom }) {
-    this.viewportModel = computed({
-      get: () => viewport.value,
-      set: (val) => this.emit("update:viewport", val)
-    });
-
-    this.zoomModel = computed({
-      get: () => zoom.value,
-      set: (val) => this.emit("update:zoom", val)
-    });
-  }
-
-  initWatchers({ value }) {
+  initWatchers({ value, viewport, zoom }) {
     watch(value, () => {
-      this.changeModel(value.value);
+      this.setValue(value.value);
     });
-  }
 
-  changeModel(value) {
-    if (this.model.value) {
-      this.model.value.destroy();
-    }
+    watch(viewport, () => {
+      this.viewportModel.value = viewport.value;
+    });
 
-    this.model.value = createModel(value);
-    this.model.value.addChangeListener(this.onChangeModelContent);
+    watch(zoom, () => {
+      this.zoomModel.value = zoom.value;
+    });
 
-    this.selectedObject.value = this.model.value;
+    watch(this.viewportModel, () => {
+      this.emit("update:viewport", this.viewportModel.value);
+    });
+
+    watch(this.zoomModel, () => {
+      this.emit("update:zoom", this.zoomModel.value);
+    });
   }
 
   getModel() {
     return this.model.value;
+  }
+
+  getValue() {
+    return this.model.value;
+  }
+
+  setValue(value) {
+    this.model.value.setValue(value);
+  }
+
+  setZoom(zoom) {
+    this.zoomModel.value = zoom;
+  }
+
+  setViewport(viewport) {
+    this.viewportModel.value = viewport;
   }
 
   fitCanvas(maxZoom = null) {
