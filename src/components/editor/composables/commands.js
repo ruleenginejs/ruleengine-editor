@@ -1,5 +1,4 @@
-import { EditCommand } from "./command";
-import { EditCommandsRegistry } from "./command-registry";
+import { EditCommand, EditCommandsRegistry } from "@/utils/edit-command";
 
 export class ChangeNodePosition extends EditCommand {
   static NAME = "change-node-position";
@@ -9,13 +8,11 @@ export class ChangeNodePosition extends EditCommand {
   }
 
   static createRaw(nodeId, newPosition) {
-    return {
-      name: ChangeNodePosition.NAME,
-      payload: {
-        nodeId,
-        position: newPosition
-      }
-    }
+    debugger;
+    return EditCommand.getRaw(ChangeNodePosition.NAME, {
+      nodeId,
+      position: newPosition
+    });
   }
 }
 

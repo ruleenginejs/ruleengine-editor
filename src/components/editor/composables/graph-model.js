@@ -4,7 +4,7 @@ import { isDefined } from "@/utils/types";
 import { createNode } from "./graph-node-model";
 import { createConnection } from "./graph-connection-model";
 import { SelectableModel } from "./selectable-model";
-import { applyEditCommands, applyReverseEditCommands } from "./command";
+import { applyEditCommands, applyReverseEditCommands } from "@/utils/edit-command";
 
 export class GraphModel extends SelectableModel {
   static _nextId = 0;

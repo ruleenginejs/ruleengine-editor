@@ -1,6 +1,3 @@
-import { EditCommandsRegistry } from "./command-registry";
-import { markRaw } from "vue";
-
 export class EditCommand {
   static _nextId = 0;
 
@@ -21,12 +18,38 @@ export class EditCommand {
     throw new Error("Not implemented");
   }
 
-  toRaw(payload, reversePayload) {
+  static getRaw(name, payload, reversePayload) {
     return {
-      name: this.name,
+      name,
       payload,
       reversePayload
     }
+  }
+}
+
+export class EditCommandsRegistry {
+  static current = new EditCommandsRegistry();
+
+  constructor() {
+    this.commands = new Map();
+  }
+
+  registerCommand(commandId, handler) {
+    this.commands.set(commandId, handler);
+
+    const toUnbind = () => {
+      this.commands.delete(commandId);
+    }
+
+    return toUnbind;
+  }
+
+  getCommand(commandId) {
+    return this.commands.get(commandId);
+  }
+
+  destroy() {
+    this.commands.clear();
   }
 }
 
@@ -57,7 +80,7 @@ export function createEditCommands(rawEditCommands) {
 export function createCommand(name, payload, reversePayload) {
   const ctor = EditCommandsRegistry.current.getCommand(name);
   if (typeof ctor === "function") {
-    return markRaw(new ctor(payload, reversePayload));
+    return new ctor(payload, reversePayload);
   }
   return null;
 }
