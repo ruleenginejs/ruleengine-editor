@@ -20,7 +20,7 @@ export class GraphModel extends SelectableModel {
     this.versionId = ref(0);
     this.title = ref(null);
     this.description = ref(null);
-    this.changeListeners = reactive([]);
+    this._changeListeners = [];
 
     this._parseValue(value);
   }
@@ -178,24 +178,24 @@ export class GraphModel extends SelectableModel {
 
   addChangeListener(listener) {
     if (typeof listener === "function") {
-      this.changeListeners.push(listener);
+      this._changeListeners.push(listener);
     }
   }
 
   removeChangeListener(listener) {
-    const index = this.changeListeners.indexOf(listener);
+    const index = this._changeListeners.indexOf(listener);
     if (index !== -1) {
-      this.changeListeners.splice(index, 1);
+      this._changeListeners.splice(index, 1);
     }
   }
 
   removeAllChangeListeners() {
-    this.changeListeners = reactive([]);
+    this._changeListeners = [];
   }
 
   emitChangeEvent(changes) {
-    for (let i = 0; i < this.changeListeners.length; i++) {
-      const listener = this.changeListeners[i];
+    for (let i = 0; i < this._changeListeners.length; i++) {
+      const listener = this._changeListeners[i];
       listener({
         changes,
         versionId: this.versionId.value
