@@ -25,7 +25,7 @@
         @change-position="onChangeNodePosition(node, $event)"
       >
         <template #port>
-          <v-graph-port :key="node.inPorts[0].id" :id="node.inPorts[0].id" />
+          <v-graph-port :key="node.ports[0].id" :id="node.ports[0].id" />
         </template>
       </v-graph-circle-node>
       <v-graph-node
@@ -148,24 +148,16 @@ export default {
     resizeDelay: {
       type: Number,
       default: undefined
-    },
-    selectedObject: {
-      type: Object,
-      default: null
     }
   },
-  emits: ["update:viewport", "update:zoom", "update:selectedObject", "created"],
+  emits: ["update:viewport", "update:zoom", "created"],
   setup(props, { emit }) {
-    const { model, viewport, zoom, resizeDelay, selectedObject } = toRefs(
-      props
-    );
-
+    const { model, viewport, zoom, resizeDelay } = toRefs(props);
     const graph = useEditorGraph({
       model,
       viewport,
       zoom,
       resizeDelay,
-      selectedObject,
       emit
     });
 
