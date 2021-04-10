@@ -19,11 +19,12 @@
         :x="node.positionX"
         :y="node.positionY"
         :error="node.isErrorNode"
-        :link-rule="linkRule"
+        :link-rule="nodeLinkRule"
         :title-length="node.titleLength"
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
         @change-position="onChangeNodePosition(node, $event)"
+        @new-link="onNodeNewLink(node, $event)"
       >
         <template #port>
           <v-graph-port :key="node.ports[0].id" :id="node.ports[0].id" />
@@ -37,10 +38,11 @@
         :x="node.positionX"
         :y="node.positionY"
         :header-color="node.headerColor"
-        :link-rule="linkRule"
+        :link-rule="nodeLinkRule"
         :selected="node.selected"
         @update:selected="onObjectSelected(node, $event)"
         @change-position="onChangeNodePosition(node, $event)"
+        @new-link="onNodeNewLink(node, $event)"
       >
         <template #header-left-icon>
           <v-icon-doc-text />
@@ -56,10 +58,13 @@
             :error="port.isErrorPort"
             :disabled="port.disabled"
             :link-limit="port.linkLimit"
-            :link-rule="linkRule"
+            :link-rule="portLinkRule"
+            direction="left"
             :selected="port.selected"
             @update:selected="onObjectSelected(port, $event)"
-            direction="left"
+            @link="onPortLink"
+            @unlink="onPortUnlink"
+            @new-link="onPortNewLink"
           >
             {{ port.name }}
           </v-graph-port>
@@ -72,10 +77,13 @@
             :error="port.isErrorPort"
             :disabled="port.disabled"
             :link-limit="port.linkLimit"
-            :link-rule="linkRule"
+            :link-rule="portLinkRule"
+            direction="right"
             :selected="port.selected"
             @update:selected="onObjectSelected(port, $event)"
-            direction="right"
+            @link="onPortLink"
+            @unlink="onPortUnlink"
+            @new-link="onPortNewLink"
           >
             {{ port.name }}
           </v-graph-port>
@@ -169,9 +177,14 @@ export default {
       cvSelected,
       circleNodes,
       stepNodes,
-      linkRule,
+      nodeLinkRule,
+      portLinkRule,
       onObjectSelected,
-      onChangeNodePosition
+      onChangeNodePosition,
+      onNodeNewLink,
+      onPortLink,
+      onPortUnlink,
+      onPortNewLink
     } = graph;
 
     return {
@@ -182,9 +195,14 @@ export default {
       cvSelected,
       circleNodes,
       stepNodes,
-      linkRule,
+      nodeLinkRule,
+      portLinkRule,
       onObjectSelected,
-      onChangeNodePosition
+      onChangeNodePosition,
+      onNodeNewLink,
+      onPortLink,
+      onPortUnlink,
+      onPortNewLink
     };
   }
 };

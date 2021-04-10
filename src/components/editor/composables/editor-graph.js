@@ -3,6 +3,7 @@ import { GraphNodeType } from "./graph-node-type";
 import { SelectableModel } from "./selectable-model";
 import debounce from "debounce";
 import { ChangeNodePosition } from "./commands";
+import { validateLink } from "./link-rules";
 
 class EditorGraph {
   constructor({
@@ -16,11 +17,16 @@ class EditorGraph {
     this.emit = emit;
     this.canvas = ref(null);
 
-    this.linkRule = this.linkRule.bind(this);
     this.onObjectSelected = this.onObjectSelected.bind(this);
     this.invalidateCanvasSize = this.invalidateCanvasSize.bind(this);
     this.onCreated = this.onCreated.bind(this);
     this.onChangeNodePosition = this.onChangeNodePosition.bind(this);
+    this.nodeLinkRule = this.nodeLinkRule.bind(this);
+    this.portLinkRule = this.portLinkRule.bind(this);
+    this.onNodeNewLink = this.onNodeNewLink.bind(this);
+    this.onPortNewLink = this.onPortNewLink.bind(this);
+    this.onPortLink = this.onPortLink.bind(this);
+    this.onPortUnlink = this.onPortUnlink.bind(this);
     this.onResize = debounce(this.invalidateCanvasSize, resizeDelay.value);
 
     this.initComputed({ viewport, zoom, model });
@@ -101,7 +107,28 @@ class EditorGraph {
     ]);
   }
 
-  linkRule() {
+  onNodeNewLink(node, e) {
+    console.log("new link node", e);
+  }
+
+  onPortNewLink(e) {
+    console.log("port new link", e);
+  }
+
+  onPortLink(e) {
+    console.log("link port", e);
+  }
+
+  onPortUnlink(e) {
+    console.log("unlink port", e);
+  }
+
+  nodeLinkRule(from, to) {
+    return validateLink(this.model.value, from, to);
+  }
+
+  portLinkRule(from, to) {
+    return validateLink(this.model.value, from, to);
   }
 }
 

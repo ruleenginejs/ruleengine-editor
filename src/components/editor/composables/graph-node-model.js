@@ -238,6 +238,34 @@ export class GraphNodeModel extends SelectableModel {
     return this.inPorts.find(port => port.name === portName);
   }
 
+  getPortById(portId) {
+    for (let i = 0, len = this.ports.length; i < len; i++) {
+      const port = this.ports[i];
+      if (port.id === portId) {
+        return port;
+      }
+    }
+    return null;
+  }
+
+  getDefaultOutPort() {
+    return this.getPortByTypeAndName(GraphPortType.OUT, DEFAULT_PORT);
+  }
+
+  getDefaultInPort() {
+    return this.getPortByTypeAndName(GraphPortType.IN, DEFAULT_PORT);
+  }
+
+  getPortByTypeAndName(portType, portName) {
+    for (let i = 0, len = this.ports.length; i < len; i++) {
+      const port = this.ports[i];
+      if (port.type === portType && port.name === portName) {
+        return port;
+      }
+    }
+    return null;
+  }
+
   getPositionArray() {
     return [this.positionX, this.positionY];
   }

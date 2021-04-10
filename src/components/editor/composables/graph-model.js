@@ -267,7 +267,38 @@ export class GraphModel extends SelectableModel {
   }
 
   getNodeById(nodeId) {
-    return this.nodes.find(node => node.id === nodeId);
+    for (let i = 0, len = this.nodes.length; i < len; i++) {
+      const node = this.nodes[i];
+      if (node.id === nodeId) {
+        return this.nodes[i];
+      }
+    }
+    return null;
+  }
+
+  getNodeConnections(nodeId) {
+    const result = [];
+    for (let i = 0, len = this.connections.length; i < len; i++) {
+      const connection = this.connections[i];
+      if (connection.srcNode.id === nodeId || connection.destNode.id === nodeId) {
+        result.push(connection);
+      }
+    }
+    return result;
+  }
+
+  connectionExistsFor(pair1, pair2) {
+    for (let i = 0, len = this.connections.length; i < len; i++) {
+      const connection = this.connections[i];
+      if (connection.srcEquals(pair1) ||
+        connection.destEquals(pair1) ||
+        connection.srcEquals(pair2) ||
+        connection.destEquals(pair2)
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 
   applyEdits(rawEditCommands, emitChangeEvent = true) {

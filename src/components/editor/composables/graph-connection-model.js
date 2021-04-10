@@ -51,6 +51,20 @@ export class GraphConnectionModel extends SelectableModel {
       dstInPort: this.destPort.getValue()
     };
   }
+
+  srcEquals(pair) {
+    if (!pair) return false;
+    const { nodeId, portId } = this.from;
+    return nodeId === pair.nodeId &&
+      portId === pair.portId;
+  }
+
+  destEquals(pair) {
+    if (!pair) return false;
+    const { nodeId, portId } = this.to;
+    return nodeId === pair.nodeId &&
+      portId === pair.portId;
+  }
 }
 
 export function createConnection(srcNode, srcPort, destNode, destPort) {
