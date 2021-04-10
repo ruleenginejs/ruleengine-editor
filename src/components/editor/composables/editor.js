@@ -66,8 +66,16 @@ class Editor {
     this.model.value.setValue(value);
   }
 
+  getZoom() {
+    return this.zoomModel.value;
+  }
+
   setZoom(zoom) {
     this.zoomModel.value = zoom;
+  }
+
+  getViewport() {
+    return this.viewportModel.value.slice();
   }
 
   setViewport(viewport) {
