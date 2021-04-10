@@ -7,6 +7,7 @@ import { createConnection } from "./graph-connection-model";
 import { SelectableModel } from "./selectable-model";
 import { DEFAULT_PORT } from "./graph-port-model";
 import { createInstance } from "./graph-base-model";
+import { GraphPortType } from "./graph-port-type";
 
 export class GraphModel extends SelectableModel {
   constructor(value) {
@@ -287,13 +288,17 @@ export class GraphModel extends SelectableModel {
     return result;
   }
 
-  connectionExistsFor(pair1, pair2) {
+  connectionExists(nodeId, portId, portType = null) {
+    const isIn = portType === GraphPortType.IN;
+    const isOut = portType === GraphPortType.OUT;
+    const isBoth = !isDefined(portType);
+
     for (let i = 0, len = this.connections.length; i < len; i++) {
       const connection = this.connections[i];
-      if (connection.srcEquals(pair1) ||
-        connection.destEquals(pair1) ||
-        connection.srcEquals(pair2) ||
-        connection.destEquals(pair2)
+
+      if ((isBoth && connection.isSrcOrDest(nodeId, portId)) ||
+        (isOut && connection.isSrc(nodeId, portId)) ||
+        (isIn && connection.isDest(nodeId, portId))
       ) {
         return true;
       }

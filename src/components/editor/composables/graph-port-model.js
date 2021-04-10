@@ -24,7 +24,12 @@ export class GraphPortModel extends SelectableModel {
     }
 
     this.disabled = false;
-    this.linkLimit = 1;
+
+    if (this.type === GraphPortType.OUT) {
+      this.linkLimit = 1;
+    } else {
+      this.linkLimit = null;
+    }
 
     this.isErrorPort = false;
   }

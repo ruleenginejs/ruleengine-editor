@@ -49,6 +49,20 @@ const pipeline = {
       }
     },
     {
+      id: 4,
+      type: "single",
+      name: "Response",
+      props: { a: 1, b: 2 },
+      handler: "var a = 1;",
+      ports: {
+        in: ["test"],
+        out: ["test2"]
+      },
+      canvas: {
+        position: [300, -250]
+      }
+    },
+    {
       id: 3,
       type: "end",
       canvas: {
