@@ -20,7 +20,7 @@ export function validateLink(model, from, to) {
     return false;
   }
 
-  if (from.node.id === to.node.id && (!from.portId || !to.portId)) {
+  if (from.node.id === to.node.id) {
     return false;
   }
 
