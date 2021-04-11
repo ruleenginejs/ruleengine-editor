@@ -39,7 +39,12 @@ export class GraphNodeModel extends SelectableModel {
 
     if (this.isNavNode) {
       const ports = this._parsePorts(null);
-      this.ports = ports.in.concat(ports.out);
+
+      if (this.type === GraphNodeType.End) {
+        this.ports = [ports.in[0]];
+      } else {
+        this.ports = [ports.out[0]];
+      }
     } else {
       const ports = this._parsePorts(options.ports);
       this.ports = ports.in.concat(ports.out);

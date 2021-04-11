@@ -4,6 +4,7 @@ import { SelectableModel } from "./selectable-model";
 import debounce from "debounce";
 import { ChangeNodePosition } from "./commands";
 import { validateLink } from "./link-rules";
+import { createNewConnection } from "./new-connection";
 
 class EditorGraph {
   constructor({
@@ -21,12 +22,8 @@ class EditorGraph {
     this.invalidateCanvasSize = this.invalidateCanvasSize.bind(this);
     this.onCreated = this.onCreated.bind(this);
     this.onChangeNodePosition = this.onChangeNodePosition.bind(this);
-    this.nodeLinkRule = this.nodeLinkRule.bind(this);
-    this.portLinkRule = this.portLinkRule.bind(this);
-    this.onNodeNewLink = this.onNodeNewLink.bind(this);
-    this.onPortNewLink = this.onPortNewLink.bind(this);
-    this.onPortLink = this.onPortLink.bind(this);
-    this.onPortUnlink = this.onPortUnlink.bind(this);
+    this.linkRule = this.linkRule.bind(this);
+    this.onNewLink = this.onNewLink.bind(this);
     this.onResize = debounce(this.invalidateCanvasSize, resizeDelay.value);
 
     this.initComputed({ viewport, zoom, model });
@@ -103,31 +100,15 @@ class EditorGraph {
 
   onChangeNodePosition(node, e) {
     this.model.value.applyEdits([
-      ChangeNodePosition.createRaw(node.id, e.newPosition)
+      ChangeNodePosition.createDef(node.id, e.newPosition)
     ]);
   }
 
-  onNodeNewLink(node, e) {
-    console.log("new link node", e);
+  onNewLink(e) {
+    createNewConnection(this.model.value, e.from, e.to);
   }
 
-  onPortNewLink(e) {
-    console.log("port new link", e);
-  }
-
-  onPortLink(e) {
-    console.log("link port", e);
-  }
-
-  onPortUnlink(e) {
-    console.log("unlink port", e);
-  }
-
-  nodeLinkRule(from, to) {
-    return validateLink(this.model.value, from, to);
-  }
-
-  portLinkRule(from, to) {
+  linkRule(from, to) {
     return validateLink(this.model.value, from, to);
   }
 }

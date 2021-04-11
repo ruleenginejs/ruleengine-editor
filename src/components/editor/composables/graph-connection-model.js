@@ -2,6 +2,8 @@ import { computed } from "vue";
 import { isDefined } from "@/utils/types";
 import { SelectableModel } from "./selectable-model";
 import { createInstance } from "./graph-base-model";
+import { ConnectionDefinition } from "./connection-definition";
+import { GraphPortType } from "./graph-port-type";
 
 export class GraphConnectionModel extends SelectableModel {
   constructor(srcNode, srcPort, destNode, destPort) {
@@ -20,6 +22,14 @@ export class GraphConnectionModel extends SelectableModel {
       throw new Error("Argument destPort is required");
     }
 
+    if (srcPort.type !== GraphPortType.OUT) {
+      throw new Error("srcPort must be outgoing port");
+    }
+
+    if (destPort.type !== GraphPortType.IN) {
+      throw new Error("destPort must be incoming port");
+    }
+
     this.srcNode = srcNode;
     this.srcPort = srcPort;
     this.destNode = destNode;
@@ -28,6 +38,7 @@ export class GraphConnectionModel extends SelectableModel {
 
     this.from = null;
     this.to = null;
+    this.definition = null;
   }
 
   _initComputed() {
@@ -42,6 +53,14 @@ export class GraphConnectionModel extends SelectableModel {
       nodeId: this.destNode.id,
       portId: this.destPort.id
     }));
+
+    this.definition = computed(() => new ConnectionDefinition({
+      nodeId: this.srcNode.id,
+      outPort: this.srcPort.name
+    }, {
+      nodeId: this.destNode.id,
+      inPort: this.destPort.name
+    }));
   }
 
   _buildValue() {
@@ -50,20 +69,6 @@ export class GraphConnectionModel extends SelectableModel {
       srcOutPort: this.srcPort.getValue(),
       dstInPort: this.destPort.getValue()
     };
-  }
-
-  srcEquals(pair) {
-    if (!pair) return false;
-    const { nodeId, portId } = this.from;
-    return nodeId === pair.nodeId &&
-      portId === pair.portId;
-  }
-
-  destEquals(pair) {
-    if (!pair) return false;
-    const { nodeId, portId } = this.to;
-    return nodeId === pair.nodeId &&
-      portId === pair.portId;
   }
 
   isSrcOrDest(nodeId, portId) {

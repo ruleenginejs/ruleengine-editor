@@ -1,13 +1,13 @@
-import { EditCommand } from "@/utils/edit-command";
+import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
 
 export class ChangeNodePosition extends EditCommand {
   static NAME = "change-node-position";
 
-  constructor(payload, reversePayload) {
-    super(ChangeNodePosition.NAME, payload, reversePayload);
+  constructor(payload) {
+    super(ChangeNodePosition.NAME, payload);
   }
 
-  doExecute(model, payload) {
+  doApply(model, payload) {
     const { nodeId, position } = payload;
     if (!nodeId || !Array.isArray(position)) return null;
 
@@ -16,23 +16,21 @@ export class ChangeNodePosition extends EditCommand {
 
     const oldPosition = node.changePosition(position);
     const newPosition = node.getPositionArray();
+
     return this._createChanges(node.id, newPosition, oldPosition);
   }
 
   _createChanges(nodeId, newPosition, oldPosition) {
-    return EditCommand.getRaw(this.name, {
-      nodeId,
-      position: newPosition
-    }, {
-      nodeId,
-      position: oldPosition
-    })
+    return createChanges(
+      ChangeNodePosition.createDef(nodeId, newPosition),
+      ChangeNodePosition.createDef(nodeId, oldPosition)
+    );
   }
 
-  static createRaw(nodeId, newPosition) {
-    return EditCommand.getRaw(ChangeNodePosition.NAME, {
+  static createDef(nodeId, position) {
+    return createDefinition(ChangeNodePosition.NAME, {
       nodeId,
-      position: newPosition
-    });
+      position
+    })
   }
 }

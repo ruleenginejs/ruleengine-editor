@@ -1,7 +1,7 @@
 import { computed } from "vue"
 import isPlainObject from "is-plain-object";
 import { isDefined, notEmptyString } from "@/utils/types";
-import { applyEditCommands, applyReverseEditCommands } from "@/utils/edit-command";
+import { applyEditCommands } from "@/utils/edit-command";
 import { createNode, GraphNodeModel } from "./graph-node-model";
 import { createConnection } from "./graph-connection-model";
 import { SelectableModel } from "./selectable-model";
@@ -289,33 +289,77 @@ export class GraphModel extends SelectableModel {
   }
 
   connectionExists(nodeId, portId, portType = null) {
-    const isIn = portType === GraphPortType.IN;
-    const isOut = portType === GraphPortType.OUT;
-    const isBoth = !isDefined(portType);
+    const _in = portType === GraphPortType.IN;
+    const out = portType === GraphPortType.OUT;
+    const both = !isDefined(portType);
 
     for (let i = 0, len = this.connections.length; i < len; i++) {
       const connection = this.connections[i];
 
-      if ((isBoth && connection.isSrcOrDest(nodeId, portId)) ||
-        (isOut && connection.isSrc(nodeId, portId)) ||
-        (isIn && connection.isDest(nodeId, portId))
-      ) {
+      if ((both && connection.isSrcOrDest(nodeId, portId))
+        || (out && connection.isSrc(nodeId, portId))
+        || (_in && connection.isDest(nodeId, portId))) {
         return true;
       }
     }
     return false;
   }
 
-  applyEdits(rawEditCommands, emitChangeEvent = true) {
-    const changes = applyEditCommands(this, rawEditCommands);
-    if (changes.length > 0 && emitChangeEvent) {
-      this._increaseVersionId();
-      this.emitChangeEvent(changes);
+  outConnectionExistsByPortName(nodeId, outPortName) {
+    for (let i = 0, len = this.connections.length; i < len; i++) {
+      const connection = this.connections[i];
+      if (connection.srcNode.id === nodeId && connection.srcPort.name === outPortName) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  createConnection(connectionDef) {
+    const result = this.obtainConnectionDef(connectionDef);
+    if (!result) return null;
+
+    const { fromNode, outPort, toNode, inPort } = result;
+    const connection = createConnection(fromNode, outPort, toNode, inPort);
+    this.connections.push(connection);
+    return connection;
+  }
+
+  obtainConnectionDef(connectionDef) {
+    const fromNode = this.getNodeById(connectionDef.fromNodeId);
+    if (!fromNode) return null;
+
+    const outPort = fromNode.findOutPortByName(connectionDef.outPort);
+    if (!outPort) return null;
+
+    const toNode = this.getNodeById(connectionDef.toNodeId);
+    if (!toNode) return null;
+
+    const inPort = toNode.findInPortByName(connectionDef.inPort);
+    if (!inPort) return null;
+
+    return { fromNode, outPort, toNode, inPort };
+  }
+
+  findConnectionByDef(connectionDef) {
+    for (let i = 0, len = this.connections.length; i < len; i++) {
+      const connection = this.connections[i];
+      if (connection.definition.equals(connectionDef)) {
+        return connection;
+      }
+    }
+    return null;
+  }
+
+  deleteConnectionById(connectionId) {
+    const index = this.connections.findIndex(c => c.id === connectionId);
+    if (index !== -1) {
+      this.connections.splice(index, 1);
     }
   }
 
-  applyReverseEdits(rawEditCommands, emitChangeEvent = true) {
-    const changes = applyReverseEditCommands(this, rawEditCommands);
+  applyEdits(rawEditCommands, emitChangeEvent = true) {
+    const changes = applyEditCommands(this, rawEditCommands);
     if (changes.length > 0 && emitChangeEvent) {
       this._increaseVersionId();
       this.emitChangeEvent(changes);

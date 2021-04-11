@@ -3,60 +3,31 @@ import { GraphPortType } from "./graph-port-type";
 
 export function validateLink(model, from, to) {
   if (!from || !to) return false;
+  from = { ...from };
+  to = { ...to };
 
-  const fromNode = model.getNodeById(from.nodeId);
-  if (!fromNode) return false;
+  from.node = model.getNodeById(from.nodeId);
+  if (!from.node) return false;
 
-  const toNode = model.getNodeById(to.nodeId);
-  if (!toNode) return false;
+  to.node = model.getNodeById(to.nodeId);
+  if (!to.node) return false;
 
-  if (fromNode.isNavNode && toNode.isNavNode) {
-    return _validateLinkBetweenNavNodes(model,
-      { node: fromNode, portId: from.portId },
-      { node: toNode, portId: to.portId }
-    );
-  }
-
-  if (fromNode.isNavNode || toNode.isNavNode) {
-    return _validateLinkBetweenNavAndStepNodes(model,
-      { node: fromNode, portId: from.portId },
-      { node: toNode, portId: to.portId }
-    );
-  }
-
-  if (!fromNode.isNavNode && !toNode.isNavNode) {
-    return _validateLinkBetweenStepNodes(model,
-      { node: fromNode, portId: from.portId },
-      { node: toNode, portId: to.portId }
-    );
-  }
-
-  return false;
-}
-
-function _validateLinkBetweenNavNodes(model, from, to) {
-  if (_isReverseDirection(from.node, to.node)) {
-    const tmp = from;
-    from = to;
-    to = tmp;
-  }
-
-  if (from.node.type === to.node.type) {
+  if (_isStartOrErrorNode(from.node) && _isStartOrErrorNode(to.node)) {
     return false;
   }
 
-  if (!_isEndNode(to.node)) {
+  if (from.node.isNavNode && to.node.isNavNode && from.node.type === to.node.type) {
     return false;
   }
 
-  if (model.connectionExists(from.node.id, from.portId)) {
+  if (from.node.id === to.node.id && (!from.portId || !to.portId)) {
     return false;
   }
 
-  return true;
-}
+  if (!from.portId && !to.portId) {
+    return false;
+  }
 
-function _validateLinkBetweenNavAndStepNodes(model, from, to) {
   if (from.portId) {
     from.port = from.node.getPortById(from.portId);
     if (!from.port) return false;
@@ -67,105 +38,23 @@ function _validateLinkBetweenNavAndStepNodes(model, from, to) {
     if (!to.port) return false;
   }
 
-  if (to.node.isNavNode) {
-    const tmp = from;
-    from = to;
-    to = tmp;
-  }
-
-  if (_isStartOrErrorNode(from.node)) {
-    if (!to.port) {
-      to.port = to.node.getDefaultInPort();
-    }
-
-    if (!to.port) {
-      return false;
-    }
-
-    if (to.port.type === GraphPortType.OUT) {
-      return false;
-    }
-
-    if (model.connectionExists(from.node.id, from.portId)) {
-      return false;
-    }
-  } else if (_isEndNode(from.node)) {
-    if (!to.port) {
-      to.port = to.node.getDefaultOutPort();
-    }
-
-    if (!to.port) {
-      return false;
-    }
-
-    if (to.port.type === GraphPortType.IN) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function _validateLinkBetweenStepNodes(model, from, to) {
-  if (from.portId) {
-    from.port = from.node.getPortById(from.portId);
-    if (!from.port) return false;
-  }
-
-  if (to.portId) {
-    to.port = to.node.getPortById(to.portId);
-    if (!to.port) return false;
-  }
-
-  if (from.port && to.port) {
-    if (!_validatePorts(model, from, to, false)) {
-      return false;
-    }
-  } else if (!from.port && to.port) {
+  if (!from.port) {
     if (to.port.type === GraphPortType.IN) {
       from.port = from.node.getDefaultOutPort();
     } else {
       from.port = from.node.getDefaultInPort();
     }
+  }
 
-    if (!from.port) {
-      return false;
-    }
-
-    if (!_validatePorts(model, from, to)) {
-      return false;
-    }
-  } else if (from.port && !to.port) {
+  if (!to.port) {
     if (from.port.type === GraphPortType.IN) {
       to.port = to.node.getDefaultOutPort();
     } else {
       to.port = to.node.getDefaultInPort();
     }
-
-    if (!to.port) {
-      return false;
-    }
-
-    if (!_validatePorts(model, from, to)) {
-      return false;
-    }
-  } else {
-    from.port = from.node.getDefaultOutPort();
-    if (!from.port) return false;
-
-    to.port = to.node.getDefaultInPort();
-    if (!to.port) return false;
-
-    if (!_validatePorts(model, from, to)) {
-      return false;
-    }
   }
 
-  return true;
-}
-
-function _validatePorts(model, from, to, selfNode = true) {
-  if (selfNode && from.node.id === to.node.id) {
+  if (!from.port || !to.port) {
     return false;
   }
 
@@ -177,39 +66,21 @@ function _validatePorts(model, from, to, selfNode = true) {
     return false;
   }
 
-  if (_isOutConnectionExists(model, from, to)) {
-    return false;
-  }
-
-  return true;
-}
-
-function _isOutConnectionExists(model, from, to) {
   if (from.port.type === GraphPortType.IN) {
     const tmp = from;
     from = to;
     to = tmp;
   }
 
-  return model.connectionExists(from.node.id, from.port.id, GraphPortType.OUT);
-}
+  if (model.connectionExists(from.node.id, from.port.id, GraphPortType.OUT)) {
+    return false;
+  }
 
-function _isReverseDirection(fromNode, toNode) {
-  if (_isEndNode(fromNode)) {
-    return true;
-  }
-  if (_isSingleOrCompositeNode(fromNode) && _isStartOrErrorNode(toNode)) {
-    return true;
-  }
-  return false;
+  return true;
 }
 
 function _isStartOrErrorNode(node) {
   return _isStartNode(node) || _isErrorNode(node);
-}
-
-function _isSingleOrCompositeNode(node) {
-  return _isSingleNode(node) || _isCompositeNode(node);
 }
 
 function _isStartNode(node) {
@@ -218,16 +89,4 @@ function _isStartNode(node) {
 
 function _isErrorNode(node) {
   return node.type === GraphNodeType.Error;
-}
-
-function _isEndNode(node) {
-  return node.type === GraphNodeType.End;
-}
-
-function _isSingleNode(node) {
-  return node.type === GraphNodeType.Single;
-}
-
-function _isCompositeNode(node) {
-  return node.type === GraphNodeType.Composite;
 }

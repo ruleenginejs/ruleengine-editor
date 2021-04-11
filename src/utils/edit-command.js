@@ -1,40 +1,38 @@
 import isPlainObject from "is-plain-object";
+import logger from "./logger";
 import { isDefined } from "./types";
 
 export class EditCommand {
-  static _nextId = 0;
-
-  constructor(name, payload, reversePayload) {
+  constructor(name, payload) {
     this.name = name;
     this.payload = payload;
-    this.reversePayload = reversePayload;
-    this.uid = ++EditCommand._nextId;
   }
 
   apply(model) {
-    return this._execute(model, this.payload);
-  }
-
-  reverse(model) {
-    return this._execute(model, this.reversePayload);
-  }
-
-  _execute(model, payload) {
-    if (isDefined(payload) && isPlainObject(payload)) {
-      return this.doExecute(model, payload);
+    if (!isDefined(this.payload) || !isPlainObject(this.payload)) {
+      return null;
     }
-    return null;
+    try {
+      return this.doApply(model, this.payload);
+    } catch (err) {
+      return this.handleError(err);
+    }
   }
 
   // eslint-disable-next-line no-unused-vars
-  doExecute(model, payload) { }
+  doApply(model, payload) { }
 
-  static getRaw(name, payload, reversePayload) {
-    return {
-      name,
-      payload,
-      reverse: reversePayload
-    }
+  handleError(err) {
+    logger.error(`Error apply command ${this.name}`, err);
+    return null;
+  }
+
+  toJSON() {
+    return createDefinition(this.name, this.payload);
+  }
+
+  toString() {
+    return JSON.stringify(this.toJSON());
   }
 }
 
@@ -64,14 +62,23 @@ export class EditCommandsRegistry {
   }
 }
 
+export function createDefinition(name, payload) {
+  return {
+    name,
+    payload
+  }
+}
+
+export function createChanges(appliedChangesCommandDef, reverseCommandDef) {
+  return {
+    applied: appliedChangesCommandDef,
+    reverse: reverseCommandDef
+  }
+}
+
 export function applyEditCommands(model, rawEditCommands) {
   const commands = createEditCommands(rawEditCommands);
   return commands.map(c => c.apply(model)).filter(val => !!val);
-}
-
-export function applyReverseEditCommands(model, rawEditCommands) {
-  const commands = createEditCommands(rawEditCommands);
-  return commands.map(c => c.reverse(model)).filter(val => !!val);
 }
 
 export function createEditCommands(rawEditCommands) {
@@ -84,14 +91,14 @@ export function createEditCommands(rawEditCommands) {
       return null;
     }
 
-    return createCommand(command.name, command.payload, command.reverse);
+    return createCommand(command.name, command.payload);
   }).filter(val => !!val);
 }
 
-export function createCommand(name, payload, reversePayload) {
+export function createCommand(name, payload) {
   const ctor = EditCommandsRegistry.current.getCommand(name);
   if (typeof ctor === "function") {
-    return new ctor(payload, reversePayload);
+    return new ctor(payload);
   }
   return null;
 }

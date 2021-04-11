@@ -70,6 +70,12 @@ const pipeline = {
       }
     },
     {
+      type: "end",
+      canvas: {
+        position: [400, 150]
+      }
+    },
+    {
       type: "error",
       canvas: {
         position: [10, 10]
@@ -98,11 +104,13 @@ export default {
     },
     revertAllChanges() {
       const changes = [];
-      this.edits.forEach((edit) => changes.push(...edit.reverse()));
+      this.edits.forEach((edit) =>
+        changes.push(...edit.map((e) => e.reverse).reverse())
+      );
       this.edits = [];
       this.$refs.editor.instance
         .getModel()
-        .applyReverseEdits(changes.reverse(), false);
+        .applyEdits(changes.reverse(), false);
     }
   }
 };
