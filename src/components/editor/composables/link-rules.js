@@ -25,7 +25,7 @@ export function validateLink(model, from, to) {
   }
 
   if (!from.portId && !to.portId) {
-    return false;
+    from.port = from.node.getDefaultOutPort();
   }
 
   if (from.portId) {

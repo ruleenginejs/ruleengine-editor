@@ -23,7 +23,7 @@ export function createNewConnection(model, from, to) {
   }
 
   if (!from.port && !to.port) {
-    return;
+    from.port = from.node.getDefaultOutPort();
   }
 
   if (!from.port) {
