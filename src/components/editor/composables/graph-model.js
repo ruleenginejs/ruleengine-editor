@@ -29,6 +29,8 @@ export class GraphModel extends SelectableModel {
     this.connectionsById = null;
     this.navNodes = null;
     this.stepNodes = null;
+    this.startNode = null;
+    this.errorNode = null;
 
     this._parseValue(value);
   }
@@ -55,6 +57,9 @@ export class GraphModel extends SelectableModel {
       GraphNodeType.Single,
       GraphNodeType.Composite
     ));
+
+    this.startNode = computed(() => this.getNodesByType(GraphNodeType.Start)[0]);
+    this.errorNode = computed(() => this.getNodesByType(GraphNodeType.Error)[0]);
   }
 
   _buildValue() {

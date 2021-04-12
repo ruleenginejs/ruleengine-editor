@@ -1,4 +1,5 @@
 import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
+import { GraphNodeType } from "../graph-node-type";
 import { DeleteNode } from "./delete-node";
 
 export class CreateNode extends EditCommand {
@@ -9,6 +10,14 @@ export class CreateNode extends EditCommand {
   }
 
   doApply(model, payload) {
+    const { type } = payload;
+    if (type === GraphNodeType.Start && model.startNode) {
+      return null;
+    }
+    if (type === GraphNodeType.Error && model.errorNode) {
+      return null;
+    }
+
     const node = model.createNode(payload);
     if (!node) return null;
 
