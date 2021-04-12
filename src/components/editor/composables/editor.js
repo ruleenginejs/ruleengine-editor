@@ -82,6 +82,10 @@ class Editor {
     this.viewportModel.value = viewport;
   }
 
+  getGraph() {
+    return this.graph.value?.instance;
+  }
+
   fitCanvas(maxZoom = null) {
     this.graph.value?.instance.fitCanvas(maxZoom);
   }

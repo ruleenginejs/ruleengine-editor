@@ -1,10 +1,10 @@
 import { computed, ref, onMounted, nextTick } from "vue";
-import { GraphNodeType } from "./graph-node-type";
 import { SelectableModel } from "./selectable-model";
 import debounce from "debounce";
 import { ChangeNodePosition } from "./commands";
 import { validateLink } from "./link-rules";
 import { createNewConnection } from "./new-connection";
+import { CreateNode } from "./commands/create-node";
 
 class EditorGraph {
   constructor({
@@ -33,7 +33,7 @@ class EditorGraph {
     });
   }
 
-  initComputed({ viewport, zoom, model }) {
+  initComputed({ viewport, zoom }) {
     this.cvViewport = computed({
       get: () => viewport.value,
       set: (val) => this.emit("update:viewport", val)
@@ -42,18 +42,6 @@ class EditorGraph {
     this.cvZoom = computed({
       get: () => zoom.value,
       set: (val) => this.emit("update:zoom", val)
-    });
-
-    this.circleNodes = computed(() => {
-      return model.value.getNodesByType(
-        GraphNodeType.Start,
-        GraphNodeType.End,
-        GraphNodeType.Error
-      );
-    });
-
-    this.stepNodes = computed(() => {
-      return model.value.getNodesByType(GraphNodeType.Single);
     });
   }
 
@@ -96,6 +84,15 @@ class EditorGraph {
     } else {
       canvas.fitBounds(bounds);
     }
+  }
+
+  createNode(type, position = null, options = null) {
+    options = { ...options, type };
+    if (position) {
+      if (!options.canvas) options.canvas = {};
+      options.canvas.position = position;
+    }
+    this.model.value.applyEdits([CreateNode.createDef(options)]);
   }
 
   onChangeNodePosition(node, e) {

@@ -12,7 +12,7 @@
   >
     <template #node>
       <v-graph-circle-node
-        v-for="node in circleNodes"
+        v-for="node in model.navNodes"
         :key="node.id"
         :id="node.id"
         :title="node.name"
@@ -31,7 +31,7 @@
         </template>
       </v-graph-circle-node>
       <v-graph-node
-        v-for="node in stepNodes"
+        v-for="node in model.stepNodes"
         :key="node.id"
         :id="node.id"
         :title="node.name"

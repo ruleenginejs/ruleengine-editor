@@ -10,6 +10,7 @@
   <div class="controls">
     <button @click="changeValue">Change value</button>
     <button @click="revertAllChanges">Revert changes</button>
+    <button @click="createNodes">Create nodes</button>
     <div>Zoom: {{ zoom }}, Viewport: {{ viewport }}</div>
   </div>
 </template>
@@ -111,6 +112,14 @@ export default {
       this.$refs.editor.instance
         .getModel()
         .applyEdits(changes.reverse(), false);
+    },
+    createNodes() {
+      const graph = this.$refs.editor.instance.getGraph();
+      graph.createNode("start");
+      graph.createNode("end");
+      graph.createNode("error");
+      graph.createNode("single");
+      graph.createNode("composite", null, { name: "Composite" });
     }
   }
 };

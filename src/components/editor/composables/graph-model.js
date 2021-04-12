@@ -8,6 +8,7 @@ import { SelectableModel } from "./selectable-model";
 import { DEFAULT_PORT } from "./graph-port-model";
 import { createInstance } from "./graph-base-model";
 import { GraphPortType } from "./graph-port-type";
+import { GraphNodeType } from "./graph-node-type";
 
 export class GraphModel extends SelectableModel {
   constructor(value) {
@@ -19,16 +20,41 @@ export class GraphModel extends SelectableModel {
     this.versionId = 0;
     this.title = null;
     this.description = null;
-    this.selectedObject = null;
+
     this._changeListeners = [];
     this._states = [];
+
+    this.selectedObject = null;
+    this.nodesById = null;
+    this.connectionsById = null;
+    this.navNodes = null;
+    this.stepNodes = null;
 
     this._parseValue(value);
   }
 
   _initComputed() {
     super._initComputed();
+
     this.selectedObject = computed(() => this._findSelectedObject());
+    this.nodesById = computed(() => this.nodes.reduce((res, node) => {
+      res[node.id] = node;
+      return res;
+    }, {}));
+    this.connectionsById = computed(() => this.connections.reduce((res, node) => {
+      res[node.id] = node;
+      return res;
+    }, {}));
+
+    this.navNodes = computed(() => this.getNodesByType(
+      GraphNodeType.Start,
+      GraphNodeType.End,
+      GraphNodeType.Error
+    ));
+    this.stepNodes = computed(() => this.getNodesByType(
+      GraphNodeType.Single,
+      GraphNodeType.Composite
+    ));
   }
 
   _buildValue() {
@@ -248,6 +274,7 @@ export class GraphModel extends SelectableModel {
 
   setValue(value) {
     this._savePersistentState();
+
     this.error = null;
     this.nodes.splice(0);
     this.connections.splice(0);
@@ -255,7 +282,25 @@ export class GraphModel extends SelectableModel {
     this.description = null;
     this._increaseVersionId();
     this._parseValue(value);
+
     this._restorePersistentState();
+  }
+
+  createNode(options) {
+    const node = createNode(options);
+    this.nodes.push(node);
+    return node;
+  }
+
+  deleteNode(node) {
+    this.deleteNodeById(node.id);
+  }
+
+  deleteNodeById(nodeId) {
+    const index = this.nodes.findIndex(n => n.id === nodeId);
+    if (index !== -1) {
+      this.nodes.splice(index, 1);
+    }
   }
 
   getNodesByType(...nodeTypes) {
@@ -268,13 +313,7 @@ export class GraphModel extends SelectableModel {
   }
 
   getNodeById(nodeId) {
-    for (let i = 0, len = this.nodes.length; i < len; i++) {
-      const node = this.nodes[i];
-      if (node.id === nodeId) {
-        return this.nodes[i];
-      }
-    }
-    return null;
+    return this.nodesById[nodeId] ?? null;
   }
 
   getNodeConnections(nodeId) {
@@ -313,6 +352,20 @@ export class GraphModel extends SelectableModel {
       }
     }
     return false;
+  }
+
+  inConnectionExistsByPortName(nodeId, inPortName) {
+    for (let i = 0, len = this.connections.length; i < len; i++) {
+      const connection = this.connections[i];
+      if (connection.destNode.id === nodeId && connection.destPort.name === inPortName) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getConnectionById(connectionId) {
+    return this.connectionsById[connectionId] ?? null;
   }
 
   createConnection(connectionDef) {
