@@ -1,8 +1,7 @@
 import { computed } from "vue"
-import isPlainObject from "is-plain-object";
 import merge from "merge";
 import localize from "@/utils/localize";
-import { isDefined, notEmptyString } from "@/utils/types";
+import { isDefined, isPlainObject, notEmptyString } from "@/utils/types";
 import { GraphNodeType, isNavNodeType, validateNodeType } from "./graph-node-type";
 import { createPort, DEFAULT_PORT } from "./graph-port-model";
 import { SelectableModel } from "./selectable-model";
@@ -50,7 +49,7 @@ export class GraphNodeModel extends SelectableModel {
       this.ports = ports.in.concat(ports.out);
     }
 
-    if (isDefined(options.props) && isPlainObject(options.props)) {
+    if (isPlainObject(options.props)) {
       this.props = merge.recursive(true, options.props, {});
     } else {
       this.props = {};
@@ -157,7 +156,7 @@ export class GraphNodeModel extends SelectableModel {
     const inPorts = new Set([DEFAULT_PORT]);
     const outPorts = new Set([DEFAULT_PORT]);
 
-    if (isDefined(ports) && isPlainObject(ports)) {
+    if (isPlainObject(ports)) {
       const { in: _in, out } = ports;
 
       if (Array.isArray(_in)) {
@@ -185,7 +184,7 @@ export class GraphNodeModel extends SelectableModel {
   }
 
   _parsePosition(canvasOptions) {
-    if (isDefined(canvasOptions) && isPlainObject(canvasOptions)) {
+    if (isPlainObject(canvasOptions)) {
       return this._toPoint(canvasOptions.position);
     }
     return this._toPoint();
@@ -210,7 +209,7 @@ export class GraphNodeModel extends SelectableModel {
   }
 
   _parseHeaderColor(canvasOptions) {
-    if (!isDefined(canvasOptions) || !isPlainObject(canvasOptions)) {
+    if (!isPlainObject(canvasOptions)) {
       return null;
     }
 

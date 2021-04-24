@@ -1,6 +1,5 @@
 import { computed } from "vue"
-import isPlainObject from "is-plain-object";
-import { isDefined, notEmptyString } from "@/utils/types";
+import { isDefined, isPlainObject, notEmptyString } from "@/utils/types";
 import { applyEditCommands } from "@/utils/edit-command";
 import { createNode, GraphNodeModel } from "./graph-node-model";
 import { createConnection } from "./graph-connection-model";
@@ -97,7 +96,7 @@ export class GraphModel extends SelectableModel {
     if (value === null || value === undefined) {
       return;
     }
-    if (isDefined(value) && isPlainObject(value)) {
+    if (isPlainObject(value)) {
       try {
         this._parseData(value);
       } catch (err) {
@@ -114,7 +113,7 @@ export class GraphModel extends SelectableModel {
     }
     try {
       const data = JSON.parse(value);
-      if (isDefined(data) && isPlainObject(data)) {
+      if (isPlainObject(data)) {
         this._parseData(data);
       } else {
         this.error = new Error("The value must contain an object");
@@ -144,7 +143,7 @@ export class GraphModel extends SelectableModel {
     const connections = [];
     for (let i = 0, len = steps.length; i < len; i++) {
       const step = steps[i];
-      if (isDefined(step) && isPlainObject(step)) {
+      if (isPlainObject(step)) {
         const node = createNode(step);
         this.nodes.push(node);
         connections.push({ srcNodeId: node.id, connectionItems: step.connect });
@@ -172,7 +171,7 @@ export class GraphModel extends SelectableModel {
 
       for (let k = 0, len2 = connectionItems.length; k < len2; k++) {
         const connectionItem = connectionItems[k];
-        if (!isDefined(connectionItem) || !isPlainObject(connectionItem)) {
+        if (!isPlainObject(connectionItem)) {
           continue;
         }
 

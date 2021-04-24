@@ -1,6 +1,5 @@
-import isPlainObject from "is-plain-object";
 import logger from "./logger";
-import { isDefined } from "./types";
+import { isPlainObject } from "./types";
 
 export class EditCommand {
   constructor(name, payload) {
@@ -9,7 +8,7 @@ export class EditCommand {
   }
 
   apply(model) {
-    if (!isDefined(this.payload) || !isPlainObject(this.payload)) {
+    if (!isPlainObject(this.payload)) {
       return null;
     }
     try {

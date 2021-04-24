@@ -1,5 +1,4 @@
-import { isDefined } from "@/utils/types";
-import isPlainObject from "is-plain-object";
+import { isPlainObject } from "@/utils/types";
 
 export class ConnectionDefinition {
   constructor(from, to) {
@@ -8,12 +7,12 @@ export class ConnectionDefinition {
     this.toNodeId = null;
     this.inPort = null;
 
-    if (isDefined(from) && isPlainObject(from)) {
+    if (isPlainObject(from)) {
       this.fromNodeId = from.nodeId;
       this.outPort = from.outPort;
     }
 
-    if (isDefined(to) && isPlainObject(to)) {
+    if (isPlainObject(to)) {
       this.toNodeId = to.nodeId;
       this.inPort = to.inPort;
     }
