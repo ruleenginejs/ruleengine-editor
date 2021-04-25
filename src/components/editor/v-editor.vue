@@ -94,7 +94,7 @@ export default {
     },
     sidebarSize: {
       type: Number,
-      default: 250
+      default: 280
     },
     sidebarBorder: {
       type: Boolean,
@@ -102,7 +102,7 @@ export default {
     },
     splitViewSnapOffset: {
       type: Number,
-      default: 30
+      default: 70
     },
     resizeDelay: {
       type: Number,
