@@ -4,7 +4,7 @@ import { createModel } from "./graph-model";
 class Editor {
   constructor({
     value,
-    dataSource,
+    provider,
     editable,
     viewport,
     zoom,
@@ -12,7 +12,7 @@ class Editor {
     emit
   }) {
     this.model = ref(createModel(value.value));
-    this.dataSource = dataSource;
+    this.provider = provider;
     this.editable = editable;
     this.emit = emit;
     this.autoFit = autoFit;

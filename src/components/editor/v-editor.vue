@@ -56,7 +56,7 @@ export default {
       type: [String, Object],
       default: null
     },
-    dataSource: {
+    provider: {
       type: Object,
       default: null
     },
@@ -111,13 +111,13 @@ export default {
   },
   emits: ["change-value", "update:viewport", "update:zoom"],
   setup(props, { emit }) {
-    const { value, dataSource, editable, viewport, zoom, autoFit } = toRefs(
+    const { value, provider, editable, viewport, zoom, autoFit } = toRefs(
       props
     );
 
     const editor = useEditor({
       value,
-      dataSource,
+      provider,
       editable,
       viewport,
       zoom,
