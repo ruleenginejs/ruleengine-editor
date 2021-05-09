@@ -1,77 +1,34 @@
 <template>
   <v-sidebar :lt-border="sidebarBorder" w-full h-full>
-    <v-content scroll="sm" h-full w-full>
-      <v-sidebar-section
-        title="Connection"
-        header-compact
-        expand
-        :header-border="true"
-        :bottom-border="false"
-      >
-        <v-fieldset b-border>
-          <v-field-layout>
-            <v-label>Some property</v-label>
-            <v-input>
-              <template #icon>
-                <v-icon-file-menu />
-              </template>
-            </v-input>
-          </v-field-layout>
-          <v-field-layout>
-            <v-label>Some property</v-label>
-            <v-input />
-          </v-field-layout>
-        </v-fieldset>
-        <v-fieldset label="Some input group">
-          <v-field-layout vertical>
-            <v-label>Some property</v-label>
-            <v-input />
-          </v-field-layout>
-          <v-field-layout vertical>
-            <v-label>Some property</v-label>
-            <v-input>
-              <template #icon>
-                <v-icon-file-menu />
-              </template>
-            </v-input>
-          </v-field-layout>
-        </v-fieldset>
-      </v-sidebar-section>
-      <v-sidebar-section
-        title="User props"
-        header-compact
-        expand
-        :header-border="true"
-        :bottom-border="false"
-      >
-      </v-sidebar-section>
+    <v-editor-sidebar-no-action v-if="noAction" :message="noActionMessage" />
+    <v-content v-else scroll="sm" h-full w-full>
+      <component
+        v-if="propsComponentName"
+        :is="propsComponentName"
+        :model="model.selectedObject"
+      />
     </v-content>
   </v-sidebar>
 </template>
 
 <script>
-import {
-  VSidebar,
-  VContent,
-  VSidebarSection,
-  VFieldset,
-  VFieldLayout,
-  VLabel,
-  VInput,
-  VIconFileMenu
-} from "@ruleenginejs/ruleengine-ui-kit-vue";
+import { toRefs } from "vue";
+import { VSidebar, VContent } from "@ruleenginejs/ruleengine-ui-kit-vue";
+import VEditorSidebarNoAction from "./v-editor-sidebar-no-action";
+import VEditorStepProps from "./v-editor-step-props";
+import VEditorConnectionProps from "./v-editor-connection-props";
+import VEditorPortProps from "./v-editor-port-props";
+import useSidebar from "./composables/use-sidebar";
 
 export default {
   name: "v-editor-sidebar",
   components: {
     VSidebar,
     VContent,
-    VSidebarSection,
-    VFieldset,
-    VFieldLayout,
-    VLabel,
-    VInput,
-    VIconFileMenu
+    VEditorSidebarNoAction,
+    VEditorStepProps,
+    VEditorConnectionProps,
+    VEditorPortProps
   },
   props: {
     model: {
@@ -82,6 +39,26 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  setup(props) {
+    const { model } = toRefs(props);
+
+    const propsComponents = {
+      node: VEditorStepProps.name,
+      port: VEditorPortProps.name,
+      connection: VEditorConnectionProps.name
+    };
+
+    const { noAction, noActionMessage, propsComponentName } = useSidebar({
+      model,
+      propsComponents
+    });
+
+    return {
+      noAction,
+      noActionMessage,
+      propsComponentName
+    };
   }
 };
 </script>

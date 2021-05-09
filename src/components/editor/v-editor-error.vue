@@ -20,9 +20,11 @@ export default {
   },
   setup(props) {
     const { error } = toRefs(props);
+
     const detailsMessage = computed(() => {
       return error.value?.message ?? null;
     });
+
     const message = computed(() => {
       let msg = localize("editor.errorMessage");
       if (detailsMessage.value) {
