@@ -121,7 +121,6 @@ export default {
       editable,
       viewport,
       zoom,
-      graph,
       autoFit,
       emit
     });
