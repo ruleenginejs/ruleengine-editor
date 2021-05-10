@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-npm install @ruleenginejs/ruleengine-editor-vue
+npm install @ruleenginejs/ruleengine-editor-vue vscode-codicons
 ```
 
 Use tailwindcss base (recommended)
@@ -25,6 +25,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import RuleEngineEditor from "@ruleenginejs/ruleengine-editor-vue"
 import "@ruleenginejs/ruleengine-editor-vue/dist/ruleengine-editor-vue.css"
+import "vscode-codicons/dist/codicon.css" // add codeicons
 
 const app = createApp(App)
 
