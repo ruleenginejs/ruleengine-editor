@@ -16,5 +16,8 @@
   "editor.sidebar.handler": "Handler",
   "editor.sidebar.ports": "Ports",
   "editor.sidebar.connections": "Connections",
-  "editor.sidebar.userProperties": "User Properties"
+  "editor.sidebar.userProperties": "User Properties",
+  "editor.hint.handler": "Handler file path",
+  "editor.suggest.loading": "Loading...",
+  "editor.suggest.emptyResult": "No suggestions."
 }

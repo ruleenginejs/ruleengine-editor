@@ -36,7 +36,27 @@
       v-if="canShowHandler"
       :label="t('editor.sidebar.handler')"
       b-border
-    ></v-fieldset>
+    >
+      <v-field-layout vertical>
+        <template #value>
+          <v-autocomplete
+            :placeholder="t('editor.hint.handler')"
+            :loading-message="t('editor.suggest.loading')"
+            :empty-result-message="t('editor.suggest.emptyResult')"
+            :model-value="model.handlerFile"
+            icon-clickable
+          >
+            <template #icon>
+              <span
+                v-if="!model.handlerFile"
+                class="codicon codicon-new-file"
+              ></span>
+              <span v-else class="codicon codicon-go-to-file"></span>
+            </template>
+          </v-autocomplete>
+        </template>
+      </v-field-layout>
+    </v-fieldset>
     <v-fieldset
       v-if="canShowPorts"
       :label="t('editor.sidebar.ports')"
@@ -64,7 +84,8 @@ import {
   VFieldset,
   VFieldLayout,
   VLabel,
-  VInput
+  VInput,
+  VAutocomplete
 } from "@ruleenginejs/ruleengine-ui-kit-vue";
 import useStepProps from "./composables/use-step-props";
 import { GraphNodeModel } from "./composables/graph-node-model";
@@ -77,7 +98,8 @@ export default {
     VFieldset,
     VFieldLayout,
     VLabel,
-    VInput
+    VInput,
+    VAutocomplete
   },
   props: {
     model: {
