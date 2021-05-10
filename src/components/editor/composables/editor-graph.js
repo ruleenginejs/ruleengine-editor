@@ -1,10 +1,10 @@
 import { computed, ref, onMounted, nextTick } from "vue";
-import { SelectableModel } from "./selectable-model";
 import debounce from "debounce";
-import { ChangeNodePosition } from "./commands";
+import { SelectableModel } from "./selectable-model";
 import { validateLink } from "./link-rules";
 import { createNewConnection } from "./new-connection";
 import { CreateNode } from "./commands/create-node";
+import { ChangeNodePosition } from "./commands/change-node-position";
 
 class EditorGraph {
   constructor({

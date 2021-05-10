@@ -9,7 +9,7 @@ export const GraphNodeType = Object.freeze({
 const graphNodeTypes = Object.keys(GraphNodeType).map(key => GraphNodeType[key]);
 
 export function validateNodeType(value) {
-  return graphNodeTypes.indexOf(value) !== -1;
+  return graphNodeTypes.indexOf(value.toLowerCase()) !== -1;
 }
 
 const _navNodeTypes = [

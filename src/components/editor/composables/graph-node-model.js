@@ -21,7 +21,7 @@ export class GraphNodeModel extends SelectableModel {
       }
     }
 
-    if (notEmptyString(options.type) && validateNodeType(options.type.toLowerCase())) {
+    if (notEmptyString(options.type) && validateNodeType(options.type)) {
       this.type = options.type.toLowerCase();
     } else {
       this.type = GraphNodeType.Single;
@@ -30,10 +30,12 @@ export class GraphNodeModel extends SelectableModel {
     this.isNavNode = isNavNodeType(this.type);
     this.isErrorNode = this.type === GraphNodeType.Error;
 
-    if (notEmptyString(options.name)) {
+    if (this.isNavNode) {
+      this.name = this._getNameFromType(this.type);
+    } else if (notEmptyString(options.name)) {
       this.name = options.name;
     } else {
-      this.name = this._getNameFromTypeOrDefault(this.type, this.id);
+      this.name = null;
     }
 
     if (this.isNavNode) {
@@ -104,10 +106,14 @@ export class GraphNodeModel extends SelectableModel {
   _buildValue() {
     const value = {
       id: this.id,
-      type: this.type,
-      name: this.name,
-      ports: this._buildPorts()
+      type: this.type
     }
+
+    if (this.name) {
+      value.name = this.name;
+    }
+
+    value.ports = this._buildPorts();
 
     const props = this._buildProps();
     if (props) {
@@ -119,8 +125,6 @@ export class GraphNodeModel extends SelectableModel {
         value.handlerFile = this.handlerFile;
       } else if (isDefined(this.handler)) {
         value.handler = this.handler;
-      } else {
-        value.handlerFile = null;
       }
     }
 
@@ -221,7 +225,7 @@ export class GraphNodeModel extends SelectableModel {
     return null;
   }
 
-  _getNameFromTypeOrDefault(type, id) {
+  _getNameFromType(type) {
     switch (type) {
       case GraphNodeType.Start:
         return localize("editor.startNode");
@@ -230,7 +234,7 @@ export class GraphNodeModel extends SelectableModel {
       case GraphNodeType.Error:
         return localize("editor.errorNode");
       default:
-        return localize("editor.untitledNode", id);
+        return null;
     }
   }
 
@@ -297,6 +301,28 @@ export class GraphNodeModel extends SelectableModel {
     this.positionX = x;
     this.positionY = y;
     return oldPosition;
+  }
+
+  changeName(name) {
+    const oldName = this.name;
+    if (this.isNavNode) return oldName;
+    if (notEmptyString(name)) {
+      this.name = name;
+    } else {
+      this.name = null;
+    }
+    return oldName;
+  }
+
+  changeHandlerFilePath(filePath) {
+    const oldValue = this.handlerFile;
+    if (this.isNavNode) return oldValue;
+    if (notEmptyString(filePath)) {
+      this.handlerFile = filePath;
+    } else {
+      this.handlerFile = null;
+    }
+    return oldValue;
   }
 }
 

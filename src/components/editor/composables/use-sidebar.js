@@ -15,9 +15,14 @@ export default function useSidebar({ model, propsComponents }) {
     return propsComponents[selectedObjectType.value];
   });
 
+  const onEdit = (editCommands) => {
+    model.value.applyEdits(editCommands);
+  }
+
   return {
     noAction,
     noActionMessage,
-    propsComponentName
+    propsComponentName,
+    onEdit
   }
 }

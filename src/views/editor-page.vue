@@ -38,7 +38,7 @@ const pipeline = {
       type: "single",
       name: "Response",
       props: { a: 1, b: 2 },
-      handler: "var a = 1;",
+      handlerFile: "./handler.js",
       ports: {
         in: ["test"],
         out: ["test2"]
@@ -54,7 +54,7 @@ const pipeline = {
       type: "single",
       name: "Response",
       props: { a: 1, b: 2 },
-      handler: "var a = 1;",
+      handlerFile: "./handler2.js",
       ports: {
         in: ["test"],
         out: ["test2"]

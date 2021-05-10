@@ -12,15 +12,7 @@
           <v-label truncate>Name</v-label>
         </template>
         <template #value>
-          <v-input :model-value="model.name" />
-        </template>
-      </v-field-layout>
-      <v-field-layout>
-        <template #label>
-          <v-label truncate>Identifier</v-label>
-        </template>
-        <template #value>
-          <v-label truncate>{{ model.id }}</v-label>
+          <v-input v-model="editName" />
         </template>
       </v-field-layout>
       <v-field-layout>
@@ -29,6 +21,14 @@
         </template>
         <template #value>
           <v-label truncate>{{ model.type }}</v-label>
+        </template>
+      </v-field-layout>
+      <v-field-layout>
+        <template #label>
+          <v-label truncate>Identifier</v-label>
+        </template>
+        <template #value>
+          <v-label truncate>{{ model.id }}</v-label>
         </template>
       </v-field-layout>
     </v-fieldset>
@@ -43,12 +43,12 @@
             :placeholder="t('editor.hint.handler')"
             :loading-message="t('editor.suggest.loading')"
             :empty-result-message="t('editor.suggest.emptyResult')"
-            :model-value="model.handlerFile"
+            v-model="editHandlerFile"
             icon-clickable
           >
             <template #icon>
               <span
-                v-if="!model.handlerFile"
+                v-if="!editHandlerFile"
                 class="codicon codicon-new-file"
               ></span>
               <span v-else class="codicon codicon-go-to-file"></span>
@@ -87,12 +87,12 @@ import {
   VInput,
   VAutocomplete
 } from "@ruleenginejs/ruleengine-ui-kit-vue";
-import useStepProps from "./composables/use-step-props";
+import useNodeProps from "./composables/use-node-props";
 import { GraphNodeModel } from "./composables/graph-node-model";
 import { toRefs } from "@vue/reactivity";
 
 export default {
-  name: "v-editor-step-props",
+  name: "v-editor-node-props",
   components: {
     VSidebarSection,
     VFieldset,
@@ -105,22 +105,32 @@ export default {
     model: {
       type: GraphNodeModel,
       required: true
+    },
+    editDelay: {
+      type: Number,
+      default: null
     }
   },
-  setup(props) {
-    const { model } = toRefs(props);
+  emits: ["edit"],
+  setup(props, { emit }) {
+    const { model, editDelay } = toRefs(props);
+
     const {
       sectionName,
+      editName,
+      editHandlerFile,
       canShowName,
       canShowHandler,
       canShowPorts,
       canShowConnections,
       canShowUserProps,
       localize
-    } = useStepProps({ nodeModel: model });
+    } = useNodeProps({ nodeModel: model, emit, editDelay });
 
     return {
       sectionName,
+      editName,
+      editHandlerFile,
       canShowName,
       canShowHandler,
       canShowPorts,

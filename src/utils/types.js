@@ -8,6 +8,10 @@ export function notEmptyString(value) {
   return typeof value === "string" && value.length > 0;
 }
 
+export function isString(value) {
+  return typeof value === "string";
+}
+
 export function isPlainObject(value) {
   return isDefined(value) && _isPlainObject(value);
 }

@@ -24,7 +24,11 @@
         />
       </v-split-pane>
       <v-split-pane v-if="sidebarEnabled" :size="`${sidebarSize}px`">
-        <v-editor-sidebar v-if="splitViewCreated" :model="model" />
+        <v-editor-sidebar
+          v-if="splitViewCreated"
+          :model="model"
+          :edit-delay="editDelay"
+        />
       </v-split-pane>
     </v-split-view>
   </div>
@@ -32,11 +36,11 @@
 
 <script>
 import { toRefs } from "vue";
-import useEditor from "./composables/use-editor";
 import { VSplitView, VSplitPane } from "@ruleenginejs/ruleengine-ui-kit-vue";
 import VEditorGraph from "./v-editor-graph";
 import VEditorError from "./v-editor-error";
 import VEditorSidebar from "./v-editor-sidebar";
+import useEditor from "./composables/use-editor";
 
 const defaultEdgeScrollSizes = Object.freeze({
   edgeBottomSize: { in: 10, out: 0 }
@@ -63,6 +67,10 @@ export default {
     editable: {
       type: Boolean,
       default: true
+    },
+    editDelay: {
+      type: Number,
+      default: 500
     },
     viewport: {
       type: Array,
