@@ -18,6 +18,12 @@ In your styles
 @import "tailwindcss/base";
 ```
 
+Add codicons
+
+```css
+@import "vscode-codicons/dist/codicon.css"
+```
+
 ## Usage
 
 ```javascript
@@ -25,7 +31,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import RuleEngineEditor from "@ruleenginejs/ruleengine-editor-vue"
 import "@ruleenginejs/ruleengine-editor-vue/dist/ruleengine-editor-vue.css"
-import "vscode-codicons/dist/codicon.css" // add codeicons
 
 const app = createApp(App)
 
