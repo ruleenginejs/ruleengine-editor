@@ -87,9 +87,9 @@ import {
   VInput,
   VAutocomplete
 } from "@ruleenginejs/ruleengine-ui-kit-vue";
-import useNodeProps from "./composables/use-node-props";
+import { toRefs } from "vue";
 import { GraphNodeModel } from "./composables/graph-node-model";
-import { toRefs } from "@vue/reactivity";
+import useNodeProps from "./composables/use-node-props";
 
 export default {
   name: "v-editor-node-props",

@@ -111,7 +111,7 @@ import {
   VIconDocText,
   VIconScript
 } from "@ruleenginejs/ruleengine-ui-kit-vue";
-import { toRefs } from "@vue/reactivity";
+import { toRefs } from "vue";
 import useEditorGraph from "./composables/use-editor-graph";
 
 export default {
