@@ -1,7 +1,7 @@
 {
   "name": "@ruleenginejs/ruleengine-editor-vue",
   "version": "1.0.0",
-  "description": "Ruleengine Editor",
+  "description": "Rule Engine Editor",
   "main": "dist/ruleengine-editor-vue.common.js",
   "files": [
     "dist"
