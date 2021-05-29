@@ -2,9 +2,9 @@ import { computed } from "vue"
 import { isDefined, isPlainObject, notEmptyString } from "@/utils/types";
 import { applyEditCommands } from "@/utils/edit-command";
 import { createNode, GraphNodeModel } from "./graph-node-model";
-import { createConnection, GraphConnectionModel } from "./graph-connection-model";
+import { createConnection } from "./graph-connection-model";
 import { SelectableModel } from "./selectable-model";
-import { DEFAULT_PORT, GraphPortModel } from "./graph-port-model";
+import { DEFAULT_PORT } from "./graph-port-model";
 import { createInstance } from "./graph-base-model";
 import { GraphPortType } from "./graph-port-type";
 import { GraphNodeType } from "./graph-node-type";
@@ -290,21 +290,6 @@ export class GraphModel extends SelectableModel {
     this._restorePersistentState();
   }
 
-  getModelType(model) {
-    if (!isDefined(model)) {
-      return model;
-    } else if (model instanceof GraphModel) {
-      return "graph";
-    } else if (model instanceof GraphNodeModel) {
-      return "node";
-    } else if (model instanceof GraphPortModel) {
-      return "port";
-    } else if (model instanceof GraphConnectionModel) {
-      return "connection";
-    }
-    return null;
-  }
-
   createNode(options) {
     const node = createNode(options);
     this.nodes.push(node);
@@ -432,9 +417,11 @@ export class GraphModel extends SelectableModel {
 
   applyEdits(rawEditCommands, emitChangeEvent = true) {
     const changes = applyEditCommands(this, rawEditCommands);
-    if (changes.length > 0 && emitChangeEvent) {
+    if (changes.length > 0) {
       this._increaseVersionId();
-      this.emitChangeEvent(changes);
+      if (emitChangeEvent) {
+        this.emitChangeEvent(changes);
+      }
     }
   }
 

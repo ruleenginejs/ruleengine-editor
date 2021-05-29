@@ -25,6 +25,7 @@ class Editor {
     this.onSplitViewCreated = this.onSplitViewCreated.bind(this);
     this.onGraphCreated = this.onGraphCreated.bind(this);
     this.onChangeModelContent = this.onChangeModelContent.bind(this);
+    this.onSidebarEdit = this.onSidebarEdit.bind(this);
 
     this.model.value.selected = true;
     this.model.value.addChangeListener(this.onChangeModelContent);
@@ -87,11 +88,15 @@ class Editor {
   }
 
   fitCanvas(maxZoom = null) {
-    this.graph.value?.instance.fitCanvas(maxZoom);
+    this.getGraph()?.fitCanvas(maxZoom);
+  }
+
+  applyEdits(editCommands, emitChangeEvent = true) {
+    this.getModel()?.applyEdits(editCommands, emitChangeEvent);
   }
 
   onSplitViewResize() {
-    this.graph.value?.instance.onResize();
+    this.getGraph()?.onResize();
   }
 
   onSplitViewCreated() {
@@ -102,6 +107,10 @@ class Editor {
     if (this.autoFit.value) {
       this.fitCanvas(this.zoomModel.value);
     }
+  }
+
+  onSidebarEdit(editCommands) {
+    this.applyEdits(editCommands);
   }
 
   onChangeModelContent(e) {

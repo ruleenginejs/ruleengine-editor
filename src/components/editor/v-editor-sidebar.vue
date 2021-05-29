@@ -4,9 +4,9 @@
     <v-content v-else scroll="sm" h-full w-full>
       <component
         v-if="propsComponentName"
-        :key="model.selectedObject.id"
+        :key="selectedObject.id"
         :is="propsComponentName"
-        :model="model.selectedObject"
+        :model="selectedObject"
         :edit-delay="editDelay"
         @edit="onEdit"
       />
@@ -21,6 +21,7 @@ import VEditorSidebarNoAction from "./v-editor-sidebar-no-action";
 import VEditorNodeProps from "./v-editor-node-props";
 import VEditorConnectionProps from "./v-editor-connection-props";
 import VEditorPortProps from "./v-editor-port-props";
+import { GraphModelType } from "./composables/graph-model-util";
 import useSidebar from "./composables/use-sidebar";
 
 export default {
@@ -34,9 +35,9 @@ export default {
     VEditorPortProps
   },
   props: {
-    model: {
+    selectedObject: {
       type: Object,
-      required: true
+      default: null
     },
     sidebarBorder: {
       type: Boolean,
@@ -47,13 +48,14 @@ export default {
       default: null
     }
   },
-  setup(props) {
-    const { model } = toRefs(props);
+  emits: ["edit"],
+  setup(props, { emit }) {
+    const { selectedObject } = toRefs(props);
 
     const propsComponents = {
-      node: VEditorNodeProps.name,
-      port: VEditorPortProps.name,
-      connection: VEditorConnectionProps.name
+      [GraphModelType.Node]: VEditorNodeProps.name,
+      [GraphModelType.Port]: VEditorPortProps.name,
+      [GraphModelType.Connection]: VEditorConnectionProps.name
     };
 
     const {
@@ -62,8 +64,9 @@ export default {
       propsComponentName,
       onEdit
     } = useSidebar({
-      model,
-      propsComponents
+      selectedObject,
+      propsComponents,
+      emit
     });
 
     return {

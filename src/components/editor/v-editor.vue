@@ -11,23 +11,23 @@
       <v-split-pane>
         <v-editor-graph
           v-if="splitViewCreated"
-          :model="model"
+          ref="graph"
           v-model:viewport="viewportModel"
           v-model:zoom="zoomModel"
+          :model="model"
           :min-zoom="minZoom"
           :max-zoom="maxZoom"
           :edge-sizes="edgeScrollSizes"
           :resize-delay="resizeDelay"
-          v-model:selected-object="selectedObject"
           @created="onGraphCreated"
-          ref="graph"
         />
       </v-split-pane>
       <v-split-pane v-if="sidebarEnabled" :size="`${sidebarSize}px`">
         <v-editor-sidebar
           v-if="splitViewCreated"
-          :model="model"
+          :selected-object="model.selectedObject"
           :edit-delay="editDelay"
+          @edit="onSidebarEdit"
         />
       </v-split-pane>
     </v-split-view>
@@ -141,8 +141,8 @@ export default {
       onSplitViewResize,
       onSplitViewCreated,
       splitViewCreated,
-      selectedObject,
-      onGraphCreated
+      onGraphCreated,
+      onSidebarEdit
     } = editor;
 
     return {
@@ -154,8 +154,8 @@ export default {
       onSplitViewResize,
       onSplitViewCreated,
       splitViewCreated,
-      selectedObject,
-      onGraphCreated
+      onGraphCreated,
+      onSidebarEdit
     };
   }
 };
