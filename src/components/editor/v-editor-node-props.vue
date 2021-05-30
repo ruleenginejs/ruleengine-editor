@@ -2,6 +2,7 @@
   <v-sidebar-section
     :title="sectionName"
     header-compact
+    header-strong
     expand
     :header-border="true"
     :bottom-border="false"
