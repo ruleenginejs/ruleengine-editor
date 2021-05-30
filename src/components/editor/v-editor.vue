@@ -1,45 +1,24 @@
 <template>
   <div class="v-editor">
     <v-editor-error v-if="model.error" :error="model.error" />
-    <v-split-view
-      v-else
-      :snap-offset="splitViewSnapOffset"
+    <v-editor-graph
+      ref="graph"
+      v-model:viewport="viewportModel"
+      v-model:zoom="zoomModel"
+      :model="model"
+      :min-zoom="minZoom"
+      :max-zoom="maxZoom"
+      :edge-sizes="edgeScrollSizes"
       :resize-delay="resizeDelay"
-      @resize="onSplitViewResize"
-      @created="onSplitViewCreated"
-    >
-      <v-split-pane>
-        <v-editor-graph
-          v-if="splitViewCreated"
-          ref="graph"
-          v-model:viewport="viewportModel"
-          v-model:zoom="zoomModel"
-          :model="model"
-          :min-zoom="minZoom"
-          :max-zoom="maxZoom"
-          :edge-sizes="edgeScrollSizes"
-          :resize-delay="resizeDelay"
-          @created="onGraphCreated"
-        />
-      </v-split-pane>
-      <v-split-pane v-if="sidebarEnabled" :size="`${sidebarSize}px`">
-        <v-editor-sidebar
-          v-if="splitViewCreated"
-          :selected-object="model.selectedObject"
-          :edit-delay="editDelay"
-          @edit="onSidebarEdit"
-        />
-      </v-split-pane>
-    </v-split-view>
+      @created="onGraphCreated"
+    />
   </div>
 </template>
 
 <script>
 import { toRefs } from "vue";
-import { VSplitView, VSplitPane } from "@ruleenginejs/ruleengine-ui-kit-vue";
 import VEditorGraph from "./v-editor-graph";
 import VEditorError from "./v-editor-error";
-import VEditorSidebar from "./v-editor-sidebar";
 import useEditor from "./composables/use-editor";
 
 const defaultEdgeScrollSizes = Object.freeze({
@@ -49,9 +28,6 @@ const defaultEdgeScrollSizes = Object.freeze({
 export default {
   name: "v-editor",
   components: {
-    VSplitView,
-    VSplitPane,
-    VEditorSidebar,
     VEditorGraph,
     VEditorError
   },
@@ -67,10 +43,6 @@ export default {
     editable: {
       type: Boolean,
       default: true
-    },
-    editDelay: {
-      type: Number,
-      default: 500
     },
     viewport: {
       type: Array,
@@ -96,28 +68,12 @@ export default {
       type: Object,
       default: () => defaultEdgeScrollSizes
     },
-    sidebarEnabled: {
-      type: Boolean,
-      default: true
-    },
-    sidebarSize: {
-      type: Number,
-      default: 280
-    },
-    sidebarBorder: {
-      type: Boolean,
-      default: false
-    },
-    splitViewSnapOffset: {
-      type: Number,
-      default: 70
-    },
     resizeDelay: {
       type: Number,
       default: 100
     }
   },
-  emits: ["change-value", "update:viewport", "update:zoom"],
+  emits: ["change-value", "update:viewport", "update:zoom", "graph-created"],
   setup(props, { emit }) {
     const { value, provider, editable, viewport, zoom, autoFit } = toRefs(
       props
@@ -133,17 +89,7 @@ export default {
       emit
     });
 
-    const {
-      viewportModel,
-      zoomModel,
-      graph,
-      model,
-      onSplitViewResize,
-      onSplitViewCreated,
-      splitViewCreated,
-      onGraphCreated,
-      onSidebarEdit
-    } = editor;
+    const { viewportModel, zoomModel, graph, model, onGraphCreated } = editor;
 
     return {
       instance: editor,
@@ -151,11 +97,7 @@ export default {
       zoomModel,
       graph,
       model,
-      onSplitViewResize,
-      onSplitViewCreated,
-      splitViewCreated,
-      onGraphCreated,
-      onSidebarEdit
+      onGraphCreated
     };
   }
 };

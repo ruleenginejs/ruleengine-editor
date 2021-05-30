@@ -17,15 +17,12 @@ class Editor {
     this.emit = emit;
     this.autoFit = autoFit;
     this.graph = ref(null);
-    this.splitViewCreated = ref(false);
     this.viewportModel = ref(viewport.value);
     this.zoomModel = ref(zoom.value);
 
-    this.onSplitViewResize = this.onSplitViewResize.bind(this);
-    this.onSplitViewCreated = this.onSplitViewCreated.bind(this);
+    this.onResize = this.onResize.bind(this);
     this.onGraphCreated = this.onGraphCreated.bind(this);
     this.onChangeModelContent = this.onChangeModelContent.bind(this);
-    this.onSidebarEdit = this.onSidebarEdit.bind(this);
 
     this.model.value.selected = true;
     this.model.value.addChangeListener(this.onChangeModelContent);
@@ -67,6 +64,10 @@ class Editor {
     this.model.value.setValue(value);
   }
 
+  applyEdits(editCommands, emitChangeEvent = true) {
+    this.model.value.applyEdits(editCommands, emitChangeEvent);
+  }
+
   getZoom() {
     return this.zoomModel.value;
   }
@@ -91,26 +92,16 @@ class Editor {
     this.getGraph()?.fitCanvas(maxZoom);
   }
 
-  applyEdits(editCommands, emitChangeEvent = true) {
-    this.getModel()?.applyEdits(editCommands, emitChangeEvent);
-  }
-
-  onSplitViewResize() {
+  onResize() {
     this.getGraph()?.onResize();
-  }
-
-  onSplitViewCreated() {
-    this.splitViewCreated.value = true;
   }
 
   onGraphCreated() {
     if (this.autoFit.value) {
       this.fitCanvas(this.zoomModel.value);
     }
-  }
 
-  onSidebarEdit(editCommands) {
-    this.applyEdits(editCommands);
+    this.emit("graph-created", this.getGraph());
   }
 
   onChangeModelContent(e) {

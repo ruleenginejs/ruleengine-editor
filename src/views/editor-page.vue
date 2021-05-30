@@ -1,4 +1,5 @@
 <template>
+  <!--
   <v-editor
     ref="editor"
     :value="value"
@@ -7,6 +8,8 @@
     auto-fit
     @change-value="onChangeValue"
   />
+  -->
+  <editor-with-sidebar :value="value" @change-value="onChangeValue" />
   <div class="controls">
     <button @click="changeValue">Change value</button>
     <button @click="revertAllChanges">Revert changes</button>
@@ -17,9 +20,13 @@
 
 <script>
 import data from "./editor-data";
+import EditorWithSidebar from "./editor-with-sidebar";
 
 export default {
   name: "editor-page",
+  components: {
+    EditorWithSidebar
+  },
   data() {
     return {
       value: JSON.stringify(data),
