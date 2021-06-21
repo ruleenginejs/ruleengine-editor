@@ -1,4 +1,4 @@
-import { ref, watch } from "vue";
+import { ref, watch, watchEffect } from "vue";
 import { createModel } from "./graph-model";
 
 class Editor {
@@ -49,6 +49,10 @@ class Editor {
 
     watch(this.zoomModel, () => {
       this.emit("update:zoom", this.zoomModel.value);
+    });
+
+    watchEffect(() => {
+      this.emit("change-selection", this.model.value.selectedObject);
     });
   }
 

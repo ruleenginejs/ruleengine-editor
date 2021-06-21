@@ -73,11 +73,16 @@ export default {
       default: 100
     }
   },
-  emits: ["change-value", "update:viewport", "update:zoom", "graph-created"],
+  emits: [
+    "change-value",
+    "change-selection",
+    "graph-created",
+    "update:viewport",
+    "update:zoom"
+  ],
   setup(props, { emit }) {
-    const { value, provider, editable, viewport, zoom, autoFit } = toRefs(
-      props
-    );
+    const { value, provider, editable, viewport, zoom, autoFit } =
+      toRefs(props);
 
     const editor = useEditor({
       value,

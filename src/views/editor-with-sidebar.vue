@@ -12,12 +12,13 @@
         :value="value"
         auto-fit
         @change-value="onEditorChangeValue"
+        @change-selection="onChangeSelection"
       />
     </v-split-pane>
     <v-split-pane :size="`${sidebarSize}px`">
       <v-editor-sidebar
         v-if="splitViewCreated"
-        :selected-object="null"
+        :selected-object="selectedObject"
         :edit-delay="editDelay"
         @edit="onSidebarEdit"
       />
@@ -52,7 +53,8 @@ export default {
       splitViewSnapOffset: SNAP_OFFSET,
       sidebarSize: SIDEBAR_SIZE,
       editDelay: EDIT_DELAY,
-      splitViewCreated: false
+      splitViewCreated: false,
+      selectedObject: null
     };
   },
   methods: {
@@ -67,6 +69,9 @@ export default {
     },
     onEditorChangeValue(e) {
       this.$emit("change-value", e);
+    },
+    onChangeSelection(selectedItem) {
+      this.selectedObject = selectedItem;
     }
   }
 };
