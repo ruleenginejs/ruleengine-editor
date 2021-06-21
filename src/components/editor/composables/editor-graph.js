@@ -3,7 +3,6 @@ import debounce from "debounce";
 import { SelectableModel } from "./selectable-model";
 import { validateLink } from "./link-rules";
 import { createNewConnection } from "./new-connection";
-import { CreateNode } from "./commands/create-node";
 import { ChangeNodePosition } from "./commands/change-node-position";
 
 class EditorGraph {
@@ -84,15 +83,6 @@ class EditorGraph {
     } else {
       canvas.fitBounds(bounds);
     }
-  }
-
-  createNode(type, position = null, options = null) {
-    options = { ...options, type };
-    if (position) {
-      if (!options.canvas) options.canvas = {};
-      options.canvas.position = position;
-    }
-    this.model.value.applyEdits([CreateNode.createDef(options)]);
   }
 
   onChangeNodePosition(node, e) {

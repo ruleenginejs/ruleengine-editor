@@ -1,5 +1,6 @@
 import { ref, watch, watchEffect } from "vue";
 import { createModel } from "./graph-model";
+import { CreateNode } from "./commands/create-node";
 
 class Editor {
   constructor({
@@ -94,6 +95,20 @@ class Editor {
 
   fitCanvas(maxZoom = null) {
     this.getGraph()?.fitCanvas(maxZoom);
+  }
+
+  newNode(type, options = null, notify = true) {
+    this.model.value.applyEdits([CreateNode.createDef({ ...options, type })], notify);
+  }
+
+  newNodeInCurrentViewWithOffset(type, positionOffset, options = null, notify = true) {
+    options = { ...options, type };
+    const x = -this.viewportModel.value[0] + positionOffset[0];
+    const y = -this.viewportModel.value[1] + positionOffset[1];
+    options.canvas = {
+      position: [x, y]
+    }
+    this.newNode(type, options, notify);
   }
 
   onResize() {

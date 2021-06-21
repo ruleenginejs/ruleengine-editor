@@ -1,5 +1,4 @@
 <template>
-  <!--
   <v-editor
     ref="editor"
     :value="value"
@@ -8,8 +7,7 @@
     auto-fit
     @change-value="onChangeValue"
   />
-  -->
-  <editor-with-sidebar :value="value" @change-value="onChangeValue" />
+  <!--<editor-with-sidebar :value="value" @change-value="onChangeValue" />-->
   <div class="controls">
     <button @click="changeValue">Change value</button>
     <button @click="revertAllChanges">Revert changes</button>
@@ -52,12 +50,17 @@ export default {
       this.$refs.editor.instance.applyEdits(changes.reverse(), false);
     },
     createNodes() {
-      const graph = this.$refs.editor.instance.getGraph();
-      graph.createNode("start");
-      graph.createNode("end");
-      graph.createNode("error");
-      graph.createNode("single");
-      graph.createNode("composite", null, { name: "Composite" });
+      const instance = this.$refs.editor.instance;
+      instance.newNode("start");
+      instance.newNode("end");
+      instance.newNode("error");
+      instance.newNode("single");
+      instance.newNodeInCurrentViewWithOffset("single", [40, 40], {
+        name: "New Single"
+      });
+      instance.newNodeInCurrentViewWithOffset("composite", [20, 20], {
+        name: "New Composite"
+      });
     }
   }
 };
