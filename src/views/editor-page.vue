@@ -7,24 +7,23 @@
     auto-fit
     @change-value="onChangeValue"
   />
-  <!--<editor-with-sidebar :value="value" @change-value="onChangeValue" />-->
   <div class="controls">
-    <button @click="changeValue">Change value</button>
-    <button @click="revertAllChanges">Revert changes</button>
-    <button @click="createNodes">Create nodes</button>
-    <div>Zoom: {{ zoom }}, Viewport: {{ viewport }}</div>
+    <ul>
+      <li><button @click="changeValue">Change value</button></li>
+      <li><button @click="revertAllChanges">Revert changes</button></li>
+      <li><button @click="createNodes">Create nodes</button></li>
+      <li>
+        <div>Zoom: {{ zoom }}, Viewport: {{ viewport }}</div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 import data from "./editor-data";
-import EditorWithSidebar from "./editor-with-sidebar";
 
 export default {
   name: "editor-page",
-  components: {
-    EditorWithSidebar
-  },
   data() {
     return {
       value: JSON.stringify(data),
