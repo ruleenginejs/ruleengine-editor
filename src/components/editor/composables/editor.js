@@ -1,6 +1,6 @@
 import { ref, watch, watchEffect } from "vue";
+import { EditorOperations } from "./editor-operations";
 import { createModel } from "./graph-model";
-import { CreateNode } from "./commands/create-node";
 
 class Editor {
   constructor({
@@ -20,6 +20,7 @@ class Editor {
     this.graph = ref(null);
     this.viewportModel = ref(viewport.value);
     this.zoomModel = ref(zoom.value);
+    this.operations = new EditorOperations(this.model);
 
     this.onResize = this.onResize.bind(this);
     this.onGraphCreated = this.onGraphCreated.bind(this);
@@ -97,18 +98,30 @@ class Editor {
     this.getGraph()?.fitCanvas(maxZoom);
   }
 
-  newNode(type, options = null, notify = true) {
-    this.model.value.applyEdits([CreateNode.createDef({ ...options, type })], notify);
+  newNode(type, options, notify) {
+    this.operations.createNode(type, options, notify);
   }
 
-  newNodeInCurrentViewWithOffset(type, positionOffset, options = null, notify = true) {
-    options = { ...options, type };
-    const x = -this.viewportModel.value[0] + positionOffset[0];
-    const y = -this.viewportModel.value[1] + positionOffset[1];
-    options.canvas = {
-      position: [x, y]
-    }
-    this.newNode(type, options, notify);
+  newNodeInCurrentViewWithOffset(type, positionOffset, options, notify) {
+    this.operations.createNodeInCurrentViewWithOffset(
+      type,
+      this.getViewport(),
+      positionOffset,
+      options,
+      notify
+    );
+  }
+
+  deleteSelectedObject(notify) {
+    this.deleteModelObject(this.getSelectedObject(), notify);
+  }
+
+  deleteModelObject(modelObject, notify) {
+    this.operations.deleteModelObject(modelObject, notify);
+  }
+
+  getSelectedObject() {
+    return this.model.value.selectedObject;
   }
 
   onResize() {

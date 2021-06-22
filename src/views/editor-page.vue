@@ -9,9 +9,18 @@
   />
   <div class="controls">
     <ul>
-      <li><button @click="changeValue">Change value</button></li>
-      <li><button @click="revertAllChanges">Revert changes</button></li>
-      <li><button @click="createNodes">Create nodes</button></li>
+      <li>
+        <button @click="onDeleteSelected">Delete Selected</button>
+      </li>
+      <li>
+        <button @click="changeValue">Change Value</button>
+      </li>
+      <li>
+        <button @click="revertAllChanges">Revert Changes</button>
+      </li>
+      <li>
+        <button @click="createNodes">Create Nodes</button>
+      </li>
       <li>
         <div>Zoom: {{ zoom }}, Viewport: {{ viewport }}</div>
       </li>
@@ -33,6 +42,9 @@ export default {
     };
   },
   methods: {
+    getInstance() {
+      return this.$refs.editor.instance;
+    },
     changeValue() {
       this.value = JSON.stringify({ ...data, title: Date.now() });
     },
@@ -46,10 +58,10 @@ export default {
         changes.push(...edit.map((e) => e.reverse).reverse())
       );
       this.edits = [];
-      this.$refs.editor.instance.applyEdits(changes.reverse(), false);
+      this.getInstance().applyEdits(changes.reverse(), false);
     },
     createNodes() {
-      const instance = this.$refs.editor.instance;
+      const instance = this.getInstance();
       instance.newNode("start");
       instance.newNode("end");
       instance.newNode("error");
@@ -59,7 +71,10 @@ export default {
       });
       instance.newNodeInCurrentViewWithOffset("composite", [20, 20], {
         name: "New Composite"
-      });
+      }, false);
+    },
+    onDeleteSelected() {
+      this.getInstance().deleteSelectedObject();
     }
   }
 };
