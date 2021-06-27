@@ -14,15 +14,15 @@ export class EditCommand {
     try {
       return this.doApply(model, this.payload);
     } catch (err) {
-      return this.handleError(err);
+      return this.doError(err);
     }
   }
 
   // eslint-disable-next-line no-unused-vars
   doApply(model, payload) { }
 
-  handleError(err) {
-    logger.error(`Error apply command ${this.name}`, err);
+  doError(err) {
+    logger.error(`Error apply command: ${this.name}`, err);
     return null;
   }
 
@@ -68,24 +68,24 @@ export function createDefinition(name, payload) {
   }
 }
 
-export function createChanges(appliedChangesCommandDef, reverseCommandDef) {
+export function createChanges(appliedCommandDef, reverseCommandDef) {
   return {
-    applied: appliedChangesCommandDef,
+    applied: appliedCommandDef,
     reverse: reverseCommandDef
   }
 }
 
-export function applyEditCommands(model, rawEditCommands) {
-  const commands = createEditCommands(rawEditCommands);
+export function applyEditCommands(model, editCommandDefs) {
+  const commands = createEditCommands(editCommandDefs);
   return commands.map(c => c.apply(model)).filter(val => !!val);
 }
 
-export function createEditCommands(rawEditCommands) {
-  if (!Array.isArray(rawEditCommands)) {
+export function createEditCommands(editCommandDefs) {
+  if (!Array.isArray(editCommandDefs)) {
     return [];
   }
 
-  return rawEditCommands.map((command) => {
+  return editCommandDefs.map((command) => {
     if (!command) {
       return null;
     }

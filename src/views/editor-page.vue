@@ -51,6 +51,7 @@ export default {
     onChangeValue(e) {
       console.log(e);
       this.edits.push(e.changes);
+      console.log(this.edits);
     },
     revertAllChanges() {
       const changes = [];
@@ -58,6 +59,7 @@ export default {
         changes.push(...edit.map((e) => e.reverse).reverse())
       );
       this.edits = [];
+      console.log(changes);
       this.getInstance().applyEdits(changes.reverse(), false);
     },
     createNodes() {
@@ -69,9 +71,14 @@ export default {
       instance.newNodeInCurrentViewWithOffset("single", [40, 40], {
         name: "New Single"
       });
-      instance.newNodeInCurrentViewWithOffset("composite", [20, 20], {
-        name: "New Composite"
-      }, false);
+      instance.newNodeInCurrentViewWithOffset(
+        "composite",
+        [20, 20],
+        {
+          name: "New Composite"
+        },
+        false
+      );
     },
     onDeleteSelected() {
       this.getInstance().deleteSelectedObject();

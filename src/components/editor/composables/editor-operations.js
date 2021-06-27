@@ -33,7 +33,10 @@ export class EditorOperations {
     const editOperations = [];
     switch (modelType) {
       case GraphModelType.Node:
-        editOperations.push(DeleteNode.createDef(modelObject.id));
+        editOperations.push.apply(
+          editOperations,
+          this._deleteNodeWithConnnections(modelObject.id)
+        );
         break;
 
       case GraphModelType.Connection:
@@ -44,5 +47,14 @@ export class EditorOperations {
     if (editOperations.length > 0) {
       this.model.value.applyEdits(editOperations, notify);
     }
+  }
+
+  _deleteNodeWithConnnections(nodeId) {
+    const editOperations = [];
+    const connections = this.model.value.getNodeConnections(nodeId);
+    editOperations.push.apply(editOperations, connections.map(c =>
+      DeleteConnection.createDef(c.definition)));
+    editOperations.push(DeleteNode.createDef(nodeId));
+    return editOperations;
   }
 }
