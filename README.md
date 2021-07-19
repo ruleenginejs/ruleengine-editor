@@ -6,7 +6,7 @@
 npm install @ruleenginejs/ruleengine-editor-vue vscode-codicons
 ```
 
-Use tailwindcss base (recommended)
+Add tailwindcss (recommended)
 
 ```bash
 npm install tailwindcss
