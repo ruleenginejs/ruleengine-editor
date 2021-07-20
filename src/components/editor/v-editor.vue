@@ -2,7 +2,9 @@
   <div class="v-editor">
     <v-editor-error v-if="model.error" :error="model.error" />
     <v-editor-empty v-else-if="model.isEmptyValue">
-      <slot name="empty-text" />
+      <template v-if="$slots['empty-text']" #default>
+        <slot name="empty-text" />
+      </template>
     </v-editor-empty>
     <v-editor-graph
       v-else

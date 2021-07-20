@@ -1,6 +1,6 @@
 <template>
   <div class="v-editor-empty">
-    <div class="v-editor-empty__content">
+    <div v-if="$slots['default']" class="v-editor-empty__content">
       <slot />
     </div>
   </div>

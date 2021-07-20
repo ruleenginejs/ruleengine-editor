@@ -1,8 +1,6 @@
 <template>
   <div class="v-editor-error">
-    <p>
-      {{ message }}
-    </p>
+    <p>{{ message }}</p>
   </div>
 </template>
 
