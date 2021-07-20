@@ -1,9 +1,9 @@
 .v-editor-error {
   /* visual styles */
-  @apply text-13sp bg-editor-background text-editor-foreground;
+  @apply text-13sp;
 
   /* sizes */
-  @apply w-full h-full pt-5sp pl-2.5;
+  @apply pt-5sp pl-2.5;
 }
 
 .v-editor-error p {

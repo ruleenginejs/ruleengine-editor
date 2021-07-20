@@ -1,15 +1,4 @@
 .v-editor-empty {
-  /* display styles */
-  @apply flex justify-center items-center;
-
-  /* visual styles */
-  @apply bg-editor-background text-editor-foreground;
-
-  /* sizes */
-  @apply w-full h-full;
-}
-
-.v-editor-empty__content {
   /* visual styles */
   @apply text-14sp;
 

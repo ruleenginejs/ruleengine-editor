@@ -5,3 +5,8 @@
   /* selection */
   @apply select-none;
 }
+
+.v-editor__no-content {
+  /* visual styles */
+  @apply bg-editor-background text-editor-foreground;
+}

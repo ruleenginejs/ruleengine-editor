@@ -1,14 +1,19 @@
 <template>
-  <div class="v-editor-empty">
-    <div v-if="$slots['default']" class="v-editor-empty__content">
+  <v-layout h-full w-full h-center w-center class="v-editor__no-content">
+    <div v-if="$slots['default']" class="v-editor-empty">
       <slot />
     </div>
-  </div>
+  </v-layout>
 </template>
 
 <script>
+import { VLayout } from "@ruleenginejs/ruleengine-ui-kit-vue";
+
 export default {
-  name: "v-editor-empty"
+  name: "v-editor-empty",
+  components: {
+    VLayout
+  }
 };
 </script>
 
