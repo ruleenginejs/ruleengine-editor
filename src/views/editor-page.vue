@@ -9,18 +9,11 @@
   />
   <div class="controls">
     <ul>
-      <li>
-        <button @click="onDeleteSelected">Delete Selected</button>
-      </li>
-      <li>
-        <button @click="changeValue">Change Value</button>
-      </li>
-      <li>
-        <button @click="revertAllChanges">Revert Changes</button>
-      </li>
-      <li>
-        <button @click="createNodes">Create Nodes</button>
-      </li>
+      <li><button @click="onDeleteSelected">Delete Selected</button></li>
+      <li><button @click="changeValue">Change Value</button></li>
+      <li><button @click="undo">Undo</button></li>
+      <li><button @click="redo">Redo</button></li>
+      <li><button @click="createNodes">Create Nodes</button></li>
       <li>
         <div>Zoom: {{ zoom }}, Viewport: {{ viewport }}</div>
       </li>
@@ -38,7 +31,8 @@ export default {
       value: JSON.stringify(data),
       zoom: 100,
       viewport: [100, 100],
-      edits: []
+      edits: [],
+      index: 0
     };
   },
   methods: {
@@ -52,6 +46,7 @@ export default {
       console.log(e);
       this.edits.push(e.changes);
       console.log(this.edits);
+      this.index = this.edits.length - 1;
     },
     revertAllChanges() {
       const changes = [];
@@ -82,6 +77,28 @@ export default {
     },
     onDeleteSelected() {
       this.getInstance().deleteSelectedObject();
+    },
+    undo() {
+      if (this.edits[this.index]) {
+        const changes = this.edits[this.index].map((e) => e.reverse).reverse();
+        console.log("Undo changes: ", changes);
+        this.getInstance().applyEdits(changes, false);
+      }
+      this.index--;
+      if (this.index < 0) {
+        this.index = -1;
+      }
+    },
+    redo() {
+      this.index++;
+      if (this.index > this.edits.length - 1) {
+        this.index = this.edits.length - 1;
+      }
+      if (this.index >= 0 && this.edits[this.index]) {
+        const changes = this.edits[this.index].map((e) => e.applied);
+        console.log("Redo changes: ", changes);
+        this.getInstance().applyEdits(changes, false);
+      }
     }
   }
 };
