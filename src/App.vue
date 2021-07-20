@@ -1,5 +1,5 @@
 <template>
-  <ul class="nav">
+  <ul v-if="!pageName" class="nav">
     <li @click="pageName = 'page1'">Editor</li>
     <li @click="pageName = 'page2'">Editor With Sidebar</li>
   </ul>

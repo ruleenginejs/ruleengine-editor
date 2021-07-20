@@ -30,6 +30,7 @@ export class GraphModel extends SelectableModel {
     this.stepNodes = null;
     this.startNode = null;
     this.errorNode = null;
+    this.isEmptyValue = null;
 
     this._parseValue(value);
   }
@@ -38,10 +39,12 @@ export class GraphModel extends SelectableModel {
     super._initComputed();
 
     this.selectedObject = computed(() => this._findSelectedObject());
+
     this.nodesById = computed(() => this.nodes.reduce((res, node) => {
       res[node.id] = node;
       return res;
     }, {}));
+
     this.connectionsById = computed(() => this.connections.reduce((res, node) => {
       res[node.id] = node;
       return res;
@@ -52,13 +55,19 @@ export class GraphModel extends SelectableModel {
       GraphNodeType.End,
       GraphNodeType.Error
     ));
+
     this.stepNodes = computed(() => this.getNodesByType(
       GraphNodeType.Single,
       GraphNodeType.Composite
     ));
 
-    this.startNode = computed(() => this.getNodesByType(GraphNodeType.Start)[0]);
-    this.errorNode = computed(() => this.getNodesByType(GraphNodeType.Error)[0]);
+    this.startNode = computed(
+      () => this.getNodesByType(GraphNodeType.Start)[0]);
+    this.errorNode = computed(
+      () => this.getNodesByType(GraphNodeType.Error)[0]);
+
+    this.isEmptyValue = computed(
+      () => this.nodes.length === 0 && this.connections.length === 0);
   }
 
   _buildValue() {

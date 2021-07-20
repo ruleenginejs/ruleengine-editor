@@ -13,6 +13,7 @@ module.exports = {
       },
       fontSize: {
         "13sp": ['0.8125rem', { lineHeight: '1.1375rem' }],
+        "14sp": ['0.875rem', { lineHeight: '1.1875rem' }],
       }
     }
   },

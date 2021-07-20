@@ -6,7 +6,11 @@
     v-model:viewport="viewport"
     auto-fit
     @change-value="onChangeValue"
-  />
+  >
+    <template #empty-text>
+      Press <a href=""><span class="codicon codicon-plus"></span></a> to add new step.
+    </template>
+  </v-editor>
   <div class="controls">
     <ul>
       <li><button @click="onDeleteSelected">Delete Selected</button></li>

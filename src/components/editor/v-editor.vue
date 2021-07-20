@@ -1,7 +1,11 @@
 <template>
   <div class="v-editor">
     <v-editor-error v-if="model.error" :error="model.error" />
+    <v-editor-empty v-else-if="model.isEmptyValue">
+      <slot name="empty-text" />
+    </v-editor-empty>
     <v-editor-graph
+      v-else
       ref="graph"
       v-model:viewport="viewportModel"
       v-model:zoom="zoomModel"
@@ -19,6 +23,7 @@
 import { toRefs } from "vue";
 import VEditorGraph from "./v-editor-graph";
 import VEditorError from "./v-editor-error";
+import VEditorEmpty from "./v-editor-empty";
 import useEditor from "./composables/use-editor";
 
 const defaultEdgeScrollSizes = Object.freeze({
@@ -29,7 +34,8 @@ export default {
   name: "v-editor",
   components: {
     VEditorGraph,
-    VEditorError
+    VEditorError,
+    VEditorEmpty
   },
   props: {
     value: {
