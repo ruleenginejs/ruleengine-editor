@@ -39,7 +39,7 @@ export class GraphNodeModel extends SelectableModel {
     }
 
     if (this.isNavNode) {
-      const ports = this._parsePorts(null);
+      const ports = this._parsePorts(this.id, null);
 
       if (this.type === GraphNodeType.End) {
         this.ports = [ports.in[0]];
@@ -47,7 +47,7 @@ export class GraphNodeModel extends SelectableModel {
         this.ports = [ports.out[0]];
       }
     } else {
-      const ports = this._parsePorts(options.ports);
+      const ports = this._parsePorts(this.id, options.ports);
       this.ports = ports.in.concat(ports.out);
     }
 
@@ -156,7 +156,7 @@ export class GraphNodeModel extends SelectableModel {
     }
   }
 
-  _parsePorts(ports) {
+  _parsePorts(nodeId, ports) {
     const inPorts = new Set([DEFAULT_PORT]);
     const outPorts = new Set([DEFAULT_PORT]);
 
@@ -180,8 +180,8 @@ export class GraphNodeModel extends SelectableModel {
     }
 
     const result = {
-      in: [...inPorts].map(p => createPort(p, GraphPortType.IN)),
-      out: [...outPorts].map(p => createPort(p, GraphPortType.OUT))
+      in: [...inPorts].map(p => createPort(nodeId, p, GraphPortType.IN)),
+      out: [...outPorts].map(p => createPort(nodeId, p, GraphPortType.OUT))
     };
 
     return result;
@@ -235,23 +235,6 @@ export class GraphNodeModel extends SelectableModel {
         return localize("editor.errorNode");
       default:
         return null;
-    }
-  }
-
-  getTypeName() {
-    switch (this.type) {
-      case GraphNodeType.Start:
-        return localize("editor.startNode");
-      case GraphNodeType.End:
-        return localize("editor.endNode");
-      case GraphNodeType.Error:
-        return localize("editor.errorNode");
-      case GraphNodeType.Single:
-        return localize("editor.singleNode");
-      case GraphNodeType.Composite:
-        return localize("editor.compositeNode");
-      default:
-        return localize("editor.unknownNode");
     }
   }
 

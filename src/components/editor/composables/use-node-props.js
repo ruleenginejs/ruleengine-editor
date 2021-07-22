@@ -1,7 +1,7 @@
 import { computed, ref } from "vue";
 import debounce from "debounce";
 import localize from "@/utils/localize";
-import { GraphNodeType } from "./graph-node-type";
+import { getNodeTypeName, GraphNodeType } from "./graph-node-type";
 import { isDefined } from "@/utils/types";
 import { ChangeNodeName } from "./commands/change-node-name";
 import { ChangeNodeHandlerFile } from "./commands/change-node-handler-file";
@@ -16,11 +16,11 @@ function createHandler(func, delay = null) {
 
 export default function useNodeProps({ nodeModel, emit, editDelay }) {
   const sectionName = computed(() => {
-    return localize("editor.sidebar.nodeTitle", nodeModel.value.getTypeName());
+    return localize("editor.sidebar.nodeTitle", getNodeTypeName(nodeModel.value.nodeType));
   });
 
   const canShowName = computed(() => !nodeModel.value.isNavNode);
-  const canShowHandler = computed(() => nodeModel.value.type === GraphNodeType.Single);
+  const canShowHandler = computed(() => nodeModel.value.nodeType === GraphNodeType.Single);
   const canShowPorts = ref(false);
   const canShowConnections = ref(false);
   const canShowUserProps = ref(false);

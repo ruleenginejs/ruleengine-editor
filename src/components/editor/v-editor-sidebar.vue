@@ -1,7 +1,7 @@
 <template>
   <v-sidebar :lt-border="sidebarBorder" w-full h-full>
     <v-editor-sidebar-no-action v-if="noAction" :message="noActionMessage" />
-    <v-content v-else scroll="sm" h-full w-full>
+    <v-content v-else :scroll="sidebarScroll" h-full w-full>
       <component
         v-if="propsComponentName"
         :key="selectedObject.id"
@@ -39,13 +39,17 @@ export default {
       type: Object,
       default: null
     },
+    sidebarScroll: {
+      type: String,
+      default: "sm"
+    },
     sidebarBorder: {
       type: Boolean,
       default: false
     },
     editDelay: {
       type: Number,
-      default: null
+      default: 500
     }
   },
   emits: ["edit"],
@@ -58,16 +62,12 @@ export default {
       [GraphModelType.Connection]: VEditorConnectionProps.name
     };
 
-    const {
-      noAction,
-      noActionMessage,
-      propsComponentName,
-      onEdit
-    } = useSidebar({
-      selectedObject,
-      propsComponents,
-      emit
-    });
+    const { noAction, noActionMessage, propsComponentName, onEdit } =
+      useSidebar({
+        selectedObject,
+        propsComponents,
+        emit
+      });
 
     return {
       noAction,

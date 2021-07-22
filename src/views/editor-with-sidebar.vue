@@ -28,6 +28,7 @@
 
 <script>
 import { VSplitView, VSplitPane } from "@ruleenginejs/ruleengine-ui-kit-vue";
+import { modelSerializer } from "../index";
 
 const RESIZE_DELAY = 100;
 const SNAP_OFFSET = 70;
@@ -54,8 +55,13 @@ export default {
       sidebarSize: SIDEBAR_SIZE,
       editDelay: EDIT_DELAY,
       splitViewCreated: false,
-      selectedObject: null
+      selectedModel: null
     };
+  },
+  computed: {
+    selectedObject() {
+      return modelSerializer(this.selectedModel);
+    }
   },
   methods: {
     onSplitViewResize() {
@@ -71,7 +77,7 @@ export default {
       this.$emit("change-value", e);
     },
     onChangeSelection(selectedItem) {
-      this.selectedObject = selectedItem;
+      this.selectedModel = selectedItem;
     }
   }
 };

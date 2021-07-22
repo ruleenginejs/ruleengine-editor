@@ -89,7 +89,6 @@ import {
   VAutocomplete
 } from "@ruleenginejs/ruleengine-ui-kit-vue";
 import { toRefs } from "vue";
-import { GraphNodeModel } from "./composables/graph-node-model";
 import useNodeProps from "./composables/use-node-props";
 
 export default {
@@ -104,7 +103,7 @@ export default {
   },
   props: {
     model: {
-      type: GraphNodeModel,
+      type: Object,
       required: true
     },
     editDelay: {

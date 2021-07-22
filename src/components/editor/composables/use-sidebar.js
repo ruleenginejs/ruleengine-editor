@@ -1,13 +1,13 @@
 import { computed, ref } from "vue";
 import localize from "@/utils/localize";
 import { isDefined } from "@/utils/types";
-import { getModelType, GraphModelType } from "./graph-model-util";
+import { GraphModelType } from "./graph-model-util";
 
 export default function useSidebar({ selectedObject, propsComponents, emit }) {
   const noActionMessage = ref(localize("editor.noSelection"));
 
   const selectedObjectType = computed(() => {
-    return getModelType(selectedObject.value);
+    return selectedObject.value?.type;
   });
   const noAction = computed(() => {
     return !isDefined(selectedObjectType.value) || selectedObjectType.value === GraphModelType.Graph;
