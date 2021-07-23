@@ -6,7 +6,7 @@ import { createNewConnection } from "./new-connection";
 import { ChangeNodePosition } from "./commands/change-node-position";
 import { win } from "@/utils/platform";
 
-const WIN_ZOOM_INTENSITY = 0.35;
+const WIN_ZOOM_INTENSITY = 0.3;
 
 class EditorGraph {
   constructor({
