@@ -1,6 +1,6 @@
 {
   "name": "@ruleenginejs/ruleengine-editor-vue",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Rule editor written on Vue.js",
   "main": "dist/ruleengine-editor-vue.common.js",
   "files": [
