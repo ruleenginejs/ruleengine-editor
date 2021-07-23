@@ -1,6 +1,7 @@
 import { computed } from "vue"
 import merge from "merge";
 import localize from "@/utils/localize";
+import { round } from "@/utils/numbers";
 import { isDefined, isPlainObject, notEmptyString } from "@/utils/types";
 import { GraphNodeType, isNavNodeType, validateNodeType } from "./graph-node-type";
 import { createPort, DEFAULT_PORT } from "./graph-port-model";
@@ -134,7 +135,10 @@ export class GraphNodeModel extends SelectableModel {
 
   _buildCanvas() {
     const value = {
-      position: [this.positionX, this.positionY]
+      position: [
+        round(this.positionX, 2),
+        round(this.positionY, 2)
+      ]
     }
     if (isDefined(this.headerColor)) {
       value.color = this.headerColor;
