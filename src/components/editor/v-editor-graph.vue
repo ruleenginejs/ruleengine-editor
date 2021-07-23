@@ -7,6 +7,7 @@
     :max-zoom="maxZoom"
     :edge-sizes="edgeSizes"
     :resize-delay="resizeDelay"
+    :zoom-intensity="zoomIntensity"
     @update:selected="onObjectSelected(model, $event)"
     ref="canvas"
   >
@@ -173,6 +174,7 @@ export default {
       cvSelected,
       circleNodes,
       stepNodes,
+      zoomIntensity,
       onObjectSelected,
       onChangeNodePosition,
       linkRule,
@@ -187,6 +189,7 @@ export default {
       cvSelected,
       circleNodes,
       stepNodes,
+      zoomIntensity,
       onObjectSelected,
       onChangeNodePosition,
       linkRule,

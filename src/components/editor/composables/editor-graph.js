@@ -4,6 +4,9 @@ import { SelectableModel } from "./selectable-model";
 import { validateLink } from "./link-rules";
 import { createNewConnection } from "./new-connection";
 import { ChangeNodePosition } from "./commands/change-node-position";
+import { win } from "@/utils/platform";
+
+const WIN_ZOOM_INTENSITY = 0.35;
 
 class EditorGraph {
   constructor({
@@ -16,6 +19,7 @@ class EditorGraph {
     this.model = model;
     this.emit = emit;
     this.canvas = ref(null);
+    this.zoomIntensity = ref(win ? WIN_ZOOM_INTENSITY : undefined);
 
     this.onObjectSelected = this.onObjectSelected.bind(this);
     this.invalidateCanvasSize = this.invalidateCanvasSize.bind(this);
