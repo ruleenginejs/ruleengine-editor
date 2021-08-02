@@ -46,6 +46,7 @@
     "tailwindcss": "^2.2.7",
     "@vscode/codicons": "^0.0.20",
     "vue": "^3.1.5",
+    "vue-router": "^4.0.10",
     "webpack": "^5.47.1"
   },
   "repository": {

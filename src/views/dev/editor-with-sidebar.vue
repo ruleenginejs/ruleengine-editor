@@ -28,7 +28,7 @@
 
 <script>
 import { VSplitView, VSplitPane } from "@ruleenginejs/ruleengine-ui";
-import { modelSerializer } from "../index";
+import { modelSerializer } from "../../index";
 
 const RESIZE_DELAY = 100;
 const SNAP_OFFSET = 70;
