@@ -1,6 +1,6 @@
 # ruleengine-editor
 
-> Rule editor made in node graph written in Vue 3.0
+> Pipeline editor made in node graph written in Vue 3.0
 
 ## Installation
 
