@@ -1,6 +1,6 @@
 .v-editor-sidebar-no-action {
   /* visual styles */
-  @apply text-base text-editor-foreground truncate;
+  @apply text-base text-foreground truncate;
 
   /* sizes */
   @apply p-4;

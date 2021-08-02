@@ -4,8 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "editor-background": "var(--editor-background)",
-        "editor-foreground": "var(--editor-foreground)",
+        "foreground": "var(--v-foreground)",
+        "editor-background": "var(--v-editor-background)",
+        "editor-foreground": "var(--v-editor-foreground)",
       },
       spacing: {
         "5sp": "0.3125rem",
