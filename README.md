@@ -2,6 +2,8 @@
 
 > Rule editor made in node graph written in Vue 3.0
 
+![Editor Screen](./images/editor-screen.png)
+
 ## Installation
 
 ```bash
