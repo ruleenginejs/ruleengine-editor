@@ -1,2 +1,1 @@
-@import "vendor";
-@import "theme";
+@import "@ruleenginejs/ruleengine-ui/dist/ruleengine-ui.css";

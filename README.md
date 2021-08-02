@@ -38,6 +38,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import RuleEngineEditor from "@ruleenginejs/ruleengine-editor"
 import "@ruleenginejs/ruleengine-editor/dist/ruleengine-editor.css"
+import "@ruleenginejs/ruleengine-ui/dist/dark.theme.css"
 
 const app = createApp(App)
 
