@@ -4,7 +4,7 @@ module.exports = {
     if (process.env.BUILD_LIB) {
       config.externals({
         "vue": "vue",
-        "@ruleenginejs/ruleengine-ui-kit-vue": "@ruleenginejs/ruleengine-ui-kit-vue",
+        "@ruleenginejs/ruleengine-ui": "@ruleenginejs/ruleengine-ui",
         "debounce": "debounce",
         "is-plain-object": "is-plain-object",
         "merge": "merge"

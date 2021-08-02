@@ -16,7 +16,7 @@
 
 <script>
 import { toRefs } from "vue";
-import { VSidebar, VContent } from "@ruleenginejs/ruleengine-ui-kit-vue";
+import { VSidebar, VContent } from "@ruleenginejs/ruleengine-ui";
 import VEditorSidebarNoAction from "./v-editor-sidebar-no-action";
 import VEditorNodeProps from "./v-editor-node-props";
 import VEditorConnectionProps from "./v-editor-connection-props";

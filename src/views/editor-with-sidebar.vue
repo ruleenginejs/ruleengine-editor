@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { VSplitView, VSplitPane } from "@ruleenginejs/ruleengine-ui-kit-vue";
+import { VSplitView, VSplitPane } from "@ruleenginejs/ruleengine-ui";
 import { modelSerializer } from "../index";
 
 const RESIZE_DELAY = 100;

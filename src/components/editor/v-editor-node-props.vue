@@ -87,7 +87,7 @@ import {
   VLabel,
   VInput,
   VAutocomplete
-} from "@ruleenginejs/ruleengine-ui-kit-vue";
+} from "@ruleenginejs/ruleengine-ui";
 import { toRefs } from "vue";
 import useNodeProps from "./composables/use-node-props";
 

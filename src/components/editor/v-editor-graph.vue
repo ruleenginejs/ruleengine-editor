@@ -111,7 +111,7 @@ import {
   VGraphConnection,
   VIconDocText,
   VIconScript
-} from "@ruleenginejs/ruleengine-ui-kit-vue";
+} from "@ruleenginejs/ruleengine-ui";
 import { toRefs } from "vue";
 import useEditorGraph from "./composables/use-editor-graph";
 

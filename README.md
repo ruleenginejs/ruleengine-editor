@@ -1,12 +1,14 @@
-# ruleengine-editor-vue
+# ruleengine-editor
+
+> Rule editor made in node graph written in Vue 3.0
 
 ## Installation
 
 ```bash
-npm install @ruleenginejs/ruleengine-editor-vue vscode-codicons
+npm install @ruleenginejs/ruleengine-editor
 ```
 
-Add tailwindcss (recommended)
+Use [tailwindcss](https://github.com/tailwindlabs/tailwindcss) (for reset style)
 
 ```bash
 npm install tailwindcss
@@ -18,10 +20,15 @@ In your styles
 @import "tailwindcss/base";
 ```
 
-Add codicons
+Add [codicons](https://github.com/microsoft/vscode-codicons)
 
-```css
-@import "vscode-codicons/dist/codicon.css"
+```bash
+npm install @vscode/codicons
+```
+
+In your code
+```javascript
+import "@vscode/codicons/dist/codicon.css"
 ```
 
 ## Usage
@@ -29,8 +36,8 @@ Add codicons
 ```javascript
 import { createApp } from 'vue'
 import App from './App.vue'
-import RuleEngineEditor from "@ruleenginejs/ruleengine-editor-vue"
-import "@ruleenginejs/ruleengine-editor-vue/dist/ruleengine-editor-vue.css"
+import RuleEngineEditor from "@ruleenginejs/ruleengine-editor"
+import "@ruleenginejs/ruleengine-editor/dist/ruleengine-editor.css"
 
 const app = createApp(App)
 
@@ -44,3 +51,7 @@ In your templates
 ```html
 <v-editor value="your editor content..." />
 ```
+
+## License
+
+Licensed under the [MIT License](./LICENSE).
