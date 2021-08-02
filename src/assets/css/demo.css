@@ -1,0 +1,9 @@
+html,
+body,
+#app {
+  @apply w-full h-full;
+}
+
+html {
+  background-color: var(--v-window-background);
+}

@@ -113,6 +113,6 @@ export default {
   position: absolute;
   left: 0;
   bottom: 0;
-  color: var(--foreground);
+  color: var(--v-foreground);
 }
 </style>
