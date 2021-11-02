@@ -43,7 +43,7 @@ In your templates
 <v-editor value="editor value..." />
 ```
 
-Editor value example
+Example editor value
 
 ```json
 {
