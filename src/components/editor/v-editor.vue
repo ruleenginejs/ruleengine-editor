@@ -23,9 +23,9 @@
 
 <script>
 import { toRefs } from "vue";
-import VEditorGraph from "./v-editor-graph";
-import VEditorError from "./v-editor-error";
-import VEditorEmpty from "./v-editor-empty";
+import VEditorGraph from "./v-editor-graph.vue";
+import VEditorError from "./v-editor-error.vue";
+import VEditorEmpty from "./v-editor-empty.vue";
 import useEditor from "./composables/use-editor";
 
 const defaultEdgeScrollSizes = Object.freeze({

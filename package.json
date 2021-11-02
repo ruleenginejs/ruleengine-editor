@@ -2,52 +2,36 @@
   "name": "@ruleenginejs/ruleengine-editor",
   "version": "1.0.0",
   "description": "Rule Engine Editor",
-  "main": "dist/ruleengine-editor.common.js",
+  "main": "dist/ruleengine-editor.umd.js",
+  "module": "dist/ruleengine-editor.es.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "start": "npm run dev:start",
-    "dev:start": "cross-env NO_SOURCE_MAP=true npm run dev:serve",
-    "dev:serve": "vue-cli-service serve",
-    "dev:build": "vue-cli-service build",
-    "dev:lint": "vue-cli-service lint",
-    "build": "cross-env BUILD_LIB=true vue-cli-service build --target lib --name ruleengine-editor ./src/index.js",
+    "build": "vite build",
     "postversion": "npm run push",
-    "push": "git push origin master && git push origin master --tags"
+    "push": "git push origin master --tags"
   },
   "peerDependencies": {
-    "@vscode/codicons": "^0.0.20",
-    "vue": "^3.1.5"
+    "@vscode/codicons": "^0.0.25",
+    "vue": "^3.2.20"
   },
   "dependencies": {
-    "@ruleenginejs/ruleengine-ui": "^1.0.2",
+    "@ruleenginejs/ruleengine-ui": "^1.1.0",
     "debounce": "^1.2.1",
     "is-plain-object": "^5.0.0",
     "merge": "^2.1.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.14.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.14.7",
-    "@babel/plugin-proposal-optional-chaining": "^7.14.5",
-    "@babel/eslint-parser": "^7.14.9",
-    "@vue/cli-plugin-babel": "^5.0.0-beta.1",
-    "@vue/cli-plugin-eslint": "^5.0.0-beta.1",
-    "@vue/cli-service": "^5.0.0-beta.1",
-    "@vue/compiler-sfc": "^3.1.5",
-    "autoprefixer": "^10.3.1",
-    "core-js": "^3.16.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^7.15.0",
-    "postcss": "^8.3.6",
+    "@vitejs/plugin-vue": "^1.9.4",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.1.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "postcss": "^8.3.11",
     "postcss-import": "^14.0.2",
-    "postcss-nesting": "^8.0.1",
-    "tailwindcss": "^2.2.7",
-    "@vscode/codicons": "^0.0.20",
-    "vue": "^3.1.5",
-    "vue-router": "^4.0.10",
-    "webpack": "^5.47.1"
+    "postcss-nesting": "^9.0.0",
+    "tailwindcss": "^2.2.19",
+    "vite": "^2.6.13"
   },
   "repository": {
     "type": "git",
@@ -58,11 +42,5 @@
   "bugs": {
     "url": "https://github.com/ruleenginejs/ruleengine-editor/issues"
   },
-  "homepage": "https://github.com/ruleenginejs/ruleengine-editor#readme",
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not IE > 0"
-  ]
+  "homepage": "https://github.com/ruleenginejs/ruleengine-editor#readme"
 }

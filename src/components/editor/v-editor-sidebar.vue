@@ -17,10 +17,10 @@
 <script>
 import { toRefs } from "vue";
 import { VSidebar, VContent } from "@ruleenginejs/ruleengine-ui";
-import VEditorSidebarNoAction from "./v-editor-sidebar-no-action";
-import VEditorNodeProps from "./v-editor-node-props";
-import VEditorConnectionProps from "./v-editor-connection-props";
-import VEditorPortProps from "./v-editor-port-props";
+import VEditorSidebarNoAction from "./v-editor-sidebar-no-action.vue";
+import VEditorNodeProps from "./v-editor-node-props.vue";
+import VEditorConnectionProps from "./v-editor-connection-props.vue";
+import VEditorPortProps from "./v-editor-port-props.vue";
 import { GraphModelType } from "./composables/graph-model-util";
 import useSidebar from "./composables/use-sidebar";
 
