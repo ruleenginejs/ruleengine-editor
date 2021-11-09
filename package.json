@@ -9,11 +9,12 @@
   ],
   "scripts": {
     "build": "vite build",
+    "watch": "vite build --watch",
     "postversion": "npm run push",
     "push": "git push origin master --tags"
   },
   "peerDependencies": {
-    "@vscode/codicons": "^0.0.25",
+    "@vscode/codicons": "^0.0.26",
     "vue": "^3.2.20"
   },
   "dependencies": {
