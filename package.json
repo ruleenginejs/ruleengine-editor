@@ -15,10 +15,10 @@
   },
   "peerDependencies": {
     "@vscode/codicons": "^0.0.26",
-    "vue": "^3.2.20"
+    "vue": "^3.2.21"
   },
   "dependencies": {
-    "@ruleenginejs/ruleengine-ui": "^1.1.0",
+    "@ruleenginejs/ruleengine-ui": "^1.1.5",
     "debounce": "^1.2.1",
     "is-plain-object": "^5.0.0",
     "merge": "^2.1.1"
@@ -26,13 +26,13 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.9.4",
     "autoprefixer": "^10.4.0",
-    "eslint": "^8.1.0",
+    "eslint": "^8.2.0",
     "eslint-plugin-vue": "^8.0.3",
     "postcss": "^8.3.11",
     "postcss-import": "^14.0.2",
     "postcss-nesting": "^9.0.0",
     "tailwindcss": "^2.2.19",
-    "vite": "^2.6.13"
+    "vite": "^2.6.14"
   },
   "repository": {
     "type": "git",
