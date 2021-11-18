@@ -13,7 +13,9 @@ import {
   VFieldset,
   VFieldLayout,
   VLabel,
-  VInput
+  VInput,
+  VCheckbox,
+  VLayout
 } from "@ruleenginejs/ruleengine-ui";
 
 const props = defineProps({
@@ -26,11 +28,16 @@ const props = defineProps({
     default: null
   }
 })
-
 const emit = defineEmits(["edit"])
 
 const { model, editDelay } = toRefs(props);
-const { sectionName, editName } = usePortProps({
+const {
+  sectionName,
+  editName,
+  editDisabled,
+  editIsError,
+  checkboxId
+} = usePortProps({
   portModel: model,
   emit,
   editDelay
@@ -59,17 +66,24 @@ const t = localize;
       </v-field-layout>
       <v-field-layout>
         <template #label>
-          <v-label truncate>{{ t('editor.hint.behavior') }}</v-label>
+          <v-label truncate>{{ t('editor.hint.state') }}</v-label>
         </template>
         <template #value>
-          <v-field-layout vertical>
-            <template #value>
-              <v-layout gutter="sm" h-center>
-                <v-checkbox id="v-checkbox_1" />
-                <v-label for="checkbox_1">Disabled</v-label>
-              </v-layout>
-            </template>
-          </v-field-layout>
+          <v-layout gutter="sm" h-center>
+            <v-checkbox :id="checkboxId('disabled')" v-model="editDisabled" />
+            <v-label :for="checkboxId('disabled')">{{ t('editor.hint.disabled') }}</v-label>
+          </v-layout>
+        </template>
+      </v-field-layout>
+      <v-field-layout>
+        <template #label>
+          <v-label truncate>{{ t('editor.hint.mode') }}</v-label>
+        </template>
+        <template #value>
+          <v-layout gutter="sm" h-center>
+            <v-checkbox :id="checkboxId('error')" v-model="editIsError" />
+            <v-label :for="checkboxId('error')">{{ t('editor.hint.errorPort') }}</v-label>
+          </v-layout>
         </template>
       </v-field-layout>
     </v-fieldset>

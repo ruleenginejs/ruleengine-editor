@@ -20,7 +20,10 @@
   "editor.sidebar.userProperties": "User Properties",
   "editor.hint.handler": "Handler file path",
   "editor.hint.name": "Name",
-  "editor.hint.behavior": "Behavior",
+  "editor.hint.state": "State",
+  "editor.hint.mode": "Mode",
+  "editor.hint.errorPort": "Error Port",
+  "editor.hint.disabled": "Disabled",
   "editor.suggest.loading": "Loading...",
   "editor.suggest.emptyResult": "No suggestions."
 }

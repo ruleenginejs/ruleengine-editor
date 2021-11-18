@@ -1,8 +1,5 @@
 import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
-
-const notImplemented = () => {
-  throw new Error("Method not implemented");
-};
+import { notImplemented } from "@/utils/errors";
 
 export class ChangeNodeValue extends EditCommand {
   doApply(model, payload) {

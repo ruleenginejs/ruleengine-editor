@@ -54,6 +54,12 @@ export class GraphPortModel extends SelectableModel {
     this.name = newValue;
     return { oldValue, newValue };
   }
+
+  changeDisabled(newValue) {
+    const oldValue = this.disabled;
+    this.disabled = !!newValue;
+    return { oldValue, newValue };
+  }
 }
 
 export function createPort(nodeId, name, type) {
