@@ -11,13 +11,16 @@
   "editor.errorDetails": "See more details: {0}",
   "editor.noSelection": "No Selection",
   "editor.notApplicable": "Not Applicable",
-  "editor.sidebar.nodeTitle": "{0} Step",
+  "editor.sidebar.nodeSection": "{0} Step",
+  "editor.sidebar.portSection": "Port",
   "editor.sidebar.attributes": "Attributes",
   "editor.sidebar.handler": "Handler",
   "editor.sidebar.ports": "Ports",
   "editor.sidebar.connections": "Connections",
   "editor.sidebar.userProperties": "User Properties",
   "editor.hint.handler": "Handler file path",
+  "editor.hint.name": "Name",
+  "editor.hint.behavior": "Behavior",
   "editor.suggest.loading": "Loading...",
   "editor.suggest.emptyResult": "No suggestions."
 }

@@ -33,11 +33,7 @@
         </template>
       </v-field-layout>
     </v-fieldset>
-    <v-fieldset
-      v-if="canShowHandler"
-      :label="t('editor.sidebar.handler')"
-      b-border
-    >
+    <v-fieldset v-if="canShowHandler" :label="t('editor.sidebar.handler')" b-border>
       <v-field-layout vertical>
         <template #value>
           <v-autocomplete
@@ -48,25 +44,15 @@
             icon-clickable
           >
             <template #icon>
-              <span
-                v-if="!editHandlerFile"
-                class="codicon codicon-new-file"
-              ></span>
+              <span v-if="!editHandlerFile" class="codicon codicon-new-file"></span>
               <span v-else class="codicon codicon-go-to-file"></span>
             </template>
           </v-autocomplete>
         </template>
       </v-field-layout>
     </v-fieldset>
-    <v-fieldset
-      v-if="canShowPorts"
-      :label="t('editor.sidebar.ports')"
-      b-border
-    ></v-fieldset>
-    <v-fieldset
-      v-if="canShowConnections"
-      :label="t('editor.sidebar.connections')"
-    ></v-fieldset>
+    <v-fieldset v-if="canShowPorts" :label="t('editor.sidebar.ports')" b-border></v-fieldset>
+    <v-fieldset v-if="canShowConnections" :label="t('editor.sidebar.connections')"></v-fieldset>
   </v-sidebar-section>
   <v-sidebar-section
     v-if="canShowUserProps"
@@ -75,8 +61,7 @@
     expand
     :header-border="true"
     :bottom-border="false"
-  >
-  </v-sidebar-section>
+  ></v-sidebar-section>
 </template>
 
 <script>
@@ -90,6 +75,7 @@ import {
 } from "@ruleenginejs/ruleengine-ui";
 import { toRefs } from "vue";
 import useNodeProps from "./composables/use-node-props";
+import localize from "@/utils/localize";
 
 export default {
   name: "v-editor-node-props",
@@ -123,8 +109,7 @@ export default {
       canShowHandler,
       canShowPorts,
       canShowConnections,
-      canShowUserProps,
-      localize
+      canShowUserProps
     } = useNodeProps({ nodeModel: model, emit, editDelay });
 
     return {

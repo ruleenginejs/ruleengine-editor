@@ -37,6 +37,7 @@ function serializePortModel(portModel) {
     id: portModel.id,
     type: GraphModelType.Port,
     name: portModel.name,
+    nodeId: portModel.nodeId,
     portType: portModel.type,
     disabled: portModel.disabled,
     isErrorPort: portModel.isErrorPort

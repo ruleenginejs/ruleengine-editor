@@ -1,7 +1,16 @@
 module.exports = {
+  env: {
+    node: true,
+    browser: true,
+    'vue/setup-compiler-macros': true
+  },
   extends: [
-    "plugin:vue/vue3-strongly-recommended"
+    "plugin:vue/vue3-strongly-recommended",
+    "eslint:recommended"
   ],
+  parserOptions: {
+    ecmaVersion: 13
+  },
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
@@ -28,6 +37,7 @@ module.exports = {
         "normal": "any",
         "component": "any"
       }
-    }]
+    }],
+    "vue/singleline-html-element-content-newline": "off",
   }
 }

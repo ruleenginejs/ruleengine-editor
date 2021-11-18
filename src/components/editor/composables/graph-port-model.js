@@ -48,6 +48,12 @@ export class GraphPortModel extends SelectableModel {
   _buildValue() {
     return this.name;
   }
+
+  changeName(newValue) {
+    const oldValue = this.name;
+    this.name = newValue;
+    return { oldValue, newValue };
+  }
 }
 
 export function createPort(nodeId, name, type) {
