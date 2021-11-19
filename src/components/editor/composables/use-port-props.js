@@ -4,6 +4,7 @@ import { createEditHandler } from "./edit-handler";
 import { ChangePortName } from "./commands/change-port-name";
 import { ChangePortDisabled } from "./commands/change-port-disabled";
 import { DEFAULT_PORT, ERROR_PORT } from "./graph-port-model";
+import { GraphPortType } from "./graph-port-type";
 
 export default function usePortProps({ portModel, emit, editDelay }) {
   const sectionName = ref(localize("editor.sidebar.portSection"));
@@ -20,6 +21,7 @@ export default function usePortProps({ portModel, emit, editDelay }) {
 
   const editNameHandler = createHandler(ChangePortName, true);
   const editDisabledHandler = createHandler(ChangePortDisabled);
+  const editIsErrorHandler = createHandler(ChangePortName);
 
   const editName = computed({
     get: () => portModel.value.name,
@@ -31,9 +33,15 @@ export default function usePortProps({ portModel, emit, editDelay }) {
     set: (val) => { editDisabledHandler(val); }
   });
 
+  const editIsErrorDisabled = computed(() => portModel.value.portType === GraphPortType.IN);
+
   const editIsError = computed({
     get: () => portModel.value.isErrorPort,
-    set: (val) => { editNameHandler(val ? ERROR_PORT : DEFAULT_PORT); }
+    set: (val) => {
+      if (!editIsErrorDisabled.value) {
+        editIsErrorHandler(val ? ERROR_PORT : DEFAULT_PORT);
+      }
+    }
   });
 
   const checkboxId = (key) => `v-checkbox_${key}_${portModel.value.id}`;
@@ -43,6 +51,7 @@ export default function usePortProps({ portModel, emit, editDelay }) {
     editName,
     editDisabled,
     editIsError,
+    editIsErrorDisabled,
     checkboxId
   }
 }

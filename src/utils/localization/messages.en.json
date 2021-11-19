@@ -22,7 +22,7 @@
   "editor.hint.name": "Name",
   "editor.hint.state": "State",
   "editor.hint.mode": "Mode",
-  "editor.hint.errorPort": "Error Port",
+  "editor.hint.error": "Error",
   "editor.hint.disabled": "Disabled",
   "editor.suggest.loading": "Loading...",
   "editor.suggest.emptyResult": "No suggestions."

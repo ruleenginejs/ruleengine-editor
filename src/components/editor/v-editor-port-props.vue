@@ -36,6 +36,7 @@ const {
   editName,
   editDisabled,
   editIsError,
+  editIsErrorDisabled,
   checkboxId
 } = usePortProps({
   portModel: model,
@@ -81,8 +82,15 @@ const t = localize;
         </template>
         <template #value>
           <v-layout gutter="sm" h-center>
-            <v-checkbox :id="checkboxId('error')" v-model="editIsError" />
-            <v-label :for="checkboxId('error')">{{ t('editor.hint.errorPort') }}</v-label>
+            <v-checkbox
+              :id="checkboxId('error')"
+              :disabled="editIsErrorDisabled"
+              v-model="editIsError"
+            />
+            <v-label
+              :disabled="editIsErrorDisabled"
+              :for="checkboxId('error')"
+            >{{ t('editor.hint.error') }}</v-label>
           </v-layout>
         </template>
       </v-field-layout>
