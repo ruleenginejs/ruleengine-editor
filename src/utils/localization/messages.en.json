@@ -13,6 +13,7 @@
   "editor.notApplicable": "Not Applicable",
   "editor.sidebar.nodeSection": "{0} Step",
   "editor.sidebar.portSection": "Port",
+  "editor.sidebar.connectionSection": "Connection",
   "editor.sidebar.attributes": "Attributes",
   "editor.sidebar.handler": "Handler",
   "editor.sidebar.ports": "Ports",
@@ -24,6 +25,8 @@
   "editor.hint.mode": "Mode",
   "editor.hint.error": "Error",
   "editor.hint.disabled": "Disabled",
+  "editor.hint.fromNode": "From Node",
+  "editor.hint.toNode": "To Node",
   "editor.suggest.loading": "Loading...",
   "editor.suggest.emptyResult": "No suggestions."
 }
