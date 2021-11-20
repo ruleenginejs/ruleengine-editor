@@ -1,21 +1,19 @@
-import { ChangeNodeValue } from "./change-node-value";
+import { ChangeNodeProperty } from "./change-node-property";
 
-export class ChangeNodeHandlerFile extends ChangeNodeValue {
+export class ChangeNodeHandlerFile extends ChangeNodeProperty {
   static NAME = "change-node-handler-file";
 
   constructor(payload) {
     super(ChangeNodeHandlerFile.NAME, payload);
   }
 
-  changeValue(node, value) {
-    return node.changeHandlerFilePath(value);
-  }
-
-  getNewValue(node) {
-    return node.handlerFile;
+  changeProperty(node, value) {
+    const oldValue = node.changeHandlerFilePath(value);
+    const newValue = node.handlerFile;
+    return { oldValue, newValue };
   }
 
   static createDef(nodeId, value) {
-    return ChangeNodeValue.createDef(ChangeNodeHandlerFile.NAME, nodeId, value);
+    return ChangeNodeProperty.createDef(ChangeNodeHandlerFile.NAME, nodeId, value);
   }
 }

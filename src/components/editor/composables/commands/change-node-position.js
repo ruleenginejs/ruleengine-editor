@@ -1,6 +1,6 @@
-import { ChangeNodeValue } from "./change-node-value";
+import { ChangeNodeProperty } from "./change-node-property";
 
-export class ChangeNodePosition extends ChangeNodeValue {
+export class ChangeNodePosition extends ChangeNodeProperty {
   static NAME = "change-node-position";
 
   constructor(payload) {
@@ -8,14 +8,12 @@ export class ChangeNodePosition extends ChangeNodeValue {
   }
 
   changeValue(node, value) {
-    return node.changePosition(value);
-  }
-
-  getNewValue(node) {
-    return node.getPositionArray();
+    const oldValue = node.changePosition(value);
+    const newValue = node.getPositionArray();
+    return { oldValue, newValue };
   }
 
   static createDef(nodeId, value) {
-    return ChangeNodeValue.createDef(ChangeNodePosition.NAME, nodeId, value);
+    return ChangeNodeProperty.createDef(ChangeNodePosition.NAME, nodeId, value);
   }
 }

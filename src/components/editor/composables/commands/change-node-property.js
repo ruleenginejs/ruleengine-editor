@@ -1,7 +1,7 @@
 import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
 import { notImplemented } from "@/utils/errors";
 
-export class ChangeNodeValue extends EditCommand {
+export class ChangeNodeProperty extends EditCommand {
   doApply(model, payload) {
     const { nodeId, value } = payload;
     if (!nodeId) return null;
@@ -9,26 +9,19 @@ export class ChangeNodeValue extends EditCommand {
     const node = model.getNodeById(nodeId);
     if (!node) return null;
 
-    const oldValue = this.changeValue(node, value);
-    const newValue = this.getNewValue(node);
-
+    const { oldValue, newValue } = this.changeProperty(node, value);
     return this._createChanges(this.name, node.id, newValue, oldValue);
   }
 
   // eslint-disable-next-line no-unused-vars
-  changeValue(node, value) {
-    notImplemented();
-  }
-
-  // eslint-disable-next-line no-unused-vars
-  getNewValue(node) {
+  changeProperty(node, newValue) {
     notImplemented();
   }
 
   _createChanges(commandName, nodeId, newValue, oldValue) {
     return createChanges(
-      ChangeNodeValue.createDef(commandName, nodeId, newValue),
-      ChangeNodeValue.createDef(commandName, nodeId, oldValue)
+      ChangeNodeProperty.createDef(commandName, nodeId, newValue),
+      ChangeNodeProperty.createDef(commandName, nodeId, oldValue)
     );
   }
 
