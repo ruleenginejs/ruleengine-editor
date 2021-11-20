@@ -25,9 +25,11 @@
   "editor.hint.mode": "Mode",
   "editor.hint.error": "Error",
   "editor.hint.disabled": "Disabled",
-  "editor.hint.fromNode": "From Node",
-  "editor.hint.toNode": "To Node",
+  "editor.hint.fromNode": "From Step",
+  "editor.hint.toNode": "To Step",
   "editor.hint.color": "Color",
+  "editor.hint.inPorts": "In",
+  "editor.hint.outPorts": "Out",
   "editor.hint.useCustomColor": "Use Custom Color",
   "editor.suggest.loading": "Loading...",
   "editor.suggest.emptyResult": "No suggestions."

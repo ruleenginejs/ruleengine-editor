@@ -29,7 +29,8 @@ function serializeNodeModel(nodeModel) {
     nodeType: nodeModel.type,
     isNavNode: nodeModel.isNavNode,
     handlerFile: nodeModel.handlerFile,
-    headerColor: nodeModel.headerColor
+    headerColor: nodeModel.headerColor,
+    ports: nodeModel.ports.map(serializePortModel)
   }
 }
 

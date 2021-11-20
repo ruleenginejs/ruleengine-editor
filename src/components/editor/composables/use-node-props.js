@@ -21,7 +21,6 @@ export default function useNodeProps({ nodeModel, emit, editDelay }) {
   const canShowName = computed(() => !nodeModel.value.isNavNode);
   const canShowHandler = computed(() => nodeModel.value.nodeType === GraphNodeType.Single);
   const canShowColor = computed(() => !nodeModel.value.isNavNode);
-  const canShowPorts = ref(false);
   const canShowConnections = ref(false);
   const canShowUserProps = ref(false);
 
@@ -116,7 +115,6 @@ export default function useNodeProps({ nodeModel, emit, editDelay }) {
     editUseCustomColor,
     canShowName,
     canShowHandler,
-    canShowPorts,
     canShowConnections,
     canShowUserProps,
     canShowColor,

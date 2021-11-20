@@ -19,7 +19,9 @@ import {
 } from "@ruleenginejs/ruleengine-ui";
 import { toRefs } from "vue";
 import useNodeProps from "./composables/use-node-props";
+import useNodePortProps from "./composables/use-node-port-props";
 import localize from "@/utils/localize";
+import VEditorNodePorts from "./v-editor-node-ports.vue";
 
 const props = defineProps({
   model: {
@@ -42,7 +44,6 @@ const {
   editUseCustomColor,
   canShowName,
   canShowHandler,
-  canShowPorts,
   canShowConnections,
   canShowUserProps,
   canShowColor,
@@ -50,6 +51,16 @@ const {
   colorOptions,
   genId
 } = useNodeProps({ nodeModel: model, emit, editDelay });
+
+const {
+  inPorts,
+  outPorts,
+  canShowPorts,
+  portEditDisabled,
+  onUpdatePortName,
+  onUpdatePortDisabled,
+  onPortRemove
+} = useNodePortProps({ nodeModel: model, emit, editDelay });
 
 const t = localize;
 </script>
@@ -122,51 +133,23 @@ const t = localize;
         </template>
       </v-field-layout>
     </v-fieldset>
-    <v-fieldset v-if="1 || canShowPorts" :label="t('editor.sidebar.ports')" b-border>
-      <v-field-layout>
-        <template #label>
-          <v-label truncate>In</v-label>
-        </template>
-        <template #value>
-          <v-layout gutter="sm" h-center>
-            <v-checkbox />
-            <v-input />
-            <v-action-item icon="plus" />
-          </v-layout>
-        </template>
-      </v-field-layout>
-      <v-field-layout>
-        <template #label></template>
-        <template #value>
-          <v-layout gutter="sm" h-center>
-            <v-checkbox />
-            <v-input />
-            <v-action-item icon="plus" />
-          </v-layout>
-        </template>
-      </v-field-layout>
-      <v-field-layout>
-        <template #label>
-          <v-label truncate>Out</v-label>
-        </template>
-        <template #value>
-          <v-layout gutter="sm" h-center>
-            <v-checkbox />
-            <v-input />
-            <v-action-item icon="plus" />
-          </v-layout>
-        </template>
-      </v-field-layout>
-      <v-field-layout>
-        <template #label></template>
-        <template #value>
-          <v-layout gutter="sm" h-center>
-            <v-checkbox />
-            <v-input />
-            <v-action-item icon="plus" />
-          </v-layout>
-        </template>
-      </v-field-layout>
+    <v-fieldset v-if="canShowPorts" :label="t('editor.sidebar.ports')" b-border>
+      <v-editor-node-ports
+        :ports="inPorts"
+        :edit-disabled="portEditDisabled"
+        :label="t('editor.hint.inPorts')"
+        @update-name="onUpdatePortName"
+        @update-disabled="onUpdatePortDisabled"
+        @remove="onPortRemove"
+      />
+      <v-editor-node-ports
+        :ports="outPorts"
+        :edit-disabled="portEditDisabled"
+        :label="t('editor.hint.outPorts')"
+        @update-name="onUpdatePortName"
+        @update-disabled="onUpdatePortDisabled"
+        @remove="onPortRemove"
+      />
     </v-fieldset>
     <v-fieldset v-if="1 || canShowConnections" :label="t('editor.sidebar.connections')" b-border>
       <v-field-layout>
