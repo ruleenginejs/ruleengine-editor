@@ -311,6 +311,19 @@ export class GraphNodeModel extends SelectableModel {
     }
     return oldValue;
   }
+
+  changeColor(newValue) {
+    const oldValue = this.headerColor;
+    if (notEmptyString(newValue)) {
+      this.headerColor = newValue;
+    } else {
+      this.headerColor = null;
+    }
+    return {
+      oldValue,
+      newValue: this.headerColor
+    }
+  }
 }
 
 export function createNode(data) {

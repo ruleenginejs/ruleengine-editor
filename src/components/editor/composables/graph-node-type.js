@@ -8,10 +8,10 @@ export const GraphNodeType = Object.freeze({
   Composite: "composite"
 });
 
-const graphNodeTypes = Object.keys(GraphNodeType).map(key => GraphNodeType[key]);
+const _graphNodeTypes = Object.keys(GraphNodeType).map(key => GraphNodeType[key]);
 
 export function validateNodeType(value) {
-  return graphNodeTypes.indexOf(value.toLowerCase()) !== -1;
+  return _graphNodeTypes.indexOf(value.toLowerCase()) !== -1;
 }
 
 const _navNodeTypes = [

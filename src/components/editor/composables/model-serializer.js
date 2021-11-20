@@ -28,7 +28,8 @@ function serializeNodeModel(nodeModel) {
     name: nodeModel.name,
     nodeType: nodeModel.type,
     isNavNode: nodeModel.isNavNode,
-    handlerFile: nodeModel.handlerFile
+    handlerFile: nodeModel.handlerFile,
+    headerColor: nodeModel.headerColor
   }
 }
 

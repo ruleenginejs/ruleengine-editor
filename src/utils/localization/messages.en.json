@@ -6,7 +6,7 @@
   "editor.singleNode": "Single",
   "editor.compositeNode": "Composite",
   "editor.unknownNode": "Unknown",
-  "editor.Node": "Single",
+  "editor.default": "Default",
   "editor.errorMessage": "The document could not be displayed because the content is in an invalid format.",
   "editor.errorDetails": "See more details: {0}",
   "editor.noSelection": "No Selection",
@@ -27,6 +27,8 @@
   "editor.hint.disabled": "Disabled",
   "editor.hint.fromNode": "From Node",
   "editor.hint.toNode": "To Node",
+  "editor.hint.color": "Color",
+  "editor.hint.useCustomColor": "Use Custom Color",
   "editor.suggest.loading": "Loading...",
   "editor.suggest.emptyResult": "No suggestions."
 }

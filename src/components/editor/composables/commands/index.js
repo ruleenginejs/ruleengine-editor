@@ -1,4 +1,5 @@
 import { EditCommandsRegistry } from "@/utils/edit-command";
+import { ChangeNodeColor } from "./change-node-color";
 import { ChangeNodeHandlerFile } from "./change-node-handler-file";
 import { ChangeNodeName } from "./change-node-name";
 import { ChangeNodePosition } from "./change-node-position";
@@ -12,6 +13,7 @@ import { DeleteNode } from "./delete-node";
 EditCommandsRegistry.current.registerCommand(ChangeNodePosition.NAME, ChangeNodePosition);
 EditCommandsRegistry.current.registerCommand(ChangeNodeName.NAME, ChangeNodeName);
 EditCommandsRegistry.current.registerCommand(ChangeNodeHandlerFile.NAME, ChangeNodeHandlerFile);
+EditCommandsRegistry.current.registerCommand(ChangeNodeColor.NAME, ChangeNodeColor);
 EditCommandsRegistry.current.registerCommand(ChangePortName.NAME, ChangePortName);
 EditCommandsRegistry.current.registerCommand(ChangePortDisabled.NAME, ChangePortDisabled);
 EditCommandsRegistry.current.registerCommand(CreateNewConnection.NAME, CreateNewConnection);
@@ -24,6 +26,7 @@ export {
   ChangeNodePosition,
   ChangeNodeName,
   ChangeNodeHandlerFile,
+  ChangeNodeColor,
   ChangePortName,
   ChangePortDisabled,
   CreateNewConnection,
