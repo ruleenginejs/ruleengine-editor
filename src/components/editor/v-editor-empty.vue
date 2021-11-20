@@ -1,7 +1,7 @@
 <template>
   <v-layout h-full w-full h-center w-center class="v-editor__no-content">
     <div v-if="$slots['default']" class="v-editor-empty">
-      <slot />
+      <slot></slot>
     </div>
   </v-layout>
 </template>
