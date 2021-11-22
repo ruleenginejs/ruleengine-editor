@@ -39,7 +39,7 @@ function getLabel(index) {
 }
 
 function onUpdateDisabled(port, newValue) {
-  emit("update-name", port, newValue);
+  emit("update-disabled", port, newValue);
 }
 
 function onUpdateName(port, newValue) {
@@ -74,6 +74,7 @@ function onRemove(port) {
         </v-layout>
         <v-layout not-shrink>
           <v-action-item :disabled="editDisabled" icon="remove" @click="onRemove(port)" />
+          <div @click="onRemove(port)">Rem</div>
         </v-layout>
       </v-layout>
     </template>

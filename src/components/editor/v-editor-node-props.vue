@@ -22,6 +22,7 @@ import useNodeProps from "./composables/use-node-props";
 import useNodePortProps from "./composables/use-node-port-props";
 import localize from "@/utils/localize";
 import VEditorNodePorts from "./v-editor-node-ports.vue";
+import { GraphPortType } from "./composables/graph-port-type";
 
 const props = defineProps({
   model: {
@@ -59,7 +60,8 @@ const {
   portEditDisabled,
   onUpdatePortName,
   onUpdatePortDisabled,
-  onPortRemove
+  onPortRemove,
+  onPortAdd
 } = useNodePortProps({ nodeModel: model, emit, editDelay });
 
 const t = localize;
@@ -134,6 +136,9 @@ const t = localize;
       </v-field-layout>
     </v-fieldset>
     <v-fieldset v-if="canShowPorts" :label="t('editor.sidebar.ports')" b-border>
+      <div @click="onPortAdd(GraphPortType.IN)">Add In Port</div>
+      <div @click="onPortAdd(GraphPortType.OUT)">Add Out Port</div>
+
       <v-editor-node-ports
         :ports="inPorts"
         :edit-disabled="portEditDisabled"

@@ -9,9 +9,14 @@ export class DeleteNode extends EditCommand {
   }
 
   doApply(model, payload) {
-    if (!payload.nodeId) return null;
-    const node = model.getNodeById(payload.nodeId);
-    if (!node) return;
+    const { nodeId } = payload;
+
+    if (!nodeId) {
+      return null;
+    }
+
+    const node = model.getNodeById(nodeId);
+    if (!node) return null;
 
     model.deleteNode(node);
     return this._createChanges(node);

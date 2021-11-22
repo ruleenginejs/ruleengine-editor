@@ -183,9 +183,15 @@ export class GraphNodeModel extends SelectableModel {
       }
     }
 
+    const _in = [...inPorts].map(
+      name => createPort(nodeId, name, GraphPortType.IN));
+
+    const out = [...outPorts].map(
+      name => createPort(nodeId, name, GraphPortType.OUT));
+
     const result = {
-      in: [...inPorts].map(p => createPort(nodeId, p, GraphPortType.IN)),
-      out: [...outPorts].map(p => createPort(nodeId, p, GraphPortType.OUT))
+      in: _in,
+      out
     };
 
     return result;
@@ -276,6 +282,19 @@ export class GraphNodeModel extends SelectableModel {
       }
     }
     return null;
+  }
+
+  createPort(portType, name, disabled) {
+    const port = createPort(this.id, name, portType);
+    port.disabled = disabled;
+    this.ports.push(port);
+  }
+
+  removePort(portId) {
+    const index = this.ports.findIndex(p => p.id === portId);
+    if (index !== -1) {
+      this.ports.splice(index, 1);
+    }
   }
 
   getPositionArray() {

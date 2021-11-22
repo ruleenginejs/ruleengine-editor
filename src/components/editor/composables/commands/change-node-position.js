@@ -7,7 +7,7 @@ export class ChangeNodePosition extends ChangeNodeProperty {
     super(ChangeNodePosition.NAME, payload);
   }
 
-  changeValue(node, value) {
+  changeProperty(node, value) {
     const oldValue = node.changePosition(value);
     const newValue = node.getPositionArray();
     return { oldValue, newValue };

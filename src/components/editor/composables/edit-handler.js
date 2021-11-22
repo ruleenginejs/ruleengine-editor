@@ -10,9 +10,9 @@ function createHandler(func, delay = null) {
 }
 
 function notifyEdit(editCommand, emit) {
-  emit("edit", [editCommand]);
+  emit("edit", Array.isArray(editCommand) ? editCommand : [editCommand]);
 }
 
 export function createEditHandler(func, emit, editDelay = null) {
-  return createHandler((val) => notifyEdit(func(val), emit), editDelay);
+  return createHandler((...args) => notifyEdit(func(...args), emit), editDelay);
 }
