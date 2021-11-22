@@ -285,12 +285,19 @@ export class GraphNodeModel extends SelectableModel {
   }
 
   createPort(portType, name, disabled) {
+    if (this.isNavNode) {
+      return null;
+    }
     const port = createPort(this.id, name, portType);
     port.disabled = disabled;
     this.ports.push(port);
+    return port;
   }
 
   removePort(portId) {
+    if (this.isNavNode) {
+      return;
+    }
     const index = this.ports.findIndex(p => p.id === portId);
     if (index !== -1) {
       this.ports.splice(index, 1);
@@ -311,7 +318,9 @@ export class GraphNodeModel extends SelectableModel {
 
   changeName(name) {
     const oldName = this.name;
-    if (this.isNavNode) return oldName;
+    if (this.isNavNode) {
+      return oldName;
+    }
     if (notEmptyString(name)) {
       this.name = name;
     } else {
@@ -322,7 +331,9 @@ export class GraphNodeModel extends SelectableModel {
 
   changeHandlerFilePath(filePath) {
     const oldValue = this.handlerFile;
-    if (this.isNavNode) return oldValue;
+    if (this.isNavNode) {
+      return oldValue;
+    }
     if (notEmptyString(filePath)) {
       this.handlerFile = filePath;
     } else {
