@@ -12,8 +12,8 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
   const portEditDisabled = computed(() => nodeModel.value.isNavNode);
   const inPorts = computed(() => filterByType(nodeModel.value.ports, GraphPortType.IN));
   const outPorts = computed(() => filterByType(nodeModel.value.ports, GraphPortType.OUT));
+  const _editNameHandlers = {};
 
-  const editNameHandler = createEditPropertyHandler(ChangePortName, true);
   const editDisabledHandler = createEditPropertyHandler(ChangePortDisabled);
   const removePortHandler = createEditHandler(
     (port) => [
@@ -28,7 +28,7 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
   );
 
   function onUpdatePortName(port, newValue) {
-    editNameHandler(port.nodeId, port.id, newValue);
+    getEditNameHandlerForPort(port.id)(port.nodeId, port.id, newValue);
   }
 
   function onUpdatePortDisabled(port, newValue) {
@@ -54,6 +54,13 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
       emit,
       withDelay ? editDelay.value : null
     )
+  }
+
+  function getEditNameHandlerForPort(portId) {
+    if (!_editNameHandlers[portId]) {
+      _editNameHandlers[portId] = createEditPropertyHandler(ChangePortName, true);
+    }
+    return _editNameHandlers[portId];
   }
 
   return {

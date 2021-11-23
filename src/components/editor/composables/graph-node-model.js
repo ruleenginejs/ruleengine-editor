@@ -288,7 +288,8 @@ export class GraphNodeModel extends SelectableModel {
     if (this.isNavNode) {
       return null;
     }
-    const port = createPort(this.id, name, portType);
+    const port = createPort(this.id, null, portType);
+    port.name = name;
     port.disabled = disabled;
     this.ports.push(port);
     return port;
