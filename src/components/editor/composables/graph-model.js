@@ -341,6 +341,10 @@ export class GraphModel extends SelectableModel {
   }
 
   connectionExists(nodeId, portId, portType = null) {
+    return !!this.getConnectionByNodeAndPort(nodeId, portId, portType);
+  }
+
+  getConnectionByNodeAndPort(nodeId, portId, portType = null) {
     const _in = portType === GraphPortType.IN;
     const out = portType === GraphPortType.OUT;
     const both = !isDefined(portType);
@@ -351,10 +355,10 @@ export class GraphModel extends SelectableModel {
       if ((both && connection.isSrcOrDest(nodeId, portId))
         || (out && connection.isSrc(nodeId, portId))
         || (_in && connection.isDest(nodeId, portId))) {
-        return true;
+        return connection;
       }
     }
-    return false;
+    return null;
   }
 
   outConnectionExistsByPortName(nodeId, outPortName) {
