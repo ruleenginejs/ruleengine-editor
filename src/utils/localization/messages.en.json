@@ -31,6 +31,7 @@
   "editor.hint.inPorts": "In",
   "editor.hint.outPorts": "Out",
   "editor.hint.useCustomColor": "Use Custom Color",
+  "editor.hint.id": "Id",
   "editor.suggest.loading": "Loading...",
   "editor.suggest.emptyResult": "No suggestions."
 }

@@ -8,7 +8,6 @@ import { createEditHandler } from "./edit-handler";
 import { GraphPortType } from "./graph-port-type";
 
 export default function useNodePortProps({ nodeModel, emit, editDelay }) {
-  const canShowPorts = ref(true);
   const portEditDisabled = computed(() => nodeModel.value.isNavNode);
   const inPorts = computed(() => filterByType(nodeModel.value.ports, GraphPortType.IN));
   const outPorts = computed(() => filterByType(nodeModel.value.ports, GraphPortType.OUT));
@@ -66,7 +65,6 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
   return {
     inPorts,
     outPorts,
-    canShowPorts,
     portEditDisabled,
     onUpdatePortName,
     onUpdatePortDisabled,

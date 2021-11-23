@@ -21,8 +21,9 @@ export default function useNodeProps({ nodeModel, emit, editDelay }) {
   const canShowName = computed(() => !nodeModel.value.isNavNode);
   const canShowHandler = computed(() => nodeModel.value.nodeType === GraphNodeType.Single);
   const canShowColor = computed(() => !nodeModel.value.isNavNode);
-  const canShowConnections = ref(false);
-  const canShowUserProps = ref(false);
+  const canShowPorts = ref(true);
+  const canShowConnections = ref(true);
+  const canShowUserProps = ref(true);
 
   const editNameHandler = createHandler(ChangeNodeName, true);
   const editFileHandler = createHandler(ChangeNodeHandlerFile, true);
@@ -103,7 +104,7 @@ export default function useNodeProps({ nodeModel, emit, editDelay }) {
     }
   }
 
-  function genId(ns, key) {
+  function genElementId(ns, key) {
     return `v-${ns}_${key}_${nodeModel.value.id}`;
   }
 
@@ -115,11 +116,12 @@ export default function useNodeProps({ nodeModel, emit, editDelay }) {
     editUseCustomColor,
     canShowName,
     canShowHandler,
+    canShowPorts,
     canShowConnections,
     canShowUserProps,
     canShowColor,
     useCustomColor,
     colorOptions,
-    genId
+    genElementId
   }
 }

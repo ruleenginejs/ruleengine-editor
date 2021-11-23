@@ -14,15 +14,16 @@ import {
   VAutocomplete,
   VCheckbox,
   VSelectBox,
-  VLayout,
-  VActionItem
+  VLayout
 } from "@ruleenginejs/ruleengine-ui";
 import { toRefs } from "vue";
 import useNodeProps from "./composables/use-node-props";
 import useNodePortProps from "./composables/use-node-port-props";
+import useNodeConnectionProps from "./composables/use-node-connection-props";
 import localize from "@/utils/localize";
-import VEditorNodePorts from "./v-editor-node-ports.vue";
 import { GraphPortType } from "./composables/graph-port-type";
+import VEditorNodePorts from "./v-editor-node-ports.vue";
+import VEditorNodeConnnections from "./v-editor-node-connections.vue";
 
 const props = defineProps({
   model: {
@@ -45,24 +46,29 @@ const {
   editUseCustomColor,
   canShowName,
   canShowHandler,
+  canShowPorts,
   canShowConnections,
   canShowUserProps,
   canShowColor,
   useCustomColor,
   colorOptions,
-  genId
+  genElementId
 } = useNodeProps({ nodeModel: model, emit, editDelay });
 
 const {
   inPorts,
   outPorts,
-  canShowPorts,
   portEditDisabled,
   onUpdatePortName,
   onUpdatePortDisabled,
   onPortRemove,
   onPortAdd
 } = useNodePortProps({ nodeModel: model, emit, editDelay });
+
+const {
+  connections,
+  onConnectionRemove,
+} = useNodeConnectionProps({ nodeModel: model, emit, editDelay });
 
 const t = localize;
 </script>
@@ -98,16 +104,19 @@ const t = localize;
         <template #label></template>
         <template #value>
           <v-layout gutter="sm" h-center>
-            <v-checkbox v-model="editUseCustomColor" :id="genId('checkbox', 'use-custom-color')" />
+            <v-checkbox
+              v-model="editUseCustomColor"
+              :id="genElementId('checkbox', 'use-custom-color')"
+            />
             <v-label
-              :for="genId('checkbox', 'use-custom-color')"
+              :for="genElementId('checkbox', 'use-custom-color')"
             >{{ t("editor.hint.useCustomColor") }}</v-label>
           </v-layout>
         </template>
       </v-field-layout>
       <v-field-layout>
         <template #label>
-          <v-label truncate>Id</v-label>
+          <v-label truncate>{{ t("editor.hint.id") }}</v-label>
         </template>
         <template #value>
           <v-label truncate>{{ model.id }}</v-label>
@@ -136,8 +145,8 @@ const t = localize;
       </v-field-layout>
     </v-fieldset>
     <v-fieldset v-if="canShowPorts" :label="t('editor.sidebar.ports')" b-border>
-      <div @click="onPortAdd(GraphPortType.IN)">Add In Port</div>
-      <div @click="onPortAdd(GraphPortType.OUT)">Add Out Port</div>
+      <div v-if="!portEditDisabled" @click="onPortAdd(GraphPortType.IN)">Add In Port</div>
+      <div v-if="!portEditDisabled" @click="onPortAdd(GraphPortType.OUT)">Add Out Port</div>
 
       <v-editor-node-ports
         :ports="inPorts"
@@ -156,31 +165,10 @@ const t = localize;
         @remove="onPortRemove"
       />
     </v-fieldset>
-    <v-fieldset v-if="1 || canShowConnections" :label="t('editor.sidebar.connections')" b-border>
-      <v-field-layout>
-        <template #label>
-          <v-select-box />
-        </template>
-        <template #value>
-          <v-layout gutter="sm" h-center>
-            <v-select-box />
-            <v-action-item icon="plus" />
-          </v-layout>
-        </template>
-      </v-field-layout>
-      <v-field-layout>
-        <template #label>
-          <v-select-box />
-        </template>
-        <template #value>
-          <v-layout gutter="sm" h-center>
-            <v-select-box />
-            <v-action-item icon="minus" />
-          </v-layout>
-        </template>
-      </v-field-layout>
+    <v-fieldset v-if="canShowConnections" :label="t('editor.sidebar.connections')" b-border>
+      <v-editor-node-connnections :connections="connections" @remove="onConnectionRemove" />
     </v-fieldset>
-    <v-fieldset v-if="1 || canShowUserProps" :label="t('editor.sidebar.userProperties')" b-border>
+    <v-fieldset v-if="canShowUserProps" :label="t('editor.sidebar.userProperties')" b-border>
       <v-field-layout>
         <template #label>
           <v-label truncate>Prop1</v-label>
