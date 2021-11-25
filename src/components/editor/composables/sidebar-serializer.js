@@ -7,8 +7,8 @@ const serializers = {
   [GraphModelType.Connection]: serializeConnectionModel
 };
 
-function serializeModel(graphModel) {
-  const modelType = getModelType(graphModel);
+function serializeModel(rootModel, selectedModel) {
+  const modelType = getModelType(selectedModel);
   if (!isDefined(modelType)) {
     return null;
   }
@@ -18,10 +18,10 @@ function serializeModel(graphModel) {
     return null;
   }
 
-  return serializer(graphModel);
+  return serializer(rootModel, selectedModel);
 }
 
-function serializeNodeModel(nodeModel) {
+function serializeNodeModel(rootModel, nodeModel) {
   return {
     id: nodeModel.id,
     type: GraphModelType.Node,
@@ -34,7 +34,7 @@ function serializeNodeModel(nodeModel) {
   }
 }
 
-function serializePortModel(portModel) {
+function serializePortModel(rootModel, portModel) {
   return {
     id: portModel.id,
     type: GraphModelType.Port,
@@ -46,7 +46,7 @@ function serializePortModel(portModel) {
   }
 }
 
-function serializeConnectionModel(connectionModel) {
+function serializeConnectionModel(rootModel, connectionModel) {
   return {
     id: connectionModel.id,
     type: GraphModelType.Connection,
