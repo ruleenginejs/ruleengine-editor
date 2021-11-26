@@ -4,10 +4,6 @@ import localize from "@/utils/localize";
 export default function useConnectionProps({ connectionModel }) {
   const sectionName = ref(localize("editor.sidebar.connectionSection"));
 
-  function createPair(nodeId, portName) {
-    return `${nodeId}:${portName}`;
-  }
-
   const editFromNode = computed({
     get: () => {
       const { from } = connectionModel.value.definition;
@@ -45,6 +41,10 @@ export default function useConnectionProps({ connectionModel }) {
       }
     ]
   });
+
+  function createPair(nodeId, portName) {
+    return `${nodeId}:${portName}`;
+  }
 
   return {
     sectionName,

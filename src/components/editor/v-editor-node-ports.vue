@@ -13,6 +13,7 @@ import {
   VLayout,
   VActionItem
 } from "@ruleenginejs/ruleengine-ui";
+import localize from "@/utils/localize";
 
 const props = defineProps({
   ports: {
@@ -49,6 +50,8 @@ function onUpdateName(port, newValue) {
 function onRemove(port) {
   emit("remove", port);
 }
+
+const t = localize;
 </script>
 
 <template>
@@ -61,6 +64,7 @@ function onRemove(port) {
         <v-layout not-shrink>
           <v-checkbox
             :disabled="editDisabled"
+            :title="t('editor.title.disabled')"
             :model-value="port.disabled"
             @update:model-value="onUpdateDisabled(port, $event)"
           />
@@ -73,8 +77,12 @@ function onRemove(port) {
           />
         </v-layout>
         <v-layout not-shrink>
-          <v-action-item :disabled="editDisabled" icon="remove" @click="onRemove(port)" />
-          <div @click="onRemove(port)">Rem</div>
+          <v-action-item
+            :disabled="editDisabled"
+            :title="t('editor.title.removePort')"
+            icon="remove"
+            @click="onRemove(port)"
+          />
         </v-layout>
       </v-layout>
     </template>

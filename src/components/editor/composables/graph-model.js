@@ -329,7 +329,7 @@ export class GraphModel extends SelectableModel {
     return this.nodesById[nodeId] ?? null;
   }
 
-  getNodeConnections(nodeId) {
+  getConnectionsForNode(nodeId) {
     const result = [];
     for (let i = 0, len = this.connections.length; i < len; i++) {
       const connection = this.connections[i];

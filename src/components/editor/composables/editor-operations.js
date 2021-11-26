@@ -51,7 +51,7 @@ export class EditorOperations {
 
   _deleteNodeWithConnnections(nodeId) {
     const editOperations = [];
-    const connections = this.model.value.getNodeConnections(nodeId);
+    const connections = this.model.value.getConnectionsForNode(nodeId);
     editOperations.push.apply(editOperations, connections.map(c =>
       DeleteConnection.createDef(c.definition)));
     editOperations.push(DeleteNode.createDef(nodeId));

@@ -9,6 +9,7 @@ import { CreateNewConnection } from "./create-new-connection";
 import { CreateNode } from "./create-node";
 import { CreatePort } from "./create-port";
 import { DeleteConnection } from "./delete-connection";
+import { DeleteConnectionById } from "./delete-connection-by-id";
 import { DeleteConnectionByPort } from "./delete-connection-by-port";
 import { DeleteNode } from "./delete-node";
 import { DeletePort } from "./delete-port";
@@ -22,6 +23,7 @@ EditCommandsRegistry.current.registerCommand(ChangePortDisabled.NAME, ChangePort
 EditCommandsRegistry.current.registerCommand(CreateNewConnection.NAME, CreateNewConnection);
 EditCommandsRegistry.current.registerCommand(DeleteConnection.NAME, DeleteConnection);
 EditCommandsRegistry.current.registerCommand(DeleteConnectionByPort.NAME, DeleteConnectionByPort);
+EditCommandsRegistry.current.registerCommand(DeleteConnectionById.NAME, DeleteConnectionById);
 EditCommandsRegistry.current.registerCommand(CreateNode.NAME, CreateNode);
 EditCommandsRegistry.current.registerCommand(DeleteNode.NAME, DeleteNode);
 EditCommandsRegistry.current.registerCommand(CreatePort.NAME, CreatePort);
@@ -38,6 +40,7 @@ export {
   CreateNewConnection,
   DeleteConnection,
   DeleteConnectionByPort,
+  DeleteConnectionById,
   CreateNode,
   DeleteNode,
   CreatePort,

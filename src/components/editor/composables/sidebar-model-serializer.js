@@ -7,7 +7,7 @@ const serializers = {
   [GraphModelType.Connection]: serializeConnectionModel
 };
 
-function serializeModel(rootModel, selectedModel) {
+function serializeModel(selectedModel, rootModel = null) {
   const modelType = getModelType(selectedModel);
   if (!isDefined(modelType)) {
     return null;
@@ -18,10 +18,10 @@ function serializeModel(rootModel, selectedModel) {
     return null;
   }
 
-  return serializer(rootModel, selectedModel);
+  return serializer(selectedModel, rootModel);
 }
 
-function serializeNodeModel(rootModel, nodeModel) {
+function serializeNodeModel(nodeModel, rootModel = null) {
   return {
     id: nodeModel.id,
     type: GraphModelType.Node,
@@ -30,11 +30,13 @@ function serializeNodeModel(rootModel, nodeModel) {
     isNavNode: nodeModel.isNavNode,
     handlerFile: nodeModel.handlerFile,
     headerColor: nodeModel.headerColor,
-    ports: nodeModel.ports.map(serializePortModel)
+    ports: nodeModel.ports.map(serializePortModel),
+    connections: rootModel.getConnectionsForNode(nodeModel.id)
+      .map(serializeConnectionModel)
   }
 }
 
-function serializePortModel(rootModel, portModel) {
+function serializePortModel(portModel) {
   return {
     id: portModel.id,
     type: GraphModelType.Port,
@@ -46,7 +48,7 @@ function serializePortModel(rootModel, portModel) {
   }
 }
 
-function serializeConnectionModel(rootModel, connectionModel) {
+function serializeConnectionModel(connectionModel) {
   return {
     id: connectionModel.id,
     type: GraphModelType.Connection,

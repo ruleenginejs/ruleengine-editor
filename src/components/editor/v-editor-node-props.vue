@@ -14,7 +14,9 @@ import {
   VAutocomplete,
   VCheckbox,
   VSelectBox,
-  VLayout
+  VLayout,
+  VActionList,
+  VActionItem
 } from "@ruleenginejs/ruleengine-ui";
 import { toRefs } from "vue";
 import useNodeProps from "./composables/use-node-props";
@@ -66,7 +68,8 @@ const {
 } = useNodePortProps({ nodeModel: model, emit, editDelay });
 
 const {
-  connections,
+  inConnections,
+  outConnections,
   onConnectionRemove,
 } = useNodeConnectionProps({ nodeModel: model, emit, editDelay });
 
@@ -123,10 +126,10 @@ const t = localize;
         </template>
       </v-field-layout>
     </v-fieldset>
-    <v-fieldset v-if="canShowHandler" label="Behavior" b-border>
+    <v-fieldset v-if="canShowHandler" :label="t('editor.sidebar.behavior')" b-border>
       <v-field-layout>
         <template #label>
-          <v-label truncate>Script</v-label>
+          <v-label truncate>{{ t('editor.hint.script') }}</v-label>
         </template>
         <template #value>
           <v-autocomplete
@@ -145,9 +148,20 @@ const t = localize;
       </v-field-layout>
     </v-fieldset>
     <v-fieldset v-if="canShowPorts" :label="t('editor.sidebar.ports')" b-border>
-      <div v-if="!portEditDisabled" @click="onPortAdd(GraphPortType.IN)">Add In Port</div>
-      <div v-if="!portEditDisabled" @click="onPortAdd(GraphPortType.OUT)">Add Out Port</div>
-
+      <template #label-actions v-if="!portEditDisabled">
+        <v-action-list>
+          <v-action-item
+            icon="add"
+            :title="t('editor.title.addPort')"
+            @click="onPortAdd(GraphPortType.IN)"
+          >{{ t('editor.sidebar.addInPort') }}</v-action-item>
+          <v-action-item
+            icon="add"
+            :title="t('editor.title.addPort')"
+            @click="onPortAdd(GraphPortType.OUT)"
+          >{{ t('editor.sidebar.addOutPort') }}</v-action-item>
+        </v-action-list>
+      </template>
       <v-editor-node-ports
         :ports="inPorts"
         :edit-disabled="portEditDisabled"
@@ -166,25 +180,19 @@ const t = localize;
       />
     </v-fieldset>
     <v-fieldset v-if="canShowConnections" :label="t('editor.sidebar.connections')" b-border>
-      <v-editor-node-connnections :connections="connections" @remove="onConnectionRemove" />
+      <v-editor-node-connnections
+        v-if="inConnections.length"
+        :connections="inConnections"
+        :label="t('editor.sidebar.incoming')"
+        @remove="onConnectionRemove"
+      />
+      <v-editor-node-connnections
+        v-if="outConnections.length"
+        :connections="outConnections"
+        :label="t('editor.sidebar.outgoing')"
+        @remove="onConnectionRemove"
+      />
     </v-fieldset>
-    <v-fieldset v-if="canShowUserProps" :label="t('editor.sidebar.userProperties')" b-border>
-      <v-field-layout>
-        <template #label>
-          <v-label truncate>Prop1</v-label>
-        </template>
-        <template #value>
-          <v-input />
-        </template>
-      </v-field-layout>
-      <v-field-layout>
-        <template #label>
-          <v-label truncate>Prop2</v-label>
-        </template>
-        <template #value>
-          <v-select-box />
-        </template>
-      </v-field-layout>
-    </v-fieldset>
+    <v-fieldset v-if="canShowUserProps" :label="t('editor.sidebar.userProperties')" b-border></v-fieldset>
   </v-sidebar-section>
 </template>

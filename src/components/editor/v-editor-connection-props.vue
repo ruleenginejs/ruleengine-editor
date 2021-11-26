@@ -56,7 +56,7 @@ const t = localize;
     <v-fieldset :label="t('editor.sidebar.attributes')" b-border>
       <v-field-layout>
         <template #label>
-          <v-label truncate>{{ t('editor.hint.fromNode') }}</v-label>
+          <v-label truncate>{{ t('editor.hint.from') }}</v-label>
         </template>
         <template #value>
           <v-select-box v-model="editFromNode" :items="fromNodeOptions" />
@@ -64,7 +64,7 @@ const t = localize;
       </v-field-layout>
       <v-field-layout>
         <template #label>
-          <v-label truncate>{{ t('editor.hint.toNode') }}</v-label>
+          <v-label truncate>{{ t('editor.hint.to') }}</v-label>
         </template>
         <template #value>
           <v-select-box v-model="editToNode" :items="toNodeOptions" />
