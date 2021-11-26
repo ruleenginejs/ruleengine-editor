@@ -1,11 +1,11 @@
 import VEditor from "./v-editor.vue";
 import VEditorSidebar from "./v-editor-sidebar.vue";
 import * as commands from "./composables/commands/index";
-import sidebarSerializer from "./composables/sidebar-serializer";
+import sidebarModelSerializer from "./composables/sidebar-model-serializer";
 
 export {
   VEditor,
   VEditorSidebar,
   commands,
-  sidebarSerializer
+  sidebarModelSerializer
 }
