@@ -43,5 +43,7 @@
   "editor.title.removePort": "Remove Port",
   "editor.title.removeConnection": "Remove Connection",
   "editor.title.addPort": "Add Port",
-  "editor.title.disabled": "Disabled"
+  "editor.title.disabled": "Disabled",
+  "editor.action.zoomIn": "Zoom In",
+  "editor.action.zoomOut": "Zoom Out"
 }

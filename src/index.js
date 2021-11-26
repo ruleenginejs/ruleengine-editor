@@ -10,4 +10,4 @@ export default {
   }
 }
 
-export * from "./components"
+export * from "./components/editor/utils"
