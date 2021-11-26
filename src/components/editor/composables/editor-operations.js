@@ -3,6 +3,8 @@ import { getModelType, GraphModelType } from "./graph-model-util";
 import { isDefined } from "@/utils/types";
 import { DeleteNode } from "./commands/delete-node";
 import { DeleteConnection } from "./commands/delete-connection";
+import { DeletePort } from "./commands/delete-port";
+import { DeleteConnectionByPort } from "./commands/delete-connection-by-port";
 
 export class EditorOperations {
   constructor(model) {
@@ -25,7 +27,6 @@ export class EditorOperations {
 
   deleteModelObject(modelObject, notify) {
     const modelType = getModelType(modelObject);
-
     if (!isDefined(modelType) || modelType === GraphModelType.Graph) {
       return;
     }
@@ -33,14 +34,14 @@ export class EditorOperations {
     const editOperations = [];
     switch (modelType) {
       case GraphModelType.Node:
-        editOperations.push.apply(
-          editOperations,
-          this._deleteNodeWithConnnections(modelObject.id)
-        );
+        editOperations.push.apply(editOperations, this._deleteNodeWithConnnections(modelObject.id));
         break;
-
       case GraphModelType.Connection:
         editOperations.push(DeleteConnection.createDef(modelObject.definition));
+        break;
+      case GraphModelType.Port:
+        editOperations.push(DeleteConnectionByPort.createDef(modelObject.nodeId, modelObject.id));
+        editOperations.push(DeletePort.createDef(modelObject.nodeId, modelObject.id));
         break;
     }
 

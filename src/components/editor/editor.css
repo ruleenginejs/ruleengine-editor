@@ -4,6 +4,9 @@
 
   /* selection */
   @apply select-none;
+
+  /* focus */
+  @apply focus:outline-none;
 }
 
 .v-editor__no-content {

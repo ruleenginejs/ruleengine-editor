@@ -10,6 +10,7 @@ class Editor {
     viewport,
     zoom,
     autoFit,
+    keyboard,
     emit
   }) {
     this.model = ref(createModel(value.value));
@@ -17,14 +18,20 @@ class Editor {
     this.editable = editable;
     this.emit = emit;
     this.autoFit = autoFit;
+    this.keyboard = keyboard;
     this.graph = ref(null);
     this.viewportModel = ref(viewport.value);
     this.zoomModel = ref(zoom.value);
     this.operations = new EditorOperations(this.model);
+    this.container = ref(null);
+    this.focused = ref(false);
 
     this.onResize = this.onResize.bind(this);
     this.onGraphCreated = this.onGraphCreated.bind(this);
     this.onChangeModelContent = this.onChangeModelContent.bind(this);
+    this.onFocusIn = this.onFocusIn.bind(this);
+    this.onFocusOut = this.onFocusOut.bind(this);
+    this.onKeyboardDeleteKey = this.onKeyboardDeleteKey.bind(this);
 
     this.model.value.selected = true;
     this.model.value.addChangeListener(this.onChangeModelContent);
@@ -56,6 +63,8 @@ class Editor {
     watchEffect(() => {
       this.emit("change-selection", this.model.value.selectedObject);
     });
+
+    watchEffect(() => { this.focusWhenChangeSelection(); });
   }
 
   getModel() {
@@ -124,6 +133,13 @@ class Editor {
     return this.model.value.selectedObject;
   }
 
+  focusWhenChangeSelection() {
+    const selectedObject = this.model.value.selectedObject;
+    if (this.keyboard.value && selectedObject) {
+      this.container.value?.focus();
+    }
+  }
+
   onResize() {
     this.getGraph()?.onResize();
   }
@@ -138,6 +154,18 @@ class Editor {
 
   onChangeModelContent(e) {
     this.emit("change-value", e);
+  }
+
+  onFocusIn() {
+    this.focused.value = true;
+  }
+
+  onFocusOut() {
+    this.focused.value = false;
+  }
+
+  onKeyboardDeleteKey() {
+    this.deleteSelectedObject(true);
   }
 }
 

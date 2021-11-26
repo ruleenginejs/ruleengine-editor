@@ -1,9 +1,17 @@
 <template>
-  <div class="v-editor">
+  <div
+    ref="container"
+    class="v-editor"
+    :class="{ 'v-editor--focused': focused }"
+    :tabindex="keyboard ? tabIndex : null"
+    @keyup.delete="keyboard ? onKeyboardDeleteKey($event) : null"
+    @focusin="keyboard ? onFocusIn($event) : null"
+    @focusout="keyboard ? onFocusOut($event) : null"
+  >
     <v-editor-error v-if="model.error" :error="model.error" />
     <v-editor-empty v-else-if="model.isEmptyValue">
       <template v-if="$slots['empty-text']" #default>
-        <slot name="empty-text" />
+        <slot name="empty-text"></slot>
       </template>
     </v-editor-empty>
     <v-editor-graph
@@ -52,6 +60,10 @@ export default {
       type: Boolean,
       default: true
     },
+    keyboard: {
+      type: Boolean,
+      default: true
+    },
     viewport: {
       type: Array,
       default: () => [0, 0]
@@ -79,6 +91,10 @@ export default {
     resizeDelay: {
       type: Number,
       default: 100
+    },
+    tabIndex: {
+      type: Number,
+      default: -1
     }
   },
   emits: [
@@ -89,8 +105,15 @@ export default {
     "update:zoom"
   ],
   setup(props, { emit }) {
-    const { value, provider, editable, viewport, zoom, autoFit } =
-      toRefs(props);
+    const {
+      value,
+      provider,
+      editable,
+      viewport,
+      zoom,
+      autoFit,
+      keyboard
+    } = toRefs(props);
 
     const editor = useEditor({
       value,
@@ -99,10 +122,22 @@ export default {
       viewport,
       zoom,
       autoFit,
+      keyboard,
       emit
     });
 
-    const { viewportModel, zoomModel, graph, model, onGraphCreated } = editor;
+    const {
+      viewportModel,
+      zoomModel,
+      graph,
+      model,
+      container,
+      focused,
+      onGraphCreated,
+      onKeyboardDeleteKey,
+      onFocusIn,
+      onFocusOut
+    } = editor;
 
     return {
       instance: editor,
@@ -110,7 +145,12 @@ export default {
       zoomModel,
       graph,
       model,
-      onGraphCreated
+      container,
+      focused,
+      onGraphCreated,
+      onKeyboardDeleteKey,
+      onFocusIn,
+      onFocusOut
     };
   }
 };

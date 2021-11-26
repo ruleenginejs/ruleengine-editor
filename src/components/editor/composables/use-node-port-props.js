@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { ChangePortDisabled } from "./commands/change-port-disabled";
 import { ChangePortName } from "./commands/change-port-name";
 import { CreatePort } from "./commands/create-port";
