@@ -6,6 +6,7 @@
   "editor.singleNode": "Single",
   "editor.compositeNode": "Composite",
   "editor.unknownNode": "Unknown",
+  "editor.action.newNode": "New Step",
   "editor.default": "Default",
   "editor.errorMessage": "The document could not be displayed because the content is in an invalid format.",
   "editor.errorDetails": "See more details: {0}",
@@ -45,5 +46,14 @@
   "editor.title.addPort": "Add Port",
   "editor.title.disabled": "Disabled",
   "editor.action.zoomIn": "Zoom In",
-  "editor.action.zoomOut": "Zoom Out"
+  "editor.action.zoomOut": "Zoom Out",
+  "editor.action.fitCanvas": "Fit Canvas",
+  "editor.action.remove": "Remove",
+  "editor.action.addStart": "Add Start",
+  "editor.action.addEnd": "Add End",
+  "editor.action.addError": "Add Error",
+  "editor.action.addSingle": "Add Single",
+  "editor.action.addComposite": "Add Composite",
+  "editor.action.toggleLabel": "Toggle Label",
+  "editor.action.toggleVertical": "Toggle Vertical"
 }

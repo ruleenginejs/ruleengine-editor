@@ -57,16 +57,18 @@ const {
   actions: initActions,
   preserveDefaultActions,
   vertical: initVertical,
-  showActionLabel
+  showActionLabel: initShowActionLabel
 } = toRefs(props);
 
 const {
   actions,
   vertical,
+  showActionLabel,
   onActionClick
 } = useToolbar({
   initActions,
   initVertical,
+  initShowActionLabel,
   preserveDefaultActions,
   emit
 });
@@ -88,7 +90,9 @@ const {
           :title="action.title"
           :disabled="action.disabled"
           @click="onActionClick(action, $event)"
-        >{{ showActionLabel ? action.label : null }}</v-action-item>
+        >
+          <template v-if="showActionLabel" #default>{{ action.label }}</template>
+        </v-action-item>
       </template>
     </v-action-list>
   </v-floating-toolbar>
