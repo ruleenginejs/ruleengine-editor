@@ -34,6 +34,14 @@ const props = defineProps({
     type: Number,
     default: 0
   },
+  container: {
+    type: [HTMLElement, String],
+    default: null
+  },
+  fixed: {
+    type: Boolean,
+    default: false
+  },
   showActionLabel: {
     type: Boolean,
     default: false
@@ -65,7 +73,13 @@ const {
 </script>
 
 <template>
-  <v-floating-toolbar :vertical="vertical" fixed :x="positionX" :y="positionY">
+  <v-floating-toolbar
+    :container="container"
+    :fixed="fixed"
+    :vertical="vertical"
+    :x="positionX"
+    :y="positionY"
+  >
     <v-action-list :vertical="vertical">
       <template v-for="action in actions" :key="action.id">
         <v-action-item
