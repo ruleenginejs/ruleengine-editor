@@ -55,5 +55,7 @@
   "editor.action.addSingle": "Add Single",
   "editor.action.addComposite": "Add Composite",
   "editor.action.toggleLabel": "Toggle Label",
-  "editor.action.toggleVertical": "Toggle Vertical"
+  "editor.action.toggleVertical": "Toggle Vertical",
+  "editor.error.portExists": "A port {0} already exists. Please choose a different name.",
+  "editor.error.portEmpty": "A port name must be provided."
 }

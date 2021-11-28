@@ -72,6 +72,8 @@ const t = localize;
         <v-layout all-distr no-flex>
           <v-input
             :disabled="editDisabled"
+            :error="port.validation.error"
+            :message="port.validation.message"
             :model-value="port.name"
             @update:model-value="onUpdateName(port, $event)"
           />

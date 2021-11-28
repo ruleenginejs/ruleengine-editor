@@ -1,4 +1,4 @@
-import { computed } from "vue";
+import { computed, reactive, watch } from "vue";
 import { ChangePortDisabled } from "./commands/change-port-disabled";
 import { ChangePortName } from "./commands/change-port-name";
 import { CreatePort } from "./commands/create-port";
@@ -6,12 +6,14 @@ import { DeleteConnectionByPort } from "./commands/delete-connection-by-port";
 import { DeletePort } from "./commands/delete-port";
 import { createEditHandler } from "./edit-handler";
 import { GraphPortType } from "./graph-port-type";
+import localize from "@/utils/localize";
 
 export default function useNodePortProps({ nodeModel, emit, editDelay }) {
-  const portEditDisabled = computed(() => nodeModel.value.isNavNode);
-  const inPorts = computed(() => filterByType(nodeModel.value.ports, GraphPortType.IN));
-  const outPorts = computed(() => filterByType(nodeModel.value.ports, GraphPortType.OUT));
   const _editNameHandlers = {};
+  const portEditDisabled = computed(() => nodeModel.value.isNavNode);
+  const ports = reactive(nodeModel.value.ports.map(toEditPortModel));
+  const inPorts = computed(() => ports.filter(p => p.portType === GraphPortType.IN));
+  const outPorts = computed(() => ports.filter(p => p.portType === GraphPortType.OUT));
 
   const editDisabledHandler = createEditPropertyHandler(ChangePortDisabled);
   const removePortHandler = createEditHandler(
@@ -26,11 +28,22 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
     emit
   );
 
+  watch(nodeModel, (newValue, oldValue) => {
+    if (newValue.ports.length !== oldValue.ports.length) {
+      ports.length = 0;
+      ports.push.apply(ports, newValue.ports.map(toEditPortModel));
+    }
+  });
+
   function onUpdatePortName(port, newValue) {
-    getEditNameHandlerForPort(port.id)(port.nodeId, port.id, newValue);
+    port.name = newValue;
+    if (port.validateName(newValue)) {
+      getEditNameHandler(port.id)(port.nodeId, port.id, newValue);
+    }
   }
 
   function onUpdatePortDisabled(port, newValue) {
+    port.disabled = newValue;
     editDisabledHandler(port.nodeId, port.id, newValue);
   }
 
@@ -43,8 +56,35 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
     removePortHandler(port);
   }
 
-  function filterByType(portArray, portType) {
-    return portArray.filter(p => p.portType === portType);
+  function toEditPortModel(portModel) {
+    return {
+      ...portModel,
+      validation: reactive({
+        error: false,
+        message: null
+      }),
+      validateName(value) {
+        let isValid = true;
+        if (isValid && !value) {
+          isValid = false;
+          this.validation.error = true;
+          this.validation.message = localize("editor.error.portEmpty");
+        }
+        if (isValid && checkPortExists(this.id, this.portType, value)) {
+          isValid = false;
+          this.validation.error = true;
+          this.validation.message = localize("editor.error.portExists", value);
+        }
+        if (isValid) {
+          this.resetValidation();
+        }
+        return isValid;
+      },
+      resetValidation() {
+        this.validation.error = false;
+        this.validation.message = null;
+      }
+    }
   }
 
   function createEditPropertyHandler(commandCtor, withDelay = false) {
@@ -55,11 +95,23 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
     )
   }
 
-  function getEditNameHandlerForPort(portId) {
+  function getEditNameHandler(portId) {
     if (!_editNameHandlers[portId]) {
       _editNameHandlers[portId] = createEditPropertyHandler(ChangePortName, true);
     }
     return _editNameHandlers[portId];
+  }
+
+  function checkPortExists(excludePortId, portType, name) {
+    for (let i = 0, c = ports.length; i < c; i++) {
+      const port = ports[i];
+      if (port.id !== excludePortId
+        && port.portType === portType
+        && port.name === name) {
+        return true;
+      }
+    }
+    return false;
   }
 
   return {
