@@ -7,7 +7,11 @@ const serializers = {
   [GraphModelType.Connection]: serializeConnectionModel
 };
 
-function serializeModel(selectedModel, rootModel = null) {
+function serializeModel(rootModel, selectedModel = null) {
+  if (!isDefined(rootModel)) {
+    throw new Error("Argument rootModel is required.");
+  }
+
   const modelType = getModelType(selectedModel);
   if (!isDefined(modelType)) {
     return null;
@@ -21,7 +25,29 @@ function serializeModel(selectedModel, rootModel = null) {
   return serializer(selectedModel, rootModel);
 }
 
-function serializeNodeModel(nodeModel, rootModel = null) {
+function serializeNodeModel(nodeModel, rootModel) {
+  const model = createNodeModel(nodeModel);
+  model.ports = nodeModel.ports.map(createPortModel);
+  model.connections = rootModel.getConnectionsForNode(nodeModel.id)
+    .map(createConnectionModel);
+  return model;
+}
+
+function serializePortModel(portModel, rootModel) {
+  const model = createPortModel(portModel);
+  model.siblingPorts = getSiblingPorts(
+    rootModel.getNodeById(portModel.nodeId),
+    portModel.id,
+    portModel.type
+  )
+  return model;
+}
+
+function serializeConnectionModel(connectionModel) {
+  return createConnectionModel(connectionModel);
+}
+
+function createNodeModel(nodeModel) {
   return {
     id: nodeModel.id,
     type: GraphModelType.Node,
@@ -30,13 +56,10 @@ function serializeNodeModel(nodeModel, rootModel = null) {
     isNavNode: nodeModel.isNavNode,
     handlerFile: nodeModel.handlerFile,
     headerColor: nodeModel.headerColor,
-    ports: nodeModel.ports.map(serializePortModel),
-    connections: rootModel.getConnectionsForNode(nodeModel.id)
-      .map(serializeConnectionModel)
   }
 }
 
-function serializePortModel(portModel) {
+function createPortModel(portModel) {
   return {
     id: portModel.id,
     type: GraphModelType.Port,
@@ -44,16 +67,22 @@ function serializePortModel(portModel) {
     nodeId: portModel.nodeId,
     portType: portModel.type,
     disabled: portModel.disabled,
-    isErrorPort: portModel.isErrorPort
+    isErrorPort: portModel.isErrorPort,
   }
 }
 
-function serializeConnectionModel(connectionModel) {
+function createConnectionModel(connectionModel) {
   return {
     id: connectionModel.id,
     type: GraphModelType.Connection,
     definition: connectionModel.definition.toJSON()
   }
+}
+
+function getSiblingPorts(node, exludePortId, portType) {
+  if (!node) return [];
+  return node.getPortsByType(portType)
+    .filter(p => p.id !== exludePortId);
 }
 
 export default serializeModel;

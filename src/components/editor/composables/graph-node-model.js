@@ -289,6 +289,16 @@ export class GraphNodeModel extends SelectableModel {
     return null;
   }
 
+  getPortsByType(portType) {
+    if (portType === GraphPortType.IN) {
+      return this.inPorts;
+    } else if (portType === GraphPortType.OUT) {
+      return this.outPorts;
+    } else {
+      return [];
+    }
+  }
+
   createPort(portType, name, disabled) {
     if (this.isNavNode) {
       return null;
