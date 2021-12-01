@@ -23,6 +23,7 @@
         :link-rule="linkRule"
         :title-length="node.titleLength"
         :selected="node.selected"
+        v-model:invalidate="node.invalidate"
         @update:selected="onObjectSelected(node, $event)"
         @change-position="onChangeNodePosition(node, $event)"
         @new-link="onNewLink"
@@ -41,6 +42,7 @@
         :header-color="node.headerColor"
         :link-rule="linkRule"
         :selected="node.selected"
+        v-model:invalidate="node.invalidate"
         @update:selected="onObjectSelected(node, $event)"
         @change-position="onChangeNodePosition(node, $event)"
         @new-link="onNewLink"
@@ -64,9 +66,7 @@
             :selected="port.selected"
             @update:selected="onObjectSelected(port, $event)"
             @new-link="onNewLink"
-          >
-            {{ port.name }}
-          </v-graph-port>
+          >{{ port.name }}</v-graph-port>
         </template>
         <template #right>
           <v-graph-port
@@ -81,9 +81,7 @@
             :selected="port.selected"
             @update:selected="onObjectSelected(port, $event)"
             @new-link="onNewLink"
-          >
-            {{ port.name }}
-          </v-graph-port>
+          >{{ port.name }}</v-graph-port>
         </template>
       </v-graph-node>
     </template>

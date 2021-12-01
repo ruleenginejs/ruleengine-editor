@@ -21,7 +21,9 @@ export class DeletePort extends EditCommand {
     const port = node.getPortById(portId);
     if (!port) return null;
 
-    node.removePort(port.id);
+    if (node.removePort(port.id)) {
+      node.setInvalidate(true);
+    }
     return this._createChanges(port);
   }
 

@@ -86,6 +86,7 @@ export class GraphNodeModel extends SelectableModel {
     this.hasHandler = false;
     this.inPorts = [];
     this.outPorts = [];
+    this.invalidate = false;
   }
 
   _initComputed() {
@@ -248,6 +249,10 @@ export class GraphNodeModel extends SelectableModel {
     }
   }
 
+  setInvalidate(value) {
+    this.invalidate = value;
+  }
+
   findOutPortByName(portName) {
     return this.outPorts.find(port => port.name === portName);
   }
@@ -297,12 +302,14 @@ export class GraphNodeModel extends SelectableModel {
 
   removePort(portId) {
     if (this.isNavNode) {
-      return;
+      return false;
     }
     const index = this.ports.findIndex(p => p.id === portId);
     if (index !== -1) {
       this.ports.splice(index, 1);
+      return true;
     }
+    return false;
   }
 
   getPositionArray() {

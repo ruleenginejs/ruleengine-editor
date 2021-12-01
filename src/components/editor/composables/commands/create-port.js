@@ -21,6 +21,7 @@ export class CreatePort extends EditCommand {
     const newPort = node.createPort(type, name, disabled);
     if (!newPort) return null;
 
+    node.setInvalidate(true);
     return this._createChanges(newPort);
   }
 
