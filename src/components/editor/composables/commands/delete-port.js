@@ -22,7 +22,7 @@ export class DeletePort extends EditCommand {
     if (!port) return null;
 
     if (node.removePort(port.id)) {
-      node.setInvalidate(true);
+      node.invalidateAsync();
     }
     return this._createChanges(port);
   }

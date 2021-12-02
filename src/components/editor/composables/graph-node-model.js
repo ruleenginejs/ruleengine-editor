@@ -1,4 +1,4 @@
-import { computed } from "vue"
+import { computed, nextTick } from "vue"
 import merge from "merge";
 import localize from "@/utils/localize";
 import { round } from "@/utils/numbers";
@@ -251,6 +251,12 @@ export class GraphNodeModel extends SelectableModel {
 
   setInvalidate(value) {
     this.invalidate = value;
+  }
+
+  invalidateAsync() {
+    nextTick(() => {
+      this.invalidate = true;
+    });
   }
 
   findOutPortByName(portName) {
