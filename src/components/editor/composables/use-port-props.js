@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { computed, ref, reactive } from "vue";
 import localize from "@/utils/localize";
 import { createEditHandler } from "./edit-handler";
 import { ChangePortName } from "./commands/change-port-name";
@@ -8,6 +8,43 @@ import { GraphPortType } from "./graph-port-type";
 
 export default function usePortProps({ portModel, emit, editDelay }) {
   const sectionName = ref(localize("editor.sidebar.portSection"));
+  const portName = ref(portModel.value.name);
+  const validation = reactive({ error: false, message: null });
+  const siblingPortNames = computed(() => portModel.value.siblingPorts.map(p => p.name));
+
+  const editNameHandler = createHandler(ChangePortName, true);
+  const editDisabledHandler = createHandler(ChangePortDisabled);
+  const editIsErrorHandler = createHandler(ChangePortName);
+
+  const editName = computed({
+    get: () => portName.value,
+    set: (val) => {
+      portName.value = val;
+      if (validatePortName(val)) {
+        editNameHandler(val);
+      }
+    }
+  });
+
+  const editDisabled = computed({
+    get: () => portModel.value.disabled,
+    set: (val) => { editDisabledHandler(val); }
+  });
+
+  const canEditError = computed(() =>
+    portModel.value.portType === GraphPortType.OUT);
+
+  const editIsError = computed({
+    get: () => portModel.value.isErrorPort,
+    set: (val) => {
+      if (canEditError.value) {
+        editIsErrorHandler(val ? ERROR_PORT : DEFAULT_PORT);
+      }
+    }
+  });
+
+  const checkboxId = (key) =>
+    `v-checkbox_${key}_${portModel.value.id}`;
 
   function createHandler(commandCtor, withDelay = false) {
     return createEditHandler(
@@ -19,39 +56,36 @@ export default function usePortProps({ portModel, emit, editDelay }) {
       emit, withDelay ? editDelay.value : null)
   }
 
-  const editNameHandler = createHandler(ChangePortName, true);
-  const editDisabledHandler = createHandler(ChangePortDisabled);
-  const editIsErrorHandler = createHandler(ChangePortName);
-
-  const editName = computed({
-    get: () => portModel.value.name,
-    set: (val) => { editNameHandler(val); }
-  });
-
-  const editDisabled = computed({
-    get: () => portModel.value.disabled,
-    set: (val) => { editDisabledHandler(val); }
-  });
-
-  const editIsErrorDisabled = computed(() => portModel.value.portType === GraphPortType.IN);
-
-  const editIsError = computed({
-    get: () => portModel.value.isErrorPort,
-    set: (val) => {
-      if (!editIsErrorDisabled.value) {
-        editIsErrorHandler(val ? ERROR_PORT : DEFAULT_PORT);
-      }
+  function validatePortName(value) {
+    let isValid = true;
+    if (isValid && !value) {
+      isValid = false;
+      validation.error = true;
+      validation.message = localize("editor.error.portEmpty");
     }
-  });
+    if (isValid && siblingPortNames.value.indexOf(value) !== -1) {
+      isValid = false;
+      validation.error = true;
+      validation.message = localize("editor.error.portExists", value);
+    }
+    if (isValid) {
+      resetValidation();
+    }
+    return isValid;
+  }
 
-  const checkboxId = (key) => `v-checkbox_${key}_${portModel.value.id}`;
+  function resetValidation() {
+    validation.error = false;
+    validation.message = null;
+  }
 
   return {
     sectionName,
     editName,
     editDisabled,
     editIsError,
-    editIsErrorDisabled,
+    canEditError,
+    validation,
     checkboxId
   }
 }

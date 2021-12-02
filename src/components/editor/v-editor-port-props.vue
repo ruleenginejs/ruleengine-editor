@@ -36,7 +36,8 @@ const {
   editName,
   editDisabled,
   editIsError,
-  editIsErrorDisabled,
+  canEditError,
+  validation,
   checkboxId
 } = usePortProps({
   portModel: model,
@@ -62,7 +63,7 @@ const t = localize;
           <v-label truncate>{{ t('editor.hint.name') }}</v-label>
         </template>
         <template #value>
-          <v-input v-model="editName" />
+          <v-input v-model="editName" :error="validation.error" :message="validation.message" />
         </template>
       </v-field-layout>
       <v-field-layout>
@@ -82,13 +83,9 @@ const t = localize;
         </template>
         <template #value>
           <v-layout gutter="sm" h-center>
-            <v-checkbox
-              :id="checkboxId('error')"
-              :disabled="editIsErrorDisabled"
-              v-model="editIsError"
-            />
+            <v-checkbox :id="checkboxId('error')" :disabled="!canEditError" v-model="editIsError" />
             <v-label
-              :disabled="editIsErrorDisabled"
+              :disabled="!canEditError"
               :for="checkboxId('error')"
             >{{ t('editor.hint.error') }}</v-label>
           </v-layout>

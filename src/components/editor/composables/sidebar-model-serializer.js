@@ -79,10 +79,10 @@ function createConnectionModel(connectionModel) {
   }
 }
 
-function getSiblingPorts(node, exludePortId, portType) {
+function getSiblingPorts(node, forPortId, portType) {
   if (!node) return [];
   return node.getPortsByType(portType)
-    .filter(p => p.id !== exludePortId);
+    .filter(p => p.id !== forPortId);
 }
 
 export default serializeModel;

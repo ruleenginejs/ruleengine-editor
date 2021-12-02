@@ -60,7 +60,7 @@ const {
 const {
   inPorts,
   outPorts,
-  portEditDisabled,
+  canEditPort,
   onUpdatePortName,
   onUpdatePortDisabled,
   onPortRemove,
@@ -148,7 +148,7 @@ const t = localize;
       </v-field-layout>
     </v-fieldset>
     <v-fieldset v-if="canShowPorts" :label="t('editor.sidebar.ports')" b-border>
-      <template #label-actions v-if="!portEditDisabled">
+      <template #label-actions v-if="canEditPort">
         <v-action-list>
           <v-action-item
             icon="add"
@@ -164,7 +164,7 @@ const t = localize;
       </template>
       <v-editor-node-ports
         :ports="inPorts"
-        :edit-disabled="portEditDisabled"
+        :edit-disabled="!canEditPort"
         :label="t('editor.hint.inPorts')"
         @update-name="onUpdatePortName"
         @update-disabled="onUpdatePortDisabled"
@@ -172,7 +172,7 @@ const t = localize;
       />
       <v-editor-node-ports
         :ports="outPorts"
-        :edit-disabled="portEditDisabled"
+        :edit-disabled="!canEditPort"
         :label="t('editor.hint.outPorts')"
         @update-name="onUpdatePortName"
         @update-disabled="onUpdatePortDisabled"

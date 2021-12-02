@@ -10,7 +10,8 @@ import localize from "@/utils/localize";
 
 export default function useNodePortProps({ nodeModel, emit, editDelay }) {
   const _editNameHandlers = {};
-  const portEditDisabled = computed(() => nodeModel.value.isNavNode);
+  const canEditPort = computed(() => !nodeModel.value.isNavNode);
+
   const ports = reactive(nodeModel.value.ports.map(toEditPortModel));
   const inPorts = computed(() => ports.filter(p => p.portType === GraphPortType.IN));
   const outPorts = computed(() => ports.filter(p => p.portType === GraphPortType.OUT));
@@ -117,7 +118,7 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
   return {
     inPorts,
     outPorts,
-    portEditDisabled,
+    canEditPort,
     onUpdatePortName,
     onUpdatePortDisabled,
     onPortRemove,
