@@ -26,6 +26,7 @@ export const defaultActionDefinitions = [
     label: localize("editor.action.addStart"),
     disabled: false,
     visible: true,
+    draggable: true,
     order: 10
   },
   {
@@ -35,6 +36,7 @@ export const defaultActionDefinitions = [
     label: localize("editor.action.addEnd"),
     disabled: false,
     visible: true,
+    draggable: true,
     order: 20
   },
   {
@@ -44,6 +46,7 @@ export const defaultActionDefinitions = [
     label: localize("editor.action.addError"),
     disabled: false,
     visible: true,
+    draggable: true,
     order: 30
   },
   {
@@ -53,6 +56,7 @@ export const defaultActionDefinitions = [
     label: localize("editor.action.addSingle"),
     disabled: false,
     visible: true,
+    draggable: true,
     order: 40
   },
   {
@@ -62,6 +66,7 @@ export const defaultActionDefinitions = [
     label: localize("editor.action.fitCanvas"),
     disabled: false,
     visible: true,
+    draggable: false,
     order: 50
   },
   {
@@ -71,6 +76,7 @@ export const defaultActionDefinitions = [
     label: localize("editor.action.zoomIn"),
     disabled: false,
     visible: true,
+    draggable: false,
     order: 60
   },
   {
@@ -80,6 +86,7 @@ export const defaultActionDefinitions = [
     label: localize("editor.action.zoomOut"),
     disabled: false,
     visible: true,
+    draggable: false,
     order: 70
   },
   {
@@ -89,6 +96,7 @@ export const defaultActionDefinitions = [
     label: localize("editor.action.remove"),
     disabled: false,
     visible: true,
+    draggable: false,
     order: 80
   }
 ];

@@ -1,4 +1,4 @@
-import { reactive, computed, ref, onUnmounted, watch } from "vue";
+import { reactive, computed, ref, onUnmounted, watch, nextTick } from "vue";
 import { registerActionHandler, unregisterActionHandler } from "./toolbar-actions";
 import { defaultActionDefinitions } from "./toolbar-defaults";
 import localize from "@/utils/localize";
@@ -20,7 +20,7 @@ const settingsActionDefinitions = [
   },
   {
     id: settingsActionKey.toggleVertical,
-    icon: "gear",
+    icon: "list-selection",
     title: localize("editor.action.toggleVertical"),
     label: localize("editor.action.toggleVertical"),
     disabled: false,
@@ -38,6 +38,7 @@ export default function useToolbar({
 }) {
   const vertical = ref(initVertical.value);
   const showActionLabel = ref(initShowActionLabel.value);
+  const invalidate = ref(false);
 
   const actions = computed(() => {
     if (preserveDefaultActions.value) {
@@ -56,11 +57,15 @@ export default function useToolbar({
 
   watch(initVertical, () => {
     vertical.value = initVertical.value;
-  })
-
+  });
   watch(initShowActionLabel, () => {
     showActionLabel.value = initShowActionLabel.value;
-  })
+  });
+  watch(showActionLabel, () => {
+    nextTick(() => {
+      invalidate.value = true;
+    })
+  });
 
   onUnmounted(() => {
     unregisterActionHandler(settingsActionKey.toggleLabel);
@@ -87,6 +92,7 @@ export default function useToolbar({
     actions,
     vertical,
     showActionLabel,
+    invalidate,
     onActionClick
   }
 }

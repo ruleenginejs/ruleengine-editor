@@ -8,7 +8,8 @@ export default {
 import {
   VFloatingToolbar,
   VActionList,
-  VActionItem
+  VActionItem,
+  VDraggable,
 } from "@ruleenginejs/ruleengine-ui";
 import useToolbar from "./composables/use-toolbar";
 import { toRefs } from "vue";
@@ -64,6 +65,7 @@ const {
   actions,
   vertical,
   showActionLabel,
+  invalidate,
   onActionClick
 } = useToolbar({
   initActions,
@@ -81,11 +83,23 @@ const {
     :vertical="vertical"
     :x="positionX"
     :y="positionY"
+    v-model:invalidate="invalidate"
   >
     <v-action-list :vertical="vertical">
       <template v-for="action in actions" :key="action.id">
+        <v-draggable
+          v-if="action.visible && action.draggable"
+          hint
+          fixed
+          :disabled="action.disabled"
+          @drag-end="onActionClick(action, $event)"
+        >
+          <v-action-item :icon="action.icon" :title="action.title" :disabled="action.disabled">
+            <template v-if="showActionLabel" #default>{{ action.label }}</template>
+          </v-action-item>
+        </v-draggable>
         <v-action-item
-          v-if="action.visible"
+          v-else-if="action.visible"
           :icon="action.icon"
           :title="action.title"
           :disabled="action.disabled"
