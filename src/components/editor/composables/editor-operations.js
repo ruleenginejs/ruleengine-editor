@@ -6,23 +6,57 @@ import { DeleteConnection } from "./commands/delete-connection";
 import { DeletePort } from "./commands/delete-port";
 import { DeleteConnectionByPort } from "./commands/delete-connection-by-port";
 
+const POSITION_TOLERANCE = 0.01;
+
 export class EditorOperations {
   constructor(model) {
     this.model = model;
   }
 
-  createNode(type, options, notify) {
-    this.model.value.applyEdits([CreateNode.createDef({ ...options, type })], notify);
+  createNode(type, data, notify) {
+    this.model.value.applyEdits([CreateNode.createDef({ ...data, type })], notify);
   }
 
-  createNodeInCurrentViewWithOffset(type, viewport, positionOffset, options, notify) {
-    options = { ...options, type };
+  createNodeInCurrentViewWithOffset(type, viewport, positionOffset, data, notify) {
+    data = { ...data, type };
     const x = -viewport[0] + positionOffset[0];
     const y = -viewport[1] + positionOffset[1];
-    options.canvas = {
+    data.canvas = {
       position: [x, y]
     }
-    this.createNode(type, options, notify);
+    this.createNode(type, data, notify);
+  }
+
+  createNodeInCurrentViewWithCascade(type, viewport, startOffset, cascadeOffset, data, notify) {
+    data = { ...data, type };
+    let x = -viewport[0] + startOffset[0];
+    let y = -viewport[1] + startOffset[1];
+
+    while (this.model.value.nodeExistsByPosition(x, y, POSITION_TOLERANCE)) {
+      x += cascadeOffset[0];
+      y += cascadeOffset[1];
+    }
+    data.canvas = {
+      position: [x, y]
+    }
+    this.createNode(type, data, notify);
+  }
+
+  newNodeInCurrentViewMousePosition(canvasInstance, type, mousePoint, data, notify) {
+    const containerBounds = canvasInstance.getContainerBounds();
+    const containerPoint = canvasInstance.mouseEventToContainerPoint({
+      clientX: mousePoint.x,
+      clientY: mousePoint.y
+    });
+    if (containerBounds.contains(containerPoint)) {
+      const layerPoint = canvasInstance.containerPointToLayerPoint(containerPoint);
+
+      data = { ...data, type };
+      data.canvas = {
+        position: [layerPoint.x, layerPoint.y]
+      }
+      this.createNode(type, data, notify);
+    }
   }
 
   deleteModelObject(modelObject, notify) {

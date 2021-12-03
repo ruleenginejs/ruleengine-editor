@@ -107,18 +107,42 @@ class Editor {
     this.getGraph()?.fitCanvas(maxZoom);
   }
 
-  newNode(type, options, notify) {
-    this.operations.createNode(type, options, notify);
+  newNode(type, nodeData, notify) {
+    this.operations.createNode(type, nodeData, notify);
   }
 
-  newNodeInCurrentViewWithOffset(type, positionOffset, options, notify) {
+  newNodeInCurrentViewWithOffset(type, positionOffset, nodeData, notify) {
     this.operations.createNodeInCurrentViewWithOffset(
       type,
       this.getViewport(),
       positionOffset,
-      options,
+      nodeData,
       notify
     );
+  }
+
+  newNodeInCurrentViewWithCascade(type, startOffset, cascadeOffset, nodeData, notify) {
+    this.operations.createNodeInCurrentViewWithCascade(
+      type,
+      this.getViewport(),
+      startOffset,
+      cascadeOffset,
+      nodeData,
+      notify
+    );
+  }
+
+  newNodeInCurrentViewMousePosition(type, mousePoint, nodeData, notify) {
+    const canvasInstance = this.getGraph()?.getCanvasInstance();
+    if (canvasInstance) {
+      this.operations.newNodeInCurrentViewMousePosition(
+        canvasInstance,
+        type,
+        mousePoint,
+        nodeData,
+        notify
+      );
+    }
   }
 
   deleteSelectedObject(notify) {

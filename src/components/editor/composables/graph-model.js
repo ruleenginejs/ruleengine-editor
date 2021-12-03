@@ -329,6 +329,27 @@ export class GraphModel extends SelectableModel {
     return this.nodesById[nodeId] ?? null;
   }
 
+  findNodesByPosition(x, y, tolerance = null) {
+    const result = [];
+    for (let i = 0, len = this.nodes.length; i < len; i++) {
+      const node = this.nodes[i];
+      if (node.inPosition(x, y, tolerance)) {
+        result.push(node);
+      }
+    }
+    return result;
+  }
+
+  nodeExistsByPosition(x, y, tolerance = null) {
+    for (let i = 0, len = this.nodes.length; i < len; i++) {
+      const node = this.nodes[i];
+      if (node.inPosition(x, y, tolerance)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   getConnectionsForNode(nodeId) {
     const result = [];
     for (let i = 0, len = this.connections.length; i < len; i++) {

@@ -2,7 +2,8 @@ import localize from "@/utils/localize";
 import { GraphNodeType } from "./graph-node-type";
 import { registerActionHandler } from "./toolbar-actions";
 
-const NEW_STEP_OFFSET = [20, 20];
+const NEW_STEP_START_OFFSET = [20, 20];
+const NEW_STEP_CASCADE_OFFSET = [15, 15];
 const FIT_CANVAS_MAX_ZOOM = 100;
 const ZOOM_DELTA = 2;
 
@@ -126,12 +127,27 @@ function handleRemoveAction(editorInstance) {
   editorInstance.deleteSelectedObject(true);
 }
 
-function handleAddTypedStep(editorInstance, actionId) {
+function handleAddTypedStep(editorInstance, actionId, args = null) {
   const { type, name } = getStepTypeAndNameFromAction(actionId);
-  if (type) {
-    editorInstance.newNodeInCurrentViewWithOffset(
+  if (!type) return;
+
+  const isDragged = args?.event && args?.isClicked === false;
+  if (isDragged) {
+    const mousePoint = {
+      x: (args.event.clientX ?? 0),
+      y: (args.event.clientY ?? 0)
+    }
+    editorInstance.newNodeInCurrentViewMousePosition(
       type,
-      NEW_STEP_OFFSET,
+      mousePoint,
+      { name },
+      true
+    );
+  } else {
+    editorInstance.newNodeInCurrentViewWithCascade(
+      type,
+      NEW_STEP_START_OFFSET,
+      NEW_STEP_CASCADE_OFFSET,
       { name },
       true
     );

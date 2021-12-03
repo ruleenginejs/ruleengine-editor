@@ -332,6 +332,15 @@ export class GraphNodeModel extends SelectableModel {
     return [this.positionX, this.positionY];
   }
 
+  inPosition(x, y, tolerance = null) {
+    if (isDefined(tolerance)) {
+      return Math.abs(this.positionX - x) < tolerance &&
+        Math.abs(this.positionY - y) < tolerance;
+    } else {
+      return this.positionX === x && this.positionY === y;
+    }
+  }
+
   changePosition(position) {
     const oldPosition = this.getPositionArray();
     const { x, y } = this._toPoint(position);

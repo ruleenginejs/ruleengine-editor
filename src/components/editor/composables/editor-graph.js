@@ -89,6 +89,10 @@ class EditorGraph {
     }
   }
 
+  getCanvasInstance() {
+    return this.canvas.value?.getCanvas();
+  }
+
   onChangeNodePosition(node, e) {
     this.model.value.applyEdits([
       ChangeNodePosition.createDef(node.id, e.newPosition)
