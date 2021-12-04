@@ -20,7 +20,7 @@ const settingsActionDefinitions = [
   },
   {
     id: settingsActionKey.toggleVertical,
-    icon: "list-selection",
+    icon: "grabber",
     title: localize("editor.action.toggleVertical"),
     label: localize("editor.action.toggleVertical"),
     disabled: false,
