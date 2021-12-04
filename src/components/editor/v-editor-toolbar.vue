@@ -66,6 +66,8 @@ const {
   vertical,
   showActionLabel,
   invalidate,
+  findAction,
+  enableAction,
   onActionClick
 } = useToolbar({
   initActions,
@@ -73,6 +75,11 @@ const {
   initShowActionLabel,
   preserveDefaultActions,
   emit
+});
+
+defineExpose({
+  findAction,
+  enableAction
 });
 </script>
 

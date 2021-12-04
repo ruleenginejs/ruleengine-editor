@@ -59,12 +59,17 @@ export class EditorOperations {
     }
   }
 
-  deleteModelObject(modelObject, notify) {
+  canDeleteModelObject(modelObject) {
     const modelType = getModelType(modelObject);
-    if (!isDefined(modelType) || modelType === GraphModelType.Graph) {
+    return isDefined(modelType) && modelType !== GraphModelType.Graph;
+  }
+
+  deleteModelObject(modelObject, notify) {
+    if (!this.canDeleteModelObject(modelObject)) {
       return;
     }
 
+    const modelType = getModelType(modelObject);
     const editOperations = [];
     switch (modelType) {
       case GraphModelType.Node:

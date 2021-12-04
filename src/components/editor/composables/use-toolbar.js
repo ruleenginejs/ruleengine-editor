@@ -58,9 +58,11 @@ export default function useToolbar({
   watch(initVertical, () => {
     vertical.value = initVertical.value;
   });
+
   watch(initShowActionLabel, () => {
     showActionLabel.value = initShowActionLabel.value;
   });
+
   watch(showActionLabel, () => {
     nextTick(() => {
       invalidate.value = true;
@@ -88,11 +90,24 @@ export default function useToolbar({
     showActionLabel.value = !showActionLabel.value;
   }
 
+  function findAction(actionId) {
+    return actions.value.find(({ id }) => id === actionId);
+  }
+
+  function enableAction(actionId, value) {
+    const action = findAction(actionId);
+    if (action) {
+      action.disabled = !value;
+    }
+  }
+
   return {
     actions,
     vertical,
     showActionLabel,
     invalidate,
+    findAction,
+    enableAction,
     onActionClick
   }
 }

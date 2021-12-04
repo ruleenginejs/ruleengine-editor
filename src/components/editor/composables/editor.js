@@ -145,6 +145,10 @@ class Editor {
     }
   }
 
+  canDeleteModelObject(modelObject) {
+    return this.operations.canDeleteModelObject(modelObject);
+  }
+
   deleteSelectedObject(notify) {
     this.deleteModelObject(this.getSelectedObject(), notify);
   }

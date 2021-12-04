@@ -7,7 +7,7 @@ const NEW_STEP_CASCADE_OFFSET = [15, 15];
 const FIT_CANVAS_MAX_ZOOM = 100;
 const ZOOM_DELTA = 2;
 
-const defaultActionKey = Object.freeze({
+export const defaultActionKey = Object.freeze({
   zoomIn: "zoomIn",
   zoomOut: "zoomOut",
   remove: "remove",
