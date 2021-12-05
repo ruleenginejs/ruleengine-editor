@@ -131,7 +131,7 @@ function handleAddTypedStep(editorInstance, actionId, args = null) {
   const { type, name } = getStepTypeAndNameFromAction(actionId);
   if (!type) return;
 
-  const isDragged = args?.event && args?.isClicked === false;
+  const isDragged = args?.event && args?.isClick === false;
   if (isDragged) {
     const mousePoint = {
       x: (args.event.clientX ?? 0),

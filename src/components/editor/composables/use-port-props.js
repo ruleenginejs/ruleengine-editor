@@ -43,9 +43,6 @@ export default function usePortProps({ portModel, emit, editDelay }) {
     }
   });
 
-  const checkboxId = (key) =>
-    `v-checkbox_${key}_${portModel.value.id}`;
-
   function createHandler(commandCtor, withDelay = false) {
     return createEditHandler(
       (val) => commandCtor.createDef(
@@ -77,6 +74,10 @@ export default function usePortProps({ portModel, emit, editDelay }) {
   function resetValidation() {
     validation.error = false;
     validation.message = null;
+  }
+
+  function checkboxId(key) {
+    return `v-checkbox_${key}_${portModel.value.id}`;
   }
 
   return {
