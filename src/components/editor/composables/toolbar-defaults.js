@@ -1,6 +1,10 @@
+import { markRaw } from "vue";
 import localize from "@/utils/localize";
 import { GraphNodeType } from "./graph-node-type";
 import { registerActionHandler } from "./toolbar-actions";
+import VIconStartStep from "../icons/v-icon-start-step.vue";
+import VIconEndStep from "../icons/v-icon-end-step.vue";
+import VIconErrorStep from "../icons/v-icon-error-step.vue";
 
 const NEW_STEP_START_OFFSET = [20, 20];
 const NEW_STEP_CASCADE_OFFSET = [15, 15];
@@ -22,7 +26,7 @@ export const defaultActionKey = Object.freeze({
 export const defaultActionDefinitions = [
   {
     id: defaultActionKey.addStart,
-    icon: "star",
+    icon: markRaw(VIconStartStep),
     title: localize("editor.action.addStart"),
     label: localize("editor.action.addStart"),
     disabled: false,
@@ -32,7 +36,7 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.addEnd,
-    icon: "star",
+    icon: markRaw(VIconEndStep),
     title: localize("editor.action.addEnd"),
     label: localize("editor.action.addEnd"),
     disabled: false,
@@ -42,7 +46,7 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.addError,
-    icon: "star",
+    icon: markRaw(VIconErrorStep),
     title: localize("editor.action.addError"),
     label: localize("editor.action.addError"),
     disabled: false,
@@ -52,7 +56,7 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.addSingle,
-    icon: "add",
+    icon: "browser",
     title: localize("editor.action.addSingle"),
     label: localize("editor.action.addSingle"),
     disabled: false,

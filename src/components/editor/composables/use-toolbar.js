@@ -101,6 +101,10 @@ export default function useToolbar({
     }
   }
 
+  function isString(value) {
+    return typeof value === "string";
+  }
+
   return {
     actions,
     vertical,
@@ -108,6 +112,7 @@ export default function useToolbar({
     invalidate,
     findAction,
     enableAction,
+    isString,
     onActionClick
   }
 }

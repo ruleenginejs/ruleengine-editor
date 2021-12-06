@@ -68,6 +68,7 @@ const {
   invalidate,
   findAction,
   enableAction,
+  isString,
   onActionClick
 } = useToolbar({
   initActions,
@@ -101,18 +102,28 @@ defineExpose({
           :disabled="action.disabled"
           @drag-end="onActionClick(action, $event)"
         >
-          <v-action-item :icon="action.icon" :title="action.title" :disabled="action.disabled">
+          <v-action-item
+            :icon="isString(action.icon) ? action.icon : null"
+            :title="action.title"
+            :disabled="action.disabled"
+          >
             <template v-if="showActionLabel" #default>{{ action.label }}</template>
+            <template v-if="action.icon && !isString(action.icon)" #icon>
+              <component :is="action.icon" />
+            </template>
           </v-action-item>
         </v-draggable>
         <v-action-item
           v-else-if="action.visible"
-          :icon="action.icon"
+          :icon="isString(action.icon) ? action.icon : null"
           :title="action.title"
           :disabled="action.disabled"
           @click="onActionClick(action, $event)"
         >
           <template v-if="showActionLabel" #default>{{ action.label }}</template>
+          <template v-if="action.icon && !isString(action.icon)" #icon>
+            <component :is="action.icon" />
+          </template>
         </v-action-item>
       </template>
     </v-action-list>
