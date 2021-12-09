@@ -6,10 +6,13 @@ import VIconStartStep from "../icons/v-icon-start-step.vue";
 import VIconEndStep from "../icons/v-icon-end-step.vue";
 import VIconErrorStep from "../icons/v-icon-error-step.vue";
 
-const NEW_STEP_START_OFFSET = [20, 20];
-const NEW_STEP_CASCADE_OFFSET = [15, 15];
+const NEW_NODE_START_OFFSET = [20, 20];
+const NEW_NODE_CASCADE_OFFSET = [15, 15];
 const FIT_CANVAS_MAX_ZOOM = 100;
 const ZOOM_DELTA = 2;
+const NEW_NAV_NODE_OFFSET = [17, 17];
+const NEW_NODE_OFFSET = [90, 105];
+const NEW_NODE_DEFAULT_OFFSET = [0, 0];
 
 export const defaultActionKey = Object.freeze({
   zoomIn: "zoomIn",
@@ -132,7 +135,7 @@ function handleRemoveAction(editorInstance) {
 }
 
 function handleAddTypedStep(editorInstance, actionId, args = null) {
-  const { type, name } = getStepTypeAndNameFromAction(actionId);
+  const { type, name, offset } = getNodeOptionsFromAction(actionId);
   if (!type) return;
 
   const isDragged = args?.event && args?.isClick === false;
@@ -140,47 +143,58 @@ function handleAddTypedStep(editorInstance, actionId, args = null) {
     const mousePoint = {
       x: (args.event.clientX ?? 0),
       y: (args.event.clientY ?? 0)
-    }
-    editorInstance.newNodeInCurrentViewMousePosition(
+    };
+    const offsetPoint = {
+      x: offset[0],
+      y: offset[1]
+    };
+    editorInstance.newNodeInCurrentViewByMousePosition(
       type,
       mousePoint,
+      offsetPoint,
       { name },
       true
     );
   } else {
     editorInstance.newNodeInCurrentViewWithCascade(
       type,
-      NEW_STEP_START_OFFSET,
-      NEW_STEP_CASCADE_OFFSET,
+      NEW_NODE_START_OFFSET,
+      NEW_NODE_CASCADE_OFFSET,
       { name },
       true
     );
   }
 }
 
-function getStepTypeAndNameFromAction(actionId) {
+function getNodeOptionsFromAction(actionId) {
   let type = null;
   let name = null;
+  let offset = NEW_NODE_DEFAULT_OFFSET;
 
   switch (actionId) {
     case defaultActionKey.addStart:
       type = GraphNodeType.Start;
+      offset = NEW_NAV_NODE_OFFSET;
       break;
     case defaultActionKey.addEnd:
       type = GraphNodeType.End;
+      offset = NEW_NAV_NODE_OFFSET;
       break;
     case defaultActionKey.addError:
       type = GraphNodeType.Error;
+      offset = NEW_NAV_NODE_OFFSET;
       break;
     case defaultActionKey.addSingle:
       type = GraphNodeType.Single;
       name = localize("editor.action.newNode");
+      offset = NEW_NODE_OFFSET;
       break;
     case defaultActionKey.addComposite:
       type = GraphNodeType.Composite;
       name = localize("editor.action.newNode");
+      offset = NEW_NODE_OFFSET;
       break;
   }
 
-  return { type, name };
+  return { type, name, offset };
 }

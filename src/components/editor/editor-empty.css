@@ -1,6 +1,11 @@
+.v-editor__no-content {
+  /* display styles */
+  @apply absolute inset-0 z-10;
+}
+
 .v-editor-empty {
   /* visual styles */
-  @apply text-14sp;
+  @apply text-foreground text-14sp;
 
   /* sizes */
   @apply px-2.5;

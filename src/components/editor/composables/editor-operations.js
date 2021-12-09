@@ -42,7 +42,7 @@ export class EditorOperations {
     this.createNode(type, data, notify);
   }
 
-  newNodeInCurrentViewMousePosition(canvasInstance, type, mousePoint, data, notify) {
+  newNodeInCurrentViewByMousePosition(canvasInstance, type, mousePoint, offsetPoint, data, notify) {
     const containerBounds = canvasInstance.getContainerBounds();
     const containerPoint = canvasInstance.mouseEventToContainerPoint({
       clientX: mousePoint.x,
@@ -53,7 +53,7 @@ export class EditorOperations {
 
       data = { ...data, type };
       data.canvas = {
-        position: [layerPoint.x, layerPoint.y]
+        position: [layerPoint.x - offsetPoint.x, layerPoint.y - offsetPoint.y]
       }
       this.createNode(type, data, notify);
     }

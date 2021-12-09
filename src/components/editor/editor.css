@@ -1,4 +1,7 @@
 .v-editor {
+  /* display styles */
+  @apply relative;
+
   /* sizes */
   @apply w-full h-full;
 
@@ -7,9 +10,4 @@
 
   /* focus */
   @apply focus:outline-none;
-}
-
-.v-editor__no-content {
-  /* visual styles */
-  @apply bg-editor-background text-foreground;
 }

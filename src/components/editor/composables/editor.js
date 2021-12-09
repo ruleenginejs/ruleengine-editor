@@ -132,13 +132,14 @@ class Editor {
     );
   }
 
-  newNodeInCurrentViewMousePosition(type, mousePoint, nodeData, notify) {
+  newNodeInCurrentViewByMousePosition(type, mousePoint, offsetPoint, nodeData, notify) {
     const canvasInstance = this.getGraph()?.getCanvasInstance();
     if (canvasInstance) {
-      this.operations.newNodeInCurrentViewMousePosition(
+      this.operations.newNodeInCurrentViewByMousePosition(
         canvasInstance,
         type,
         mousePoint,
+        offsetPoint,
         nodeData,
         notify
       );

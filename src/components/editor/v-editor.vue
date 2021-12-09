@@ -10,12 +10,12 @@
   >
     <v-editor-error v-if="model.error" :error="model.error" />
     <v-editor-empty v-else-if="model.isEmptyValue">
-      <template v-if="$slots['empty-text']" #default>
-        <slot name="empty-text"></slot>
+      <template v-if="$slots.empty" #default>
+        <slot name="empty"></slot>
       </template>
     </v-editor-empty>
     <v-editor-graph
-      v-else
+      v-if="!model.error"
       ref="graph"
       v-model:viewport="viewportModel"
       v-model:zoom="zoomModel"
