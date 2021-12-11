@@ -53,7 +53,7 @@ const t = localize;
             <v-layout not-shrink>
               <v-action-item
                 icon="remove"
-                :title="t('editor.title.removeConnection')"
+                :title="t('editor.sidebar.removeConnection')"
                 @click="onRemove(connection)"
               />
             </v-layout>

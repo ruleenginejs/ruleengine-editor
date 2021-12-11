@@ -35,15 +35,24 @@ const props = defineProps({
   editDelay: {
     type: Number,
     default: null
+  },
+  provider: {
+    type: Object,
+    default: null
   }
 });
 const emit = defineEmits(["edit"]);
 
-const { model, editDelay } = toRefs(props);
+const {
+  model,
+  editDelay,
+  provider
+} = toRefs(props);
+
 const {
   sectionName,
   editName,
-  editHandlerFile,
+  editScriptFile,
   editColor,
   editUseCustomColor,
   canShowName,
@@ -54,8 +63,15 @@ const {
   canShowColor,
   useCustomColor,
   colorOptions,
+  scriptFileDataSource,
+  onScriptFileClick,
   genElementId
-} = useNodeProps({ nodeModel: model, emit, editDelay });
+} = useNodeProps({
+  nodeModel: model,
+  emit,
+  editDelay,
+  provider
+});
 
 const {
   inPorts,
@@ -65,13 +81,21 @@ const {
   onUpdatePortDisabled,
   onPortRemove,
   onPortAdd
-} = useNodePortProps({ nodeModel: model, emit, editDelay });
+} = useNodePortProps({
+  nodeModel: model,
+  emit,
+  editDelay
+});
 
 const {
   inConnections,
   outConnections,
   onConnectionRemove,
-} = useNodeConnectionProps({ nodeModel: model, emit, editDelay });
+} = useNodeConnectionProps({
+  nodeModel: model,
+  emit,
+  editDelay
+});
 
 const t = localize;
 </script>
@@ -133,15 +157,21 @@ const t = localize;
         </template>
         <template #value>
           <v-autocomplete
-            placeholder="Relative file path"
-            :loading-message="t('editor.suggest.loading')"
-            empty-result-message="No matching results."
-            v-model="editHandlerFile"
+            v-model="editScriptFile"
+            :placeholder="t('editor.sidebar.scriptHint')"
+            :loading-message="t('editor.autocomplete.loading')"
+            :empty-result-message="t('editor.autocomplete.emptyResult')"
+            :data-source="scriptFileDataSource"
             icon-clickable
+            @icon-click="onScriptFileClick"
           >
             <template #icon>
-              <span v-if="!editHandlerFile" class="codicon codicon-new-file"></span>
-              <span v-else class="codicon codicon-go-to-file"></span>
+              <span
+                v-if="!editScriptFile"
+                class="codicon codicon-new-file"
+                :title="t('editor.sidebar.newFile')"
+              ></span>
+              <span v-else class="codicon codicon-go-to-file" :title="t('editor.sidebar.openFile')"></span>
             </template>
           </v-autocomplete>
         </template>
@@ -152,12 +182,12 @@ const t = localize;
         <v-action-list>
           <v-action-item
             icon="add"
-            :title="t('editor.title.addPort')"
+            :title="t('editor.sidebar.addPort')"
             @click="onPortAdd(GraphPortType.IN)"
           >{{ t('editor.sidebar.addInPort') }}</v-action-item>
           <v-action-item
             icon="add"
-            :title="t('editor.title.addPort')"
+            :title="t('editor.sidebar.addPort')"
             @click="onPortAdd(GraphPortType.OUT)"
           >{{ t('editor.sidebar.addOutPort') }}</v-action-item>
         </v-action-list>

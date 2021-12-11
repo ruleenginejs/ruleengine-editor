@@ -26,6 +26,10 @@ const props = defineProps({
   editDelay: {
     type: Number,
     default: null
+  },
+  provider: {
+    type: Object,
+    default: null
   }
 })
 const emit = defineEmits(["edit"])

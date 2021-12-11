@@ -8,6 +8,7 @@
         :is="propsComponentName"
         :model="selectedObject"
         :edit-delay="editDelay"
+        :provider="provider"
         @edit="onEdit"
       />
     </v-content>
@@ -39,6 +40,14 @@ export default {
       type: Object,
       default: null
     },
+    editDelay: {
+      type: Number,
+      default: 500
+    },
+    provider: {
+      type: Object,
+      default: null
+    },
     sidebarScroll: {
       type: String,
       default: "sm"
@@ -46,10 +55,6 @@ export default {
     sidebarBorder: {
       type: Boolean,
       default: false
-    },
-    editDelay: {
-      type: Number,
-      default: 500
     }
   },
   emits: ["edit"],

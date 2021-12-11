@@ -64,7 +64,7 @@ const t = localize;
         <v-layout not-shrink>
           <v-checkbox
             :disabled="editDisabled"
-            :title="t('editor.title.disabled')"
+            :title="t('editor.sidebar.disabled')"
             :model-value="port.disabled"
             @update:model-value="onUpdateDisabled(port, $event)"
           />
@@ -81,7 +81,7 @@ const t = localize;
         <v-layout not-shrink>
           <v-action-item
             :disabled="editDisabled"
-            :title="t('editor.title.removePort')"
+            :title="t('editor.sidebar.removePort')"
             icon="remove"
             @click="onRemove(port)"
           />
