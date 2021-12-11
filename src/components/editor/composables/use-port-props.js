@@ -1,4 +1,4 @@
-import { computed, ref, reactive } from "vue";
+import { computed, ref, reactive, watch } from "vue";
 import localize from "@/utils/localize";
 import { createEditHandler } from "./edit-handler";
 import { ChangePortName } from "./commands/change-port-name";
@@ -10,11 +10,16 @@ export default function usePortProps({ portModel, emit, editDelay }) {
   const sectionName = ref(localize("editor.sidebar.portSection"));
   const portName = ref(portModel.value.name);
   const validation = reactive({ error: false, message: null });
-  const siblingPortNames = computed(() => portModel.value.siblingPorts.map(p => p.name));
 
   const editNameHandler = createHandler(ChangePortName, true);
   const editDisabledHandler = createHandler(ChangePortDisabled);
   const editIsErrorHandler = createHandler(ChangePortName);
+
+  watch(() => portModel.value.name, () => {
+    portName.value = portModel.value.name;
+    validation.error = false;
+    validation.message = null;
+  });
 
   const editName = computed({
     get: () => portName.value,
@@ -22,6 +27,8 @@ export default function usePortProps({ portModel, emit, editDelay }) {
       portName.value = val;
       if (validatePortName(val)) {
         editNameHandler(val);
+      } else {
+        editNameHandler.clear();
       }
     }
   });
@@ -60,7 +67,7 @@ export default function usePortProps({ portModel, emit, editDelay }) {
       validation.error = true;
       validation.message = localize("editor.error.portEmpty");
     }
-    if (isValid && siblingPortNames.value.indexOf(value) !== -1) {
+    if (isValid && otherPortExists(value)) {
       isValid = false;
       validation.error = true;
       validation.message = localize("editor.error.portExists", value);
@@ -74,6 +81,10 @@ export default function usePortProps({ portModel, emit, editDelay }) {
   function resetValidation() {
     validation.error = false;
     validation.message = null;
+  }
+
+  function otherPortExists(portName) {
+    return !!portModel.value.otherPorts.find(p => p.name === portName);
   }
 
   function checkboxId(key) {

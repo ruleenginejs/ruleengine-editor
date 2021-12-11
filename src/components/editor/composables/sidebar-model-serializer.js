@@ -35,7 +35,7 @@ function serializeNodeModel(nodeModel, rootModel) {
 
 function serializePortModel(portModel, rootModel) {
   const model = createPortModel(portModel);
-  model.siblingPorts = getSiblingPorts(
+  model.otherPorts = getOtherPorts(
     rootModel.getNodeById(portModel.nodeId),
     portModel.id,
     portModel.type
@@ -79,10 +79,10 @@ function createConnectionModel(connectionModel) {
   }
 }
 
-function getSiblingPorts(node, forPortId, portType) {
+function getOtherPorts(node, excludePortId, portType) {
   if (!node) return [];
   return node.getPortsByType(portType)
-    .filter(p => p.id !== forPortId);
+    .filter(p => p.id !== excludePortId);
 }
 
 export default serializeModel;
