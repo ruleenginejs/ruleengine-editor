@@ -10,9 +10,9 @@ import localize from "@/utils/localize";
 
 export default function useNodePortProps({ nodeModel, emit, editDelay }) {
   const _editNameHandlers = {};
-  const canEditPort = computed(() => !nodeModel.value.isNavNode);
 
-  const ports = reactive(nodeModel.value.ports.map(toEditPortModel));
+  const canEditPort = computed(() => !nodeModel.value.isNavNode);
+  const ports = reactive(nodeModel.value.ports.map(toEditModel));
   const inPorts = computed(() => ports.filter(p => p.portType === GraphPortType.IN));
   const outPorts = computed(() => ports.filter(p => p.portType === GraphPortType.OUT));
 
@@ -29,17 +29,18 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
     emit
   );
 
-  watch(nodeModel, (newValue, oldValue) => {
-    if (newValue.ports.length !== oldValue.ports.length) {
-      ports.length = 0;
-      ports.push.apply(ports, newValue.ports.map(toEditPortModel));
-    }
+  watch(() => nodeModel.value.ports, () => {
+    ports.length = 0;
+    ports.push.apply(ports, nodeModel.value.ports.map(toEditModel));
   });
 
   function onUpdatePortName(port, newValue) {
     port.name = newValue;
-    if (port.validateName(newValue)) {
-      getEditNameHandler(port.id)(port.nodeId, port.id, newValue);
+    const editHandler = getEditNameHandler(port.id);
+    if (validatePortName.call(port, newValue)) {
+      editHandler(port.nodeId, port.id, newValue);
+    } else {
+      editHandler.clear();
     }
   }
 
@@ -57,33 +58,12 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
     removePortHandler(port);
   }
 
-  function toEditPortModel(portModel) {
+  function toEditModel(portModel) {
     return {
       ...portModel,
-      validation: reactive({
+      validation: {
         error: false,
         message: null
-      }),
-      validateName(value) {
-        let isValid = true;
-        if (isValid && !value) {
-          isValid = false;
-          this.validation.error = true;
-          this.validation.message = localize("editor.error.portEmpty");
-        }
-        if (isValid && checkPortExists(this.id, this.portType, value)) {
-          isValid = false;
-          this.validation.error = true;
-          this.validation.message = localize("editor.error.portExists", value);
-        }
-        if (isValid) {
-          this.resetValidation();
-        }
-        return isValid;
-      },
-      resetValidation() {
-        this.validation.error = false;
-        this.validation.message = null;
       }
     }
   }
@@ -101,6 +81,29 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
       _editNameHandlers[portId] = createEditPropertyHandler(ChangePortName, true);
     }
     return _editNameHandlers[portId];
+  }
+
+  function validatePortName(value) {
+    let isValid = true;
+    if (isValid && !value) {
+      isValid = false;
+      this.validation.error = true;
+      this.validation.message = localize("editor.error.portEmpty");
+    }
+    if (isValid && checkPortExists(this.id, this.portType, value)) {
+      isValid = false;
+      this.validation.error = true;
+      this.validation.message = localize("editor.error.portExists", value);
+    }
+    if (isValid) {
+      resetValidation.call(this);
+    }
+    return isValid;
+  }
+
+  function resetValidation() {
+    this.validation.error = false;
+    this.validation.message = null;
   }
 
   function checkPortExists(excludePortId, portType, name) {
