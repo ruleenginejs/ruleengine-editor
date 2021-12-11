@@ -2,9 +2,9 @@ import { markRaw } from "vue";
 import localize from "@/utils/localize";
 import { GraphNodeType } from "./graph-node-type";
 import { registerActionHandler } from "./toolbar-actions";
-import VIconStartStep from "../icons/v-icon-start-step.vue";
-import VIconEndStep from "../icons/v-icon-end-step.vue";
-import VIconErrorStep from "../icons/v-icon-error-step.vue";
+import VIconStartNode from "../icons/v-icon-start-node.vue";
+import VIconEndNode from "../icons/v-icon-end-node.vue";
+import VIconErrorNode from "../icons/v-icon-error-node.vue";
 
 const NEW_NODE_START_OFFSET = [20, 20];
 const NEW_NODE_CASCADE_OFFSET = [15, 15];
@@ -29,7 +29,7 @@ export const defaultActionKey = Object.freeze({
 export const defaultActionDefinitions = [
   {
     id: defaultActionKey.addStart,
-    icon: markRaw(VIconStartStep),
+    icon: markRaw(VIconStartNode),
     title: localize("editor.action.addStart"),
     label: localize("editor.action.addStart"),
     disabled: false,
@@ -39,7 +39,7 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.addEnd,
-    icon: markRaw(VIconEndStep),
+    icon: markRaw(VIconEndNode),
     title: localize("editor.action.addEnd"),
     label: localize("editor.action.addEnd"),
     disabled: false,
@@ -49,7 +49,7 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.addError,
-    icon: markRaw(VIconErrorStep),
+    icon: markRaw(VIconErrorNode),
     title: localize("editor.action.addError"),
     label: localize("editor.action.addError"),
     disabled: false,
@@ -113,10 +113,10 @@ registerActionHandler(defaultActionKey.zoomIn, handleZoomInAction);
 registerActionHandler(defaultActionKey.zoomOut, handleZoomOutAction);
 registerActionHandler(defaultActionKey.fitCanvas, handleFitCanvasAction);
 registerActionHandler(defaultActionKey.remove, handleRemoveAction);
-registerActionHandler(defaultActionKey.addStart, handleAddTypedStep);
-registerActionHandler(defaultActionKey.addEnd, handleAddTypedStep);
-registerActionHandler(defaultActionKey.addError, handleAddTypedStep);
-registerActionHandler(defaultActionKey.addSingle, handleAddTypedStep);
+registerActionHandler(defaultActionKey.addStart, handleAddTypedNode);
+registerActionHandler(defaultActionKey.addEnd, handleAddTypedNode);
+registerActionHandler(defaultActionKey.addError, handleAddTypedNode);
+registerActionHandler(defaultActionKey.addSingle, handleAddTypedNode);
 
 function handleZoomInAction(editorInstance) {
   editorInstance.setZoom(Math.ceil(editorInstance.getZoom() * ZOOM_DELTA));
@@ -134,7 +134,7 @@ function handleRemoveAction(editorInstance) {
   editorInstance.deleteSelectedObject(true);
 }
 
-function handleAddTypedStep(editorInstance, actionId, args = null) {
+function handleAddTypedNode(editorInstance, actionId, args = null) {
   const { type, name, offset } = getNodeOptionsFromAction(actionId);
   if (!type) return;
 
