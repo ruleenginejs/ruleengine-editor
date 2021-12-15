@@ -18,21 +18,21 @@
     "vue": "^3.2.21"
   },
   "dependencies": {
-    "@ruleenginejs/ruleengine-ui": "^1.1.8",
+    "@ruleenginejs/ruleengine-ui": "^1.1.10",
     "debounce": "^1.2.1",
     "is-plain-object": "^5.0.0",
     "merge": "^2.1.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.9.4",
+    "@vitejs/plugin-vue": "^2.0.1",
     "autoprefixer": "^10.4.0",
-    "eslint": "^8.2.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "postcss": "^8.3.11",
+    "eslint": "^8.4.1",
+    "eslint-plugin-vue": "^8.2.0",
+    "postcss": "^8.4.5",
     "postcss-import": "^14.0.2",
-    "postcss-nesting": "^9.0.0",
+    "postcss-nesting": "^10.0.3",
     "tailwindcss": "^2.2.19",
-    "vite": "^2.6.14"
+    "vite": "^2.7.2"
   },
   "repository": {
     "type": "git",
