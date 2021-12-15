@@ -14,8 +14,8 @@
     "push": "git push origin master --tags"
   },
   "peerDependencies": {
-    "@vscode/codicons": "^0.0.26",
-    "vue": "^3.2.21"
+    "@vscode/codicons": "^0.0.27",
+    "vue": "^3.2.26"
   },
   "dependencies": {
     "@ruleenginejs/ruleengine-ui": "^1.1.10",
