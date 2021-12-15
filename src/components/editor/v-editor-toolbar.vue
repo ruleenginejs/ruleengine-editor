@@ -43,6 +43,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  invalidate: {
+    type: Boolean,
+    default: false
+  },
   showActionLabel: {
     type: Boolean,
     default: false
@@ -52,12 +56,16 @@ const props = defineProps({
     default: true
   }
 });
-const emit = defineEmits(["action-click"]);
+const emit = defineEmits([
+  "action-click",
+  "update:invalidate"
+]);
 
 const {
   actions: initActions,
   preserveDefaultActions,
   vertical: initVertical,
+  invalidate: initInvalidate,
   showActionLabel: initShowActionLabel
 } = toRefs(props);
 
@@ -73,6 +81,7 @@ const {
 } = useToolbar({
   initActions,
   initVertical,
+  initInvalidate,
   initShowActionLabel,
   preserveDefaultActions,
   emit

@@ -5,6 +5,7 @@ import { registerActionHandler } from "./toolbar-actions";
 import VIconStartNode from "../icons/v-icon-start-node.vue";
 import VIconEndNode from "../icons/v-icon-end-node.vue";
 import VIconErrorNode from "../icons/v-icon-error-node.vue";
+import VIconSingleNode from "../icons//v-icon-single-node.vue";
 
 const NEW_NODE_START_OFFSET = [20, 20];
 const NEW_NODE_CASCADE_OFFSET = [15, 15];
@@ -59,7 +60,7 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.addSingle,
-    icon: "browser",
+    icon: markRaw(VIconSingleNode),
     title: localize("editor.action.addSingle"),
     label: localize("editor.action.addSingle"),
     disabled: false,

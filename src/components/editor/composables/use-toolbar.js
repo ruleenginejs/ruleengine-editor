@@ -32,13 +32,14 @@ const settingsActionDefinitions = [
 export default function useToolbar({
   initActions,
   initVertical,
+  initInvalidate,
   initShowActionLabel,
   preserveDefaultActions,
   emit
 }) {
   const vertical = ref(initVertical.value);
   const showActionLabel = ref(initShowActionLabel.value);
-  const invalidate = ref(false);
+  const invalidate = ref(initInvalidate.value);
 
   const actions = computed(() => {
     if (preserveDefaultActions.value) {
@@ -67,6 +68,14 @@ export default function useToolbar({
     nextTick(() => {
       invalidate.value = true;
     })
+  });
+
+  watch(initInvalidate, () => {
+    invalidate.value = initInvalidate.value;
+  });
+
+  watch(invalidate, () => {
+    emit("update:invalidate", invalidate.value);
   });
 
   onUnmounted(() => {
