@@ -158,10 +158,12 @@ const t = localize;
         <template #value>
           <v-autocomplete
             v-model="editScriptFile"
+            :data-source="scriptFileDataSource"
+            display-field="text"
+            value-field="value"
             :placeholder="t('editor.sidebar.scriptHint')"
             :loading-message="t('editor.autocomplete.loading')"
             :empty-result-message="t('editor.autocomplete.emptyResult')"
-            :data-source="scriptFileDataSource"
             icon-clickable
             @icon-click="onScriptFileClick"
           >
