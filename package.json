@@ -1,5 +1,5 @@
 {
-  "name": "@ruleenginejs/ruleengine-editor",
+  "name": "@ruleenginejs/editor",
   "version": "1.2.0",
   "description": "Rule Engine Editor",
   "main": "dist/ruleengine-editor.umd.js",
@@ -18,7 +18,7 @@
     "vue": "^3.2.26"
   },
   "dependencies": {
-    "@ruleenginejs/ruleengine-ui": "^1.1.10",
+    "@ruleenginejs/ui": "^1.2.0",
     "debounce": "^1.2.1",
     "is-plain-object": "^5.0.0",
     "merge": "^2.1.1"

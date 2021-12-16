@@ -17,7 +17,7 @@ import {
   VLayout,
   VActionList,
   VActionItem
-} from "@ruleenginejs/ruleengine-ui";
+} from "@ruleenginejs/ui";
 import { toRefs } from "vue";
 import useNodeProps from "./composables/use-node-props";
 import useNodePortProps from "./composables/use-node-port-props";

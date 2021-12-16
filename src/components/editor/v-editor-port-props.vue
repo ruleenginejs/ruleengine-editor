@@ -16,7 +16,7 @@ import {
   VInput,
   VCheckbox,
   VLayout
-} from "@ruleenginejs/ruleengine-ui";
+} from "@ruleenginejs/ui";
 
 const props = defineProps({
   model: {

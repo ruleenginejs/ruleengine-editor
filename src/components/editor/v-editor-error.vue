@@ -9,7 +9,7 @@
 <script>
 import { computed, toRefs } from "vue";
 import localize from "@/utils/localize";
-import { VLayout } from "@ruleenginejs/ruleengine-ui";
+import { VLayout } from "@ruleenginejs/ui";
 
 export default {
   name: "v-editor-error",

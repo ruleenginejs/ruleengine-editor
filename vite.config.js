@@ -19,7 +19,7 @@ export default defineConfig({
       external: [
         'vue',
         'debounce',
-        '@ruleenginejs/ruleengine-ui',
+        '@ruleenginejs/ui',
         'is-plain-object',
         'merge'
       ],
@@ -27,7 +27,7 @@ export default defineConfig({
         globals: {
           vue: 'Vue',
           debounce: 'debounce',
-          '@ruleenginejs/ruleengine-ui': 'RuleEngineUI',
+          '@ruleenginejs/ui': 'RuleEngineUI',
           'is-plain-object': 'isPlainObject',
           merge: 'merge'
         },

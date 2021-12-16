@@ -10,7 +10,7 @@ import {
   VActionList,
   VActionItem,
   VDraggable,
-} from "@ruleenginejs/ruleengine-ui";
+} from "@ruleenginejs/ui";
 import useToolbar from "./composables/use-toolbar";
 import { toRefs } from "vue";
 

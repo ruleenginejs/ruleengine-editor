@@ -11,7 +11,7 @@ import {
   VActionItem,
   VSelectBox,
   VLabel
-} from "@ruleenginejs/ruleengine-ui";
+} from "@ruleenginejs/ui";
 import localize from "@/utils/localize";
 
 defineProps({

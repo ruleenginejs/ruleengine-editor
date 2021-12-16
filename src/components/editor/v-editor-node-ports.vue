@@ -12,7 +12,7 @@ import {
   VCheckbox,
   VLayout,
   VActionItem
-} from "@ruleenginejs/ruleengine-ui";
+} from "@ruleenginejs/ui";
 import localize from "@/utils/localize";
 
 const props = defineProps({

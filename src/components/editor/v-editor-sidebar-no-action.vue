@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { VLayout } from "@ruleenginejs/ruleengine-ui";
+import { VLayout } from "@ruleenginejs/ui";
 
 export default {
   name: "v-editor-sidebar-no-action",

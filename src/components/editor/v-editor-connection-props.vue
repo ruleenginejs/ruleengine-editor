@@ -14,7 +14,7 @@ import {
   VFieldLayout,
   VLabel,
   VSelectBox
-} from "@ruleenginejs/ruleengine-ui";
+} from "@ruleenginejs/ui";
 
 const props = defineProps({
   model: {
