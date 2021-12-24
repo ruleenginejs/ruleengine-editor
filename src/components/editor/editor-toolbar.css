@@ -1,0 +1,4 @@
+.v-editor-toolbar__action-item {
+  /* visual styles */
+  @apply text-16sp;
+}

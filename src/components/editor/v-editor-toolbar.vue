@@ -95,6 +95,7 @@ defineExpose({
 
 <template>
   <v-floating-toolbar
+    class="v-editor-toolbar"
     :container="container"
     :fixed="fixed"
     :vertical="vertical"
@@ -112,6 +113,7 @@ defineExpose({
           @drag-end="onActionClick(action, $event)"
         >
           <v-action-item
+            class="v-editor-toolbar__action-item"
             :icon="isString(action.icon) ? action.icon : null"
             :title="action.title"
             :disabled="action.disabled"
@@ -124,6 +126,7 @@ defineExpose({
         </v-draggable>
         <v-action-item
           v-else-if="action.visible"
+          class="v-editor-toolbar__action-item"
           :icon="isString(action.icon) ? action.icon : null"
           :title="action.title"
           :disabled="action.disabled"
@@ -138,3 +141,7 @@ defineExpose({
     </v-action-list>
   </v-floating-toolbar>
 </template>
+
+<style>
+@import "editor-toolbar";
+</style>
