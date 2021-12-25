@@ -5,7 +5,7 @@
 ## Installation
 
 ```bash
-npm install @ruleenginejs/editor
+npm install @ruleenginejs/editor @ruleenginejs/ui
 ```
 
 Add [codicons](https://github.com/microsoft/vscode-codicons)
@@ -27,6 +27,7 @@ import App from './App.vue'
 import RuleEngineEditor from "@ruleenginejs/editor"
 // Add css styles
 import "@ruleenginejs/ui/dist/normalize.css"
+import "@ruleenginejs/ui/dist/style.css"
 import "@ruleenginejs/ui/dist/dark.theme.css"
 import "@ruleenginejs/editor/dist/style.css"
 

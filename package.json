@@ -14,11 +14,11 @@
     "push": "git push origin master --tags"
   },
   "peerDependencies": {
+    "@ruleenginejs/ui": "^1.2.1",
     "@vscode/codicons": "^0.0.27",
     "vue": "^3.2.26"
   },
   "dependencies": {
-    "@ruleenginejs/ui": "^1.2.1",
     "debounce": "^1.2.1",
     "is-plain-object": "^5.0.0",
     "merge": "^2.1.1"
@@ -30,7 +30,6 @@
     "eslint-plugin-vue": "^8.2.0",
     "postcss": "^8.4.5",
     "postcss-import": "^14.0.2",
-    "postcss-nesting": "^10.0.3",
     "tailwindcss": "^2.2.19",
     "vite": "^2.7.2"
   },
