@@ -77,7 +77,10 @@ export function createChanges(appliedCommandDef, reverseCommandDef) {
 
 export function applyEditCommands(model, editCommandDefs) {
   const commands = createEditCommands(editCommandDefs);
-  return commands.map(c => c.apply(model)).filter(val => !!val);
+  return commands
+    .map(c => c.apply(model))
+    .flat()
+    .filter(val => !!val);
 }
 
 export function createEditCommands(editCommandDefs) {
