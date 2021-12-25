@@ -50,15 +50,13 @@ const props = defineProps({
   showActionLabel: {
     type: Boolean,
     default: false
-  },
-  showAdditionalMenu: {
-    type: Boolean,
-    default: true
   }
 });
 const emit = defineEmits([
   "action-click",
-  "update:invalidate"
+  "update:invalidate",
+  "update:vertical",
+  "update:showActionLabel"
 ]);
 
 const {

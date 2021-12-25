@@ -60,14 +60,20 @@ export default function useToolbar({
     vertical.value = initVertical.value;
   });
 
+  watch(vertical, () => {
+    emit("update:vertical", vertical.value);
+  });
+
   watch(initShowActionLabel, () => {
     showActionLabel.value = initShowActionLabel.value;
   });
 
   watch(showActionLabel, () => {
+    emit("update:showActionLabel", showActionLabel.value);
+
     nextTick(() => {
       invalidate.value = true;
-    })
+    });
   });
 
   watch(initInvalidate, () => {
