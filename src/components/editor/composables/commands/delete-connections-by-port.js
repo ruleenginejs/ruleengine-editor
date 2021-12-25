@@ -1,11 +1,11 @@
 import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
 import { CreateNewConnection } from "./create-new-connection";
 
-export class DeleteConnectionByPort extends EditCommand {
-  static NAME = "delete-connection-by-port";
+export class DeleteConnectionsByPort extends EditCommand {
+  static NAME = "delete-connections-by-port";
 
   constructor(payload) {
-    super(DeleteConnectionByPort.NAME, payload);
+    super(DeleteConnectionsByPort.NAME, payload);
   }
 
   doApply(model, payload) {
@@ -18,22 +18,26 @@ export class DeleteConnectionByPort extends EditCommand {
     const port = node.getPortById(portId);
     if (!port) return null;
 
-    const connection = model.getConnectionByNodeAndPort(node.id, port.id, port.type);
-    if (!connection) return null;
+    const connections = model.getConnectionsByNodeAndPort(node.id, port.id, port.type);
+    if (connections.length === 0) return null;
 
-    model.deleteConnectionById(connection.id);
-    return this._createChanges(node.id, port.id, connection.definition);
+    const changes = [];
+    for (let connection of connections) {
+      model.deleteConnectionById(connection.id);
+      changes.push(this._createChanges(node.id, port.id, connection.definition));
+    }
+    return changes;
   }
 
   _createChanges(nodeId, portId, connectionDef) {
     return createChanges(
-      DeleteConnectionByPort.createDef(nodeId, portId),
+      DeleteConnectionsByPort.createDef(nodeId, portId),
       CreateNewConnection.createDef(connectionDef)
     )
   }
 
   static createDef(nodeId, portId) {
-    return createDefinition(DeleteConnectionByPort.NAME, {
+    return createDefinition(DeleteConnectionsByPort.NAME, {
       nodeId,
       portId
     })

@@ -4,7 +4,7 @@ import { isDefined } from "@/utils/types";
 import { DeleteNode } from "./commands/delete-node";
 import { DeleteConnection } from "./commands/delete-connection";
 import { DeletePort } from "./commands/delete-port";
-import { DeleteConnectionByPort } from "./commands/delete-connection-by-port";
+import { DeleteConnectionsByPort } from "./commands/delete-connections-by-port";
 
 const POSITION_TOLERANCE = 0.01;
 
@@ -79,7 +79,7 @@ export class EditorOperations {
         editOperations.push(DeleteConnection.createDef(modelObject.definition));
         break;
       case GraphModelType.Port:
-        editOperations.push(DeleteConnectionByPort.createDef(modelObject.nodeId, modelObject.id));
+        editOperations.push(DeleteConnectionsByPort.createDef(modelObject.nodeId, modelObject.id));
         editOperations.push(DeletePort.createDef(modelObject.nodeId, modelObject.id));
         break;
     }

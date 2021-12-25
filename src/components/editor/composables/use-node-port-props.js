@@ -2,7 +2,7 @@ import { computed, reactive, watch } from "vue";
 import { ChangePortDisabled } from "./commands/change-port-disabled";
 import { ChangePortName } from "./commands/change-port-name";
 import { CreatePort } from "./commands/create-port";
-import { DeleteConnectionByPort } from "./commands/delete-connection-by-port";
+import { DeleteConnectionsByPort } from "./commands/delete-connections-by-port";
 import { DeletePort } from "./commands/delete-port";
 import { createEditHandler } from "./edit-handler";
 import { GraphPortType } from "./graph-port-type";
@@ -19,7 +19,7 @@ export default function useNodePortProps({ nodeModel, emit, editDelay }) {
   const editDisabledHandler = createEditPropertyHandler(ChangePortDisabled);
   const removePortHandler = createEditHandler(
     (port) => [
-      DeleteConnectionByPort.createDef(port.nodeId, port.id),
+      DeleteConnectionsByPort.createDef(port.nodeId, port.id),
       DeletePort.createDef(port.nodeId, port.id)
     ],
     emit

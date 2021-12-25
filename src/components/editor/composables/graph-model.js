@@ -365,21 +365,39 @@ export class GraphModel extends SelectableModel {
     return !!this.getConnectionByNodeAndPort(nodeId, portId, portType);
   }
 
-  getConnectionByNodeAndPort(nodeId, portId, portType = null) {
+  _createConnectionByNodeAndPortPredicate(nodeId, portId, portType = null) {
     const _in = portType === GraphPortType.IN;
     const out = portType === GraphPortType.OUT;
     const both = !isDefined(portType);
 
+    return (connection) => (
+      (both && connection.isSrcOrDest(nodeId, portId))
+      || (out && connection.isSrc(nodeId, portId))
+      || (_in && connection.isDest(nodeId, portId))
+    );
+  }
+
+  getConnectionByNodeAndPort(nodeId, portId, portType = null) {
+    const predicate = this._createConnectionByNodeAndPortPredicate(nodeId, portId, portType);
     for (let i = 0, len = this.connections.length; i < len; i++) {
       const connection = this.connections[i];
-
-      if ((both && connection.isSrcOrDest(nodeId, portId))
-        || (out && connection.isSrc(nodeId, portId))
-        || (_in && connection.isDest(nodeId, portId))) {
+      if (predicate(connection)) {
         return connection;
       }
     }
     return null;
+  }
+
+  getConnectionsByNodeAndPort(nodeId, portId, portType = null) {
+    const result = [];
+    const predicate = this._createConnectionByNodeAndPortPredicate(nodeId, portId, portType);
+    for (let i = 0, len = this.connections.length; i < len; i++) {
+      const connection = this.connections[i];
+      if (predicate(connection)) {
+        result.push(connection);
+      }
+    }
+    return result;
   }
 
   outConnectionExistsByPortName(nodeId, outPortName) {
