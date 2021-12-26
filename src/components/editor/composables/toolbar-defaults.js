@@ -39,16 +39,6 @@ export const defaultActionDefinitions = [
     order: 10
   },
   {
-    id: defaultActionKey.addEnd,
-    icon: markRaw(VIconEndNode),
-    title: localize("editor.action.addEnd"),
-    label: localize("editor.action.addEnd"),
-    disabled: false,
-    visible: true,
-    draggable: true,
-    order: 20
-  },
-  {
     id: defaultActionKey.addError,
     icon: markRaw(VIconErrorNode),
     title: localize("editor.action.addError"),
@@ -67,6 +57,16 @@ export const defaultActionDefinitions = [
     visible: true,
     draggable: true,
     order: 40
+  },
+  {
+    id: defaultActionKey.addEnd,
+    icon: markRaw(VIconEndNode),
+    title: localize("editor.action.addEnd"),
+    label: localize("editor.action.addEnd"),
+    disabled: false,
+    visible: true,
+    draggable: true,
+    order: 41
   },
   {
     id: defaultActionKey.fitCanvas,
