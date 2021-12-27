@@ -42,7 +42,7 @@ export default {
     },
     editDelay: {
       type: Number,
-      default: 500
+      default: 300
     },
     provider: {
       type: Object,
