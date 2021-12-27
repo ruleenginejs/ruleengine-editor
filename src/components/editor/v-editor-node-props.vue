@@ -131,13 +131,18 @@ const t = localize;
         <template #label></template>
         <template #value>
           <v-layout gutter="sm" h-center>
-            <v-checkbox
-              v-model="editUseCustomColor"
-              :id="genElementId('checkbox', 'use-custom-color')"
-            />
-            <v-label
-              :for="genElementId('checkbox', 'use-custom-color')"
-            >{{ t("editor.hint.useCustomColor") }}</v-label>
+            <v-layout not-shrink>
+              <v-checkbox
+                v-model="editUseCustomColor"
+                :id="genElementId('checkbox', 'use-custom-color')"
+              />
+            </v-layout>
+            <v-layout all-distr no-overflow>
+              <v-label
+                truncate
+                :for="genElementId('checkbox', 'use-custom-color')"
+              >{{ t("editor.hint.useCustomColor") }}</v-label>
+            </v-layout>
           </v-layout>
         </template>
       </v-field-layout>
