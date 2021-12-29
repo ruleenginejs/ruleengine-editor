@@ -8,6 +8,7 @@ import { createPort, DEFAULT_PORT } from "./graph-port-model";
 import { SelectableModel } from "./selectable-model";
 import { GraphPortType } from "./graph-port-type";
 import { createInstance, updateNextUid } from "./graph-base-model";
+import { PACKAGE_PREFIX, posixIsAbsolute, RELATIVE_PREFIX, replaceBackslash, winIsAbsolute } from "@/utils/path";
 
 export class GraphNodeModel extends SelectableModel {
   constructor(options) {
@@ -64,11 +65,7 @@ export class GraphNodeModel extends SelectableModel {
       this.handlerSource = null;
     }
 
-    if (notEmptyString(options.handlerFile)) {
-      this.handlerFile = options.handlerFile;
-    } else {
-      this.handlerFile = null;
-    }
+    this.handlerFile = this._parseHandlerFile(options.handlerFile);
 
     if (this.isErrorNode) {
       this.titleLength = 2;
@@ -124,7 +121,7 @@ export class GraphNodeModel extends SelectableModel {
 
     if (!this.isNavNode) {
       if (isDefined(this.handlerFile)) {
-        value.handlerFile = this.handlerFile;
+        value.handlerFile = this._buildHandlerFile();
       } else if (isDefined(this.handler)) {
         value.handler = this.handler;
       }
@@ -158,6 +155,20 @@ export class GraphNodeModel extends SelectableModel {
     return {
       in: this.inPorts.map(port => port.getValue()),
       out: this.outPorts.map(port => port.getValue())
+    }
+  }
+
+  _buildHandlerFile() {
+    if (!isDefined(this.handlerFile)) {
+      return null
+    } else if (this.handlerFile.startsWith(PACKAGE_PREFIX)) {
+      return this.handlerFile.slice(PACKAGE_PREFIX.length);
+    } else if (this.handlerFile.startsWith(RELATIVE_PREFIX)) {
+      return this.handlerFile;
+    } else if (posixIsAbsolute(this.handlerFile) || winIsAbsolute(this.handlerFile)) {
+      return this.handlerFile;
+    } else {
+      return `${RELATIVE_PREFIX}${this.handlerFile}`;
     }
   }
 
@@ -234,6 +245,18 @@ export class GraphNodeModel extends SelectableModel {
     }
 
     return null;
+  }
+
+  _parseHandlerFile(handlerFile) {
+    if (notEmptyString(handlerFile)) {
+      handlerFile = replaceBackslash(handlerFile);
+      if (!handlerFile.startsWith(RELATIVE_PREFIX)) {
+        handlerFile = `${PACKAGE_PREFIX}${handlerFile}`;
+      }
+      return handlerFile;
+    } else {
+      return null;
+    }
   }
 
   _getNameFromType(type) {
@@ -368,7 +391,7 @@ export class GraphNodeModel extends SelectableModel {
       return oldValue;
     }
     if (notEmptyString(filePath)) {
-      this.handlerFile = filePath;
+      this.handlerFile = replaceBackslash(filePath);
     } else {
       this.handlerFile = null;
     }
