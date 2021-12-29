@@ -18,7 +18,8 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   const useCustomColor = ref(false);
   const colorOptions = reactive(getColorOptions());
   const scriptFile = ref(nodeModel.value.handlerFile);
-  const scriptFileDataSource = computed(() => provider.value?.suggestScriptFiles)
+  const scriptFileDataSource = computed(() => provider.value?.suggestScriptFiles);
+  const scriptFileSearchDelay = computed(() => provider.value?.getCompletionDelay?.());
 
   const canShowName = computed(() => !nodeModel.value.isNavNode);
   const canShowHandler = computed(() => nodeModel.value.nodeType === GraphNodeType.Single);
@@ -140,6 +141,7 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
     useCustomColor,
     colorOptions,
     scriptFileDataSource,
+    scriptFileSearchDelay,
     onScriptFileClick,
     genElementId
   }

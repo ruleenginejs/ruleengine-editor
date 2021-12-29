@@ -29,7 +29,7 @@
   "editor.sidebar.removeConnection": "Remove Connection",
   "editor.sidebar.addPort": "Add Port",
   "editor.sidebar.disabled": "Disabled",
-  "editor.sidebar.scriptHint": "File path or package",
+  "editor.sidebar.scriptHint": "Search files or ~package",
   "editor.sidebar.newFile": "New File",
   "editor.sidebar.openFile": "Open File",
   "editor.hint.name": "Name",

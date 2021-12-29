@@ -64,6 +64,7 @@ const {
   useCustomColor,
   colorOptions,
   scriptFileDataSource,
+  scriptFileSearchDelay,
   onScriptFileClick,
   genElementId
 } = useNodeProps({
@@ -164,6 +165,7 @@ const t = localize;
           <v-autocomplete
             v-model="editScriptFile"
             :data-source="scriptFileDataSource"
+            :search-timeout="scriptFileSearchDelay"
             display-field="text"
             value-field="value"
             :placeholder="t('editor.sidebar.scriptHint')"
