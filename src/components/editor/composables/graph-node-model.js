@@ -2,7 +2,7 @@ import { computed, nextTick } from "vue"
 import merge from "merge";
 import localize from "@/utils/localize";
 import { round } from "@/utils/numbers";
-import { isDefined, isPlainObject, notEmptyString } from "@/utils/types";
+import { emptyString, isDefined, isPlainObject, notEmptyString } from "@/utils/types";
 import { GraphNodeType, isNavNodeType, validateNodeType } from "./graph-node-type";
 import { createPort, DEFAULT_PORT } from "./graph-port-model";
 import { SelectableModel } from "./selectable-model";
@@ -159,8 +159,8 @@ export class GraphNodeModel extends SelectableModel {
   }
 
   _buildHandlerFile() {
-    if (!isDefined(this.handlerFile)) {
-      return null
+    if (emptyString(this.handlerFile)) {
+      return null;
     } else if (this.handlerFile.startsWith(PACKAGE_PREFIX)) {
       return this.handlerFile.slice(PACKAGE_PREFIX.length);
     } else if (this.handlerFile.startsWith(RELATIVE_PREFIX)) {
@@ -216,6 +216,35 @@ export class GraphNodeModel extends SelectableModel {
     return this._toPoint();
   }
 
+  _parseHeaderColor(canvasOptions) {
+    if (!isPlainObject(canvasOptions)) {
+      return null;
+    }
+
+    const color = canvasOptions.color;
+    if (notEmptyString(color)) {
+      return color;
+    }
+
+    return null;
+  }
+
+  _parseHandlerFile(handlerFile) {
+    if (emptyString(handlerFile)) {
+      return null;
+    }
+    handlerFile = replaceBackslash(handlerFile);
+    if (handlerFile.startsWith(PACKAGE_PREFIX)) {
+      return handlerFile;
+    } else if (handlerFile.startsWith(RELATIVE_PREFIX)) {
+      return handlerFile.slice(RELATIVE_PREFIX.length);
+    } else if (posixIsAbsolute(handlerFile) || winIsAbsolute(handlerFile)) {
+      return handlerFile;
+    } else {
+      return `${PACKAGE_PREFIX}${handlerFile}`;
+    }
+  }
+
   _toPoint(point) {
     if (!Array.isArray(point)) {
       return { x: 0, y: 0 };
@@ -232,31 +261,6 @@ export class GraphNodeModel extends SelectableModel {
     }
 
     return { x, y };
-  }
-
-  _parseHeaderColor(canvasOptions) {
-    if (!isPlainObject(canvasOptions)) {
-      return null;
-    }
-
-    const color = canvasOptions.color;
-    if (notEmptyString(color)) {
-      return color;
-    }
-
-    return null;
-  }
-
-  _parseHandlerFile(handlerFile) {
-    if (notEmptyString(handlerFile)) {
-      handlerFile = replaceBackslash(handlerFile);
-      if (!handlerFile.startsWith(RELATIVE_PREFIX)) {
-        handlerFile = `${PACKAGE_PREFIX}${handlerFile}`;
-      }
-      return handlerFile;
-    } else {
-      return null;
-    }
   }
 
   _getNameFromType(type) {
@@ -385,17 +389,17 @@ export class GraphNodeModel extends SelectableModel {
     return oldName;
   }
 
-  changeHandlerFilePath(filePath) {
+  changeHandlerFile(filePath) {
     const oldValue = this.handlerFile;
     if (this.isNavNode) {
-      return oldValue;
+      return { oldValue, newValue: this.handlerFile };
     }
     if (notEmptyString(filePath)) {
       this.handlerFile = replaceBackslash(filePath);
     } else {
       this.handlerFile = null;
     }
-    return oldValue;
+    return { oldValue, newValue: this.handlerFile };
   }
 
   changeColor(newValue) {
@@ -405,10 +409,7 @@ export class GraphNodeModel extends SelectableModel {
     } else {
       this.headerColor = null;
     }
-    return {
-      oldValue,
-      newValue: this.headerColor
-    }
+    return { oldValue, newValue: this.headerColor }
   }
 }
 

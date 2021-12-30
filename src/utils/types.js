@@ -8,6 +8,10 @@ export function notEmptyString(value) {
   return typeof value === "string" && value.length > 0;
 }
 
+export function emptyString(value) {
+  return !notEmptyString(value);
+}
+
 export function isString(value) {
   return typeof value === "string";
 }

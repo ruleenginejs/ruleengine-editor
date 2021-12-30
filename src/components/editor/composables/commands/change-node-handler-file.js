@@ -8,9 +8,7 @@ export class ChangeNodeHandlerFile extends ChangeNodeProperty {
   }
 
   changeProperty(node, value) {
-    const oldValue = node.changeHandlerFilePath(value);
-    const newValue = node.handlerFile;
-    return { oldValue, newValue };
+    return node.changeHandlerFile(value);
   }
 
   static createDef(nodeId, value) {
