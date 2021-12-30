@@ -1,15 +1,25 @@
-export const GraphNodeHeaderColor = Object.freeze({
-  Blue: "blue",
-  Green: "green"
-});
+const _colorPreset = [
+  "blue",
+  "brown",
+  "green",
+  "indigo",
+  "orange",
+  "pink",
+  "purple",
+  "red",
+  "teal",
+  "yellow"
+];
 
-const _presetColors = Object.keys(GraphNodeHeaderColor)
-  .map(key => GraphNodeHeaderColor[key]);
+const _colorPresetMap = _colorPreset.reduce((res, val) => {
+  res[val] = true;
+  return res;
+}, {});
 
-export function isColorFromPreset(color) {
-  return _presetColors.indexOf(color) !== -1;
+export function isColorFromPreset(colorName) {
+  return _colorPresetMap[colorName];
 }
 
 export function getColorPreset() {
-  return _presetColors;
+  return _colorPreset;
 }
