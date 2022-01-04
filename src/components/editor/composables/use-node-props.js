@@ -5,10 +5,8 @@ import { ChangeNodeName } from "./commands/change-node-name";
 import { ChangeNodeHandlerFile } from "./commands/change-node-handler-file";
 import { createEditHandler } from "./edit-handler";
 import { getColorPreset, isColorFromPreset } from "./graph-node-color";
-import { ucFirst } from "@/utils/strings";
+import { EMPTY_STRING, ucFirst } from "@/utils/strings";
 import { ChangeNodeColor } from "./commands/change-node-color";
-
-const EMPTY_STRING = "";
 
 export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   const sectionName = computed(() => {
@@ -118,7 +116,7 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
     if (scriptFile.value) {
       provider.value?.openScriptFile?.(scriptFile.value)
     } else {
-      provider.value?.newScriptFile?.();
+      provider.value?.newScriptFile?.(editName.value);
     }
   }
 
