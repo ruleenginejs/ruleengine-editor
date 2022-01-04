@@ -5,21 +5,27 @@ import { validateLink } from "./link-rules";
 import { createNewConnection } from "./new-connection";
 import { ChangeNodePosition } from "./commands/change-node-position";
 import { win } from "@/utils/platform";
+import clamp from "@/utils/clamp";
 
 const WIN_ZOOM_INTENSITY = 0.3;
+const DEFAULT_ZOOM_INTENSITY = 0.8;
+const MIN_MOVE_INTENSITY = 0.15;
+const MAX_MOVE_INTENSITY = 0.4;
 
 class EditorGraph {
   constructor({
     model,
     viewport,
     zoom,
+    minZoom,
+    maxZoom,
     resizeDelay,
     emit
   }) {
     this.model = model;
     this.emit = emit;
     this.canvas = ref(null);
-    this.zoomIntensity = ref(win ? WIN_ZOOM_INTENSITY : undefined);
+    this.zoomIntensity = ref(win ? WIN_ZOOM_INTENSITY : DEFAULT_ZOOM_INTENSITY);
 
     this.onObjectSelected = this.onObjectSelected.bind(this);
     this.invalidateCanvasSize = this.invalidateCanvasSize.bind(this);
@@ -29,14 +35,19 @@ class EditorGraph {
     this.onNewLink = this.onNewLink.bind(this);
     this.onResize = debounce(this.invalidateCanvasSize, resizeDelay.value);
 
-    this.initComputed({ viewport, zoom, model });
+    this.initComputed({
+      viewport,
+      zoom,
+      minZoom,
+      maxZoom
+    });
 
     onMounted(() => {
       nextTick(this.onCreated);
     });
   }
 
-  initComputed({ viewport, zoom }) {
+  initComputed({ viewport, zoom, minZoom, maxZoom }) {
     this.cvViewport = computed({
       get: () => viewport.value,
       set: (val) => this.emit("update:viewport", val)
@@ -45,6 +56,22 @@ class EditorGraph {
     this.cvZoom = computed({
       get: () => zoom.value,
       set: (val) => this.emit("update:zoom", val)
+    });
+
+    const cvMoveIntensityDelta = computed(() => {
+      const minZoomValue = (minZoom.value ?? 0);
+      const maxZoomValue = (maxZoom.value ?? 0);
+      let zoomDelta = maxZoomValue - minZoomValue;
+      if (zoomDelta === 0) return 0;
+      return (MAX_MOVE_INTENSITY - MIN_MOVE_INTENSITY) / zoomDelta;
+    });
+
+    this.cvMoveIntensity = computed(() => {
+      const minZoomValue = (minZoom.value ?? 0);
+      const delta = cvMoveIntensityDelta.value;
+      if (delta === 0) return MAX_MOVE_INTENSITY;
+      const value = (zoom.value - minZoomValue) * delta + MIN_MOVE_INTENSITY;
+      return clamp(MIN_MOVE_INTENSITY, value, MAX_MOVE_INTENSITY);
     });
   }
 

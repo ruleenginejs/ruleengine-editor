@@ -1,5 +1,6 @@
 <template>
   <v-graph-canvas
+    ref="canvas"
     v-model:viewport="cvViewport"
     v-model:zoom="cvZoom"
     :selected="model.selected"
@@ -8,8 +9,8 @@
     :edge-sizes="edgeSizes"
     :resize-delay="resizeDelay"
     :zoom-intensity="zoomIntensity"
+    :move-intensity="cvMoveIntensity"
     @update:selected="onObjectSelected(model, $event)"
-    ref="canvas"
   >
     <template #node>
       <v-graph-circle-node
@@ -154,13 +155,27 @@ export default {
       default: undefined
     }
   },
-  emits: ["update:viewport", "update:zoom", "created"],
+  emits: [
+    "update:viewport",
+    "update:zoom",
+    "created"
+  ],
   setup(props, { emit }) {
-    const { model, viewport, zoom, resizeDelay } = toRefs(props);
+    const {
+      model,
+      viewport,
+      zoom,
+      minZoom,
+      maxZoom,
+      resizeDelay
+    } = toRefs(props);
+
     const graph = useEditorGraph({
       model,
       viewport,
       zoom,
+      minZoom,
+      maxZoom,
       resizeDelay,
       emit
     });
@@ -173,6 +188,7 @@ export default {
       circleNodes,
       stepNodes,
       zoomIntensity,
+      cvMoveIntensity,
       onObjectSelected,
       onChangeNodePosition,
       linkRule,
@@ -188,6 +204,7 @@ export default {
       circleNodes,
       stepNodes,
       zoomIntensity,
+      cvMoveIntensity,
       onObjectSelected,
       onChangeNodePosition,
       linkRule,
