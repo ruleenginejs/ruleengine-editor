@@ -1,4 +1,5 @@
 import { computed, ref, reactive, watch } from "vue";
+import debounce from "debounce";
 import localize from "@/utils/localize";
 import { getNodeTypeName, GraphNodeType } from "./graph-node-type";
 import { ChangeNodeName } from "./commands/change-node-name";
@@ -8,6 +9,8 @@ import { getColorPreset, isColorFromPreset } from "./graph-node-color";
 import { EMPTY_STRING, ucFirst } from "@/utils/strings";
 import { ChangeNodeColor } from "./commands/change-node-color";
 
+const UPDATE_SCRIPT_FILE_EXISTS_DELAY = 300;
+
 export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   const sectionName = computed(() => {
     return localize("editor.sidebar.nodeSection", getNodeTypeName(nodeModel.value.nodeType));
@@ -16,8 +19,10 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   const useCustomColor = ref(false);
   const colorOptions = reactive(getColorOptions());
   const scriptFile = ref(nodeModel.value.handlerFile);
+  const isScriptFileExists = ref(false);
   const scriptFileDataSource = computed(() => provider.value?.suggestScriptFiles);
   const scriptFileSearchDelay = computed(() => provider.value?.getCompletionDelay?.());
+  const scriptFileExistsHandler = debounce(updateScriptFileExists, UPDATE_SCRIPT_FILE_EXISTS_DELAY);
 
   const canShowName = computed(() => !nodeModel.value.isNavNode);
   const canShowHandler = computed(() => nodeModel.value.nodeType === GraphNodeType.Single);
@@ -33,6 +38,10 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
 
   watch(() => nodeModel.value.handlerFile, () => {
     scriptFile.value = nodeModel.value.handlerFile;
+  });
+
+  watch(scriptFile, () => {
+    scriptFileExistsHandler(scriptFile.value);
   });
 
   const editName = computed({
@@ -113,16 +122,29 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   }
 
   function onScriptFileClick() {
-    if (scriptFile.value) {
-      provider.value?.openScriptFile?.(scriptFile.value)
+    if (isScriptFileExists.value) {
+      provider.value?.openScriptFile?.(scriptFile.value);
     } else {
-      provider.value?.newScriptFile?.(editName.value);
+      const { id, name } = nodeModel.value;
+      const opt = { nodeId: id, name, filePath: scriptFile.value };
+      provider.value?.newScriptFile?.(opt);
+    }
+  }
+
+  async function updateScriptFileExists(filePath) {
+    const scriptFileExists = provider.value?.scriptFileExists;
+    if (scriptFileExists) {
+      isScriptFileExists.value = await scriptFileExists(filePath);
+    } else {
+      isScriptFileExists.value = !!filePath;
     }
   }
 
   function genElementId(ns, key) {
     return `v-${ns}_${key}_${nodeModel.value.id}`;
   }
+
+  updateScriptFileExists(scriptFile.value);
 
   return {
     sectionName,
@@ -140,6 +162,7 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
     colorOptions,
     scriptFileDataSource,
     scriptFileSearchDelay,
+    isScriptFileExists,
     onScriptFileClick,
     genElementId
   }

@@ -65,6 +65,7 @@ const {
   colorOptions,
   scriptFileDataSource,
   scriptFileSearchDelay,
+  isScriptFileExists,
   onScriptFileClick,
   genElementId
 } = useNodeProps({
@@ -176,11 +177,11 @@ const t = localize;
           >
             <template #icon>
               <span
-                v-if="!editScriptFile"
-                class="codicon codicon-new-file"
-                :title="t('editor.sidebar.newFile')"
+                v-if="isScriptFileExists"
+                class="codicon codicon-go-to-file"
+                :title="t('editor.sidebar.openFile')"
               ></span>
-              <span v-else class="codicon codicon-go-to-file" :title="t('editor.sidebar.openFile')"></span>
+              <span v-else class="codicon codicon-new-file" :title="t('editor.sidebar.newFile')"></span>
             </template>
           </v-autocomplete>
         </template>
