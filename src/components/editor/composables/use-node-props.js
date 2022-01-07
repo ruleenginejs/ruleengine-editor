@@ -121,13 +121,13 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
     }
   }
 
-  function onScriptFileClick() {
+  async function onScriptFileClick() {
     if (isScriptFileExists.value) {
       provider.value?.openScriptFile?.(scriptFile.value);
-    } else {
+    } else if (provider.value?.newScriptFile) {
       const { id, name } = nodeModel.value;
       const opt = { nodeId: id, name, filePath: scriptFile.value };
-      provider.value?.newScriptFile?.(opt);
+      editScriptFile.value = await provider.value.newScriptFile(opt);
     }
   }
 
