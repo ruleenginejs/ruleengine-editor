@@ -127,7 +127,10 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
     } else if (provider.value?.newScriptFile) {
       const { id, name } = nodeModel.value;
       const opt = { nodeId: id, name, filePath: scriptFile.value };
-      editScriptFile.value = await provider.value.newScriptFile(opt);
+      const result = await provider.value.newScriptFile(opt);
+      if (result !== undefined) {
+        editScriptFile.value = result;
+      }
     }
   }
 
