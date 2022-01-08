@@ -9,7 +9,7 @@
     :edge-sizes="edgeSizes"
     :resize-delay="resizeDelay"
     :zoom-intensity="zoomIntensity"
-    :move-intensity="cvMoveIntensity"
+    :move-intensity="moveIntensity"
     @update:selected="onObjectSelected(model, $event)"
   >
     <template #node>
@@ -165,8 +165,6 @@ export default {
       model,
       viewport,
       zoom,
-      minZoom,
-      maxZoom,
       resizeDelay
     } = toRefs(props);
 
@@ -174,8 +172,6 @@ export default {
       model,
       viewport,
       zoom,
-      minZoom,
-      maxZoom,
       resizeDelay,
       emit
     });
@@ -188,7 +184,7 @@ export default {
       circleNodes,
       stepNodes,
       zoomIntensity,
-      cvMoveIntensity,
+      moveIntensity,
       onObjectSelected,
       onChangeNodePosition,
       linkRule,
@@ -204,7 +200,7 @@ export default {
       circleNodes,
       stepNodes,
       zoomIntensity,
-      cvMoveIntensity,
+      moveIntensity,
       onObjectSelected,
       onChangeNodePosition,
       linkRule,
