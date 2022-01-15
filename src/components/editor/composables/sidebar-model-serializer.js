@@ -39,7 +39,7 @@ function serializePortModel(portModel, rootModel) {
     rootModel.getNodeById(portModel.nodeId),
     portModel.id,
     portModel.type
-  )
+  ).map(createPortModel);
   return model;
 }
 
