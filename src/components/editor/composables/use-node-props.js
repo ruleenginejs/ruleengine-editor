@@ -8,8 +8,7 @@ import { createEditHandler } from "./edit-handler";
 import { getColorPreset, isColorFromPreset } from "./graph-node-color";
 import { EMPTY_STRING, ucFirst } from "@/utils/strings";
 import { ChangeNodeColor } from "./commands/change-node-color";
-
-const DEFAULT_SCRIPT_FILE_EXISTS_DELAY = 100;
+import { isDefined } from "@/utils/types";
 
 export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   const sectionName = computed(() => {
@@ -18,12 +17,19 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
 
   const useCustomColor = ref(false);
   const colorOptions = reactive(getColorOptions());
+
   const scriptFile = ref(nodeModel.value.handlerFile);
   const isScriptFileExists = ref(false);
   const scriptFileDataSource = computed(() => provider.value?.suggestScriptFiles);
   const scriptFileSearchDelay = computed(() => provider.value?.getCompletionDelay?.());
-  const scriptFileExistsDelay = computed(() => provider.value?.getCheckExistsDelay?.() ?? DEFAULT_SCRIPT_FILE_EXISTS_DELAY);
-  const scriptFileExistsHandler = computed(() => debounce(updateScriptFileExists, scriptFileExistsDelay.value));
+  const scriptFileExistsDelay = computed(() => provider.value?.getCheckExistsDelay?.());
+  const scriptFileExistsHandler = computed(() => {
+    if (isDefined(scriptFileExistsDelay.value)) {
+      return debounce(updateScriptFileExists, scriptFileExistsDelay.value);
+    } else {
+      return updateScriptFileExists;
+    }
+  });
 
   const canShowName = computed(() => !nodeModel.value.isNavNode);
   const canShowHandler = computed(() => nodeModel.value.nodeType === GraphNodeType.Single);
