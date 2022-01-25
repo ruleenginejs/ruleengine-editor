@@ -1,4 +1,4 @@
-# ruleengine-editor
+# ruleengine-editor [![npm version](https://badge.fury.io/js/%40ruleenginejs%2Feditor.svg)](https://badge.fury.io/js/%40ruleenginejs%2Feditor)
 
 > Pipeline editor made in node graph written in Vue 3.0
 
@@ -8,7 +8,7 @@
 npm install @ruleenginejs/editor @ruleenginejs/ui
 ```
 
-Add [codicons](https://github.com/microsoft/vscode-codicons)
+Add Icons
 
 ```bash
 npm install @vscode/codicons
