@@ -22,10 +22,10 @@ function serializeModel(rootModel, selectedModel = null) {
     return null;
   }
 
-  return serializer(selectedModel, rootModel);
+  return serializer(rootModel, selectedModel);
 }
 
-function serializeNodeModel(nodeModel, rootModel) {
+function serializeNodeModel(rootModel, nodeModel) {
   const model = createNodeModel(nodeModel);
   model.ports = nodeModel.ports.map(createPortModel);
   model.connections = rootModel.getConnectionsForNode(nodeModel.id)
@@ -33,7 +33,7 @@ function serializeNodeModel(nodeModel, rootModel) {
   return model;
 }
 
-function serializePortModel(portModel, rootModel) {
+function serializePortModel(rootModel, portModel) {
   const model = createPortModel(portModel);
   model.otherPorts = getOtherPorts(
     rootModel.getNodeById(portModel.nodeId),
@@ -43,7 +43,7 @@ function serializePortModel(portModel, rootModel) {
   return model;
 }
 
-function serializeConnectionModel(connectionModel) {
+function serializeConnectionModel(rootModel, connectionModel) {
   return createConnectionModel(connectionModel);
 }
 
