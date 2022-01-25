@@ -2,6 +2,14 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path';
 
+const globals = {
+  'vue': 'Vue',
+  'debounce': 'Debounce',
+  '@ruleenginejs/ui': 'RuleEngineUI',
+  'is-plain-object': 'IsPlainObject',
+  'merge': 'Merge'
+};
+
 export default defineConfig({
   plugins: [vue()],
   resolve: {
@@ -16,21 +24,9 @@ export default defineConfig({
       fileName: (format) => `ruleengine-editor.${format}.js`
     },
     rollupOptions: {
-      external: [
-        'vue',
-        'debounce',
-        '@ruleenginejs/ui',
-        'is-plain-object',
-        'merge'
-      ],
+      external: Object.keys(globals),
       output: {
-        globals: {
-          vue: 'Vue',
-          debounce: 'debounce',
-          '@ruleenginejs/ui': 'RuleEngineUI',
-          'is-plain-object': 'isPlainObject',
-          merge: 'merge'
-        },
+        globals,
         exports: 'named'
       }
     }
