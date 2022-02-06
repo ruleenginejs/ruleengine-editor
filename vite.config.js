@@ -6,8 +6,7 @@ const globals = {
   'vue': 'Vue',
   'debounce': 'Debounce',
   '@ruleenginejs/ui': 'RuleEngineUI',
-  'is-plain-object': 'IsPlainObject',
-  'merge': 'Merge'
+  'is-plain-object': 'IsPlainObject'
 };
 
 export default defineConfig({

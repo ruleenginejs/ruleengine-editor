@@ -1,5 +1,4 @@
 import { computed, nextTick } from "vue"
-import merge from "merge";
 import localize from "@/utils/localize";
 import { round } from "@/utils/numbers";
 import { emptyString, isBoolean, isDefined, isPlainObject, isString, notEmptyString } from "@/utils/types";
@@ -131,7 +130,7 @@ export class GraphNodeModel extends SelectableModel {
 
   _buildProps() {
     if (Object.keys(this.props).length > 0) {
-      return merge.recursive(true, this.props, {});
+      return { ...this.props };
     }
     return null;
   }
