@@ -16,6 +16,10 @@ export function isString(value) {
   return typeof value === "string";
 }
 
+export function isBoolean(value) {
+  return typeof value === "boolean";
+}
+
 export function isPlainObject(value) {
   return isDefined(value) && _isPlainObject(value);
 }

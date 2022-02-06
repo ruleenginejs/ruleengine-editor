@@ -1,3 +1,4 @@
+import { toRaw } from "vue";
 import { isDefined } from "@/utils/types";
 import { getModelType, GraphModelType } from "./graph-model-util";
 
@@ -35,7 +36,7 @@ function serializeNodeModel(rootModel, nodeModel) {
 
 function serializePortModel(rootModel, portModel) {
   const model = createPortModel(portModel);
-  model.otherPorts = getOtherPorts(
+  model.otherPorts = findPorts(
     rootModel.getNodeById(portModel.nodeId),
     portModel.id,
     portModel.type
@@ -56,6 +57,7 @@ function createNodeModel(nodeModel) {
     isNavNode: nodeModel.isNavNode,
     handlerFile: nodeModel.handlerFile,
     headerColor: nodeModel.headerColor,
+    props: toRaw(nodeModel.props)
   }
 }
 
@@ -79,7 +81,7 @@ function createConnectionModel(connectionModel) {
   }
 }
 
-function getOtherPorts(node, excludePortId, portType) {
+function findPorts(node, excludePortId, portType) {
   if (!node) return [];
   return node.getPortsByType(portType)
     .filter(p => p.id !== excludePortId);

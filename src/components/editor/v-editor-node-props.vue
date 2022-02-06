@@ -22,10 +22,13 @@ import { toRefs } from "vue";
 import useNodeProps from "./composables/use-node-props";
 import useNodePortProps from "./composables/use-node-port-props";
 import useNodeConnectionProps from "./composables/use-node-connection-props";
+import useNodeUserProps from "./composables/use-node-user-props";
 import localize from "@/utils/localize";
 import { GraphPortType } from "./composables/graph-port-type";
 import VEditorNodePorts from "./v-editor-node-ports.vue";
 import VEditorNodeConnnections from "./v-editor-node-connections.vue";
+import VEditorUserProps from "./v-editor-user-props.vue";
+import useNodeUserPropsConfig from "./composables/use-node-user-props-config";
 
 const props = defineProps({
   model: {
@@ -95,6 +98,22 @@ const {
   onConnectionRemove,
 } = useNodeConnectionProps({
   nodeModel: model,
+  emit,
+  editDelay
+});
+
+const {
+  userPropsConfig,
+  onRefreshUserPropsConfig
+} = useNodeUserPropsConfig({ editScriptFile, provider });
+
+const {
+  userFields,
+  onResetUserFieldDefaults,
+  onUpdateUserField
+} = useNodeUserProps({
+  nodeModel: model,
+  userPropsConfig,
   emit,
   editDelay
 });
@@ -233,6 +252,22 @@ const t = localize;
         @remove="onConnectionRemove"
       />
     </v-fieldset>
-    <v-fieldset v-if="canShowUserProps" :label="t('editor.sidebar.userProperties')" b-border></v-fieldset>
+    <v-fieldset v-if="canShowUserProps" :label="t('editor.sidebar.userProperties')" b-border>
+      <template #label-actions v-if="userFields.length">
+        <v-action-list>
+          <v-action-item
+            icon="refresh"
+            :title="t('editor.sidebar.refresh')"
+            @click="onRefreshUserPropsConfig"
+          />
+          <v-action-item
+            icon="clear-all"
+            :title="t('editor.sidebar.resetDefault')"
+            @click="onResetUserFieldDefaults"
+          />
+        </v-action-list>
+      </template>
+      <v-editor-user-props :fields="userFields" @update="onUpdateUserField" />
+    </v-fieldset>
   </v-sidebar-section>
 </template>

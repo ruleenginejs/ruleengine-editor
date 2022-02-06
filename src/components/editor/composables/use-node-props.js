@@ -23,13 +23,11 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   const scriptFileDataSource = computed(() => provider.value?.suggestScriptFiles);
   const scriptFileSearchDelay = computed(() => provider.value?.getCompletionDelay?.());
   const scriptFileExistsDelay = computed(() => provider.value?.getCheckExistsDelay?.());
-  const scriptFileExistsHandler = computed(() => {
-    if (isDefined(scriptFileExistsDelay.value)) {
-      return debounce(updateScriptFileExists, scriptFileExistsDelay.value);
-    } else {
-      return updateScriptFileExists;
-    }
-  });
+  const scriptFileExistsHandler = computed(() =>
+    isDefined(scriptFileExistsDelay.value)
+      ? debounce(updateScriptFileExists, scriptFileExistsDelay.value)
+      : updateScriptFileExists
+  );
 
   const canShowName = computed(() => !nodeModel.value.isNavNode);
   const canShowHandler = computed(() => nodeModel.value.nodeType === GraphNodeType.Single);

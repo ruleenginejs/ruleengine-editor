@@ -2,7 +2,7 @@ import { computed, nextTick } from "vue"
 import merge from "merge";
 import localize from "@/utils/localize";
 import { round } from "@/utils/numbers";
-import { emptyString, isDefined, isPlainObject, notEmptyString } from "@/utils/types";
+import { emptyString, isBoolean, isDefined, isPlainObject, isString, notEmptyString } from "@/utils/types";
 import { GraphNodeType, isNavNodeType, validateNodeType } from "./graph-node-type";
 import { createPort, DEFAULT_PORT } from "./graph-port-model";
 import { SelectableModel } from "./selectable-model";
@@ -53,18 +53,7 @@ export class GraphNodeModel extends SelectableModel {
       this.ports = ports.in.concat(ports.out);
     }
 
-    if (isPlainObject(options.props)) {
-      this.props = merge.recursive(true, options.props, {});
-    } else {
-      this.props = {};
-    }
-
-    if (notEmptyString(options.handler)) {
-      this.handlerSource = options.handler;
-    } else {
-      this.handlerSource = null;
-    }
-
+    this.props = this._parseProps(options.props);
     this.handlerFile = this._parseHandlerFile(options.handlerFile);
 
     if (this.isErrorNode) {
@@ -89,9 +78,7 @@ export class GraphNodeModel extends SelectableModel {
   _initComputed() {
     super._initComputed();
 
-    this.hasHandler = computed(() => {
-      return isDefined(this.handlerSource) || isDefined(this.handlerFile)
-    });
+    this.hasHandler = computed(() => isDefined(this.handlerFile));
 
     if (this.isNavNode) {
       this.inPorts = computed(() => [this.ports[0]]);
@@ -122,8 +109,6 @@ export class GraphNodeModel extends SelectableModel {
     if (!this.isNavNode) {
       if (isDefined(this.handlerFile)) {
         value.handlerFile = this._buildHandlerFile();
-      } else if (isDefined(this.handler)) {
-        value.handler = this.handler;
       }
     }
 
@@ -243,6 +228,19 @@ export class GraphNodeModel extends SelectableModel {
     } else {
       return `${PACKAGE_PREFIX}${handlerFile}`;
     }
+  }
+
+  _parseProps(rawProps) {
+    if (!isPlainObject(rawProps)) {
+      return {};
+    }
+    return Object.entries(rawProps).reduce((res, curr) => {
+      const [key, value] = curr;
+      if (isString(value) || isBoolean(value)) {
+        res[key] = value;
+      }
+      return res;
+    }, {});
   }
 
   _toPoint(point) {
@@ -410,6 +408,16 @@ export class GraphNodeModel extends SelectableModel {
       this.headerColor = null;
     }
     return { oldValue, newValue: this.headerColor }
+  }
+
+  changeUserProp(propName, newValue) {
+    const oldValue = this.props[propName];
+    if (isString(newValue) || isBoolean(newValue)) {
+      this.props[propName] = newValue;
+    } else {
+      delete this.props[propName];
+    }
+    return { oldValue, newValue: this.props[propName] }
   }
 }
 
