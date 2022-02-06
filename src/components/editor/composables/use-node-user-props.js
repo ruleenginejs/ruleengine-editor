@@ -1,6 +1,10 @@
 import { computed, watch, ref, toRaw } from "vue";
 import { createEditHandler } from "./edit-handler";
 import { ChangeNodeUserProp } from "./commands/change-node-user-prop";
+import { notEmptyString } from "@/utils/types";
+import { spltCamelCase, ucFirst } from "@/utils/strings";
+
+const UNKNOWN_FIELD_LABEL = "Unknown";
 
 export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, editDelay }) {
   const fieldsByKey = ref({});
@@ -31,7 +35,7 @@ export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, edi
         res[propName] = {
           type: conf.type,
           prop: propName,
-          label: conf.label ?? propName,
+          label: conf.label ?? getFieldLabel(propName),
           value: getPropValue(propName, conf.default),
           order: conf.order ?? 0,
           enumOptions: toEnumOptions(conf.enum)
@@ -59,6 +63,13 @@ export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, edi
       return nodeModel.value.props[propName];
     }
     return defaultValue;
+  }
+
+  function getFieldLabel(str) {
+    if (notEmptyString(str)) {
+      return spltCamelCase(ucFirst(str));
+    }
+    return UNKNOWN_FIELD_LABEL;
   }
 
   function toEnumOptions(enumArray) {
