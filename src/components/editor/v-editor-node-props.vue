@@ -253,7 +253,7 @@ const t = localize;
       />
     </v-fieldset>
     <v-fieldset v-if="canShowUserProps" :label="t('editor.sidebar.userProperties')" b-border>
-      <template #label-actions v-if="userFields.length">
+      <template #label-actions>
         <v-action-list>
           <v-action-item
             icon="refresh"
@@ -261,6 +261,7 @@ const t = localize;
             @click="onRefreshUserPropsConfig"
           />
           <v-action-item
+            v-if="userFields.length"
             icon="clear-all"
             :title="t('editor.sidebar.resetDefault')"
             @click="onResetUserFieldDefaults"
