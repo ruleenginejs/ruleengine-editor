@@ -251,8 +251,12 @@ const t = localize;
         @remove="onConnectionRemove"
       />
     </v-fieldset>
-    <v-fieldset v-if="canShowUserProps" :label="t('editor.sidebar.userProperties')" b-border>
-      <template #label-actions v-if="userFields.length">
+    <v-fieldset
+      v-if="canShowUserProps && userFields.length"
+      :label="t('editor.sidebar.userProperties')"
+      b-border
+    >
+      <template #label-actions>
         <v-action-list>
           <v-action-item
             icon="clear-all"
