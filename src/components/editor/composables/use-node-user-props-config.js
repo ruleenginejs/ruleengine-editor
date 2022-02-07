@@ -28,14 +28,9 @@ export default function useNodeUserPropsConfig({ editScriptFile, provider }) {
     }
   }
 
-  function onRefreshUserPropsConfig() {
-    updateConfig(editScriptFile.value);
-  }
-
-  onRefreshUserPropsConfig();
+  updateConfig(editScriptFile.value);
 
   return {
-    userPropsConfig: config,
-    onRefreshUserPropsConfig
+    userPropsConfig: config
   }
 }

@@ -32,7 +32,6 @@
   "editor.sidebar.scriptHint": "Search files or ~package",
   "editor.sidebar.newFile": "New File",
   "editor.sidebar.openFile": "Open File",
-  "editor.sidebar.refresh": "Refresh",
   "editor.sidebar.resetDefault": "Reset Default",
   "editor.hint.name": "Name",
   "editor.hint.state": "State",

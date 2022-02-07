@@ -103,8 +103,7 @@ const {
 });
 
 const {
-  userPropsConfig,
-  onRefreshUserPropsConfig
+  userPropsConfig
 } = useNodeUserPropsConfig({ editScriptFile, provider });
 
 const {
@@ -253,15 +252,9 @@ const t = localize;
       />
     </v-fieldset>
     <v-fieldset v-if="canShowUserProps" :label="t('editor.sidebar.userProperties')" b-border>
-      <template #label-actions>
+      <template #label-actions v-if="userFields.length">
         <v-action-list>
           <v-action-item
-            icon="refresh"
-            :title="t('editor.sidebar.refresh')"
-            @click="onRefreshUserPropsConfig"
-          />
-          <v-action-item
-            v-if="userFields.length"
             icon="clear-all"
             :title="t('editor.sidebar.resetDefault')"
             @click="onResetUserFieldDefaults"
