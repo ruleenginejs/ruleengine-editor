@@ -16,7 +16,7 @@
   "peerDependencies": {
     "@ruleenginejs/ui": "^1.2.2",
     "@vscode/codicons": "^0.0.27",
-    "vue": "^3.2.29"
+    "vue": "^3.2.30"
   },
   "dependencies": {
     "debounce": "^1.2.1",
