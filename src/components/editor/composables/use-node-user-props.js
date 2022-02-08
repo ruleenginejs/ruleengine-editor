@@ -20,11 +20,6 @@ export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, edi
     editDelay.value
   );
 
-  const batchChangePropHandler = createEditHandler((params) =>
-    params.map(({ nodeId, propName, value }) => ChangeNodeUserProp.createDef(nodeId, propName, value)),
-    emit
-  );
-
   watch(userPropsConfig, updateUserFields);
   watch(() => JSON.stringify(nodeModel.value.props), updatePropValues);
 
@@ -87,19 +82,8 @@ export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, edi
     changePropHandler(nodeModel.value.id, field.prop, newValue);
   }
 
-  function onResetUserFieldDefaults() {
-    const nodeId = nodeModel.value.id;
-    const params = Object.keys(fieldsByKey.value).map(key => ({
-      nodeId,
-      propName: key,
-      value: undefined
-    }));
-    batchChangePropHandler(params);
-  }
-
   return {
     userFields: sortedFields,
-    onResetUserFieldDefaults,
     onUpdateUserField
   }
 }

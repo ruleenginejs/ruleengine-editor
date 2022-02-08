@@ -103,12 +103,17 @@ const {
 });
 
 const {
-  userPropsConfig
-} = useNodeUserPropsConfig({ editScriptFile, provider });
+  userPropsConfig,
+  resetUserProps
+} = useNodeUserPropsConfig({
+  nodeModel: model,
+  editScriptFile,
+  provider,
+  emit
+});
 
 const {
   userFields,
-  onResetUserFieldDefaults,
   onUpdateUserField
 } = useNodeUserProps({
   nodeModel: model,
@@ -261,7 +266,7 @@ const t = localize;
           <v-action-item
             icon="clear-all"
             :title="t('editor.sidebar.resetDefault')"
-            @click="onResetUserFieldDefaults"
+            @click="resetUserProps"
           />
         </v-action-list>
       </template>
