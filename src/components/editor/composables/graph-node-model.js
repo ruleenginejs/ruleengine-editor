@@ -137,8 +137,12 @@ export class GraphNodeModel extends SelectableModel {
 
   _buildPorts() {
     return {
-      in: this.inPorts.map(port => port.getValue()),
-      out: this.outPorts.map(port => port.getValue())
+      in: this.inPorts
+        .map(port => port.getValue())
+        .filter(isDefined),
+      out: this.outPorts
+        .map(port => port.getValue())
+        .filter(isDefined)
     }
   }
 
