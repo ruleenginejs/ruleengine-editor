@@ -1,6 +1,7 @@
 module.exports = {
-  purge: false,
-  darkMode: false,
+  content: [
+    './src/**/*.vue',
+  ],
   theme: {
     extend: {
       colors: {
