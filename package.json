@@ -10,8 +10,11 @@
   "scripts": {
     "build": "vite build",
     "watch": "vite build --watch",
+    "lint": "eslint . --ext .vue,.js --fix --ignore-path .gitignore",
+    "format": "prettier --write \"src/**/*.{js,vue,css}\"",
     "postversion": "npm run push",
-    "push": "git push origin master --tags"
+    "push": "git push origin master --tags",
+    "prepare": "husky install"
   },
   "peerDependencies": {
     "@ruleenginejs/ui": "^1.2.4",
@@ -23,19 +26,33 @@
     "is-plain-object": "^5.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^16.2.4",
+    "@commitlint/config-angular": "^16.2.4",
     "@vitejs/plugin-vue": "^2.3.3",
+    "@vue/eslint-config-prettier": "^7.0.0",
     "autoprefixer": "^10.4.7",
     "eslint": "^8.15.0",
     "eslint-plugin-vue": "^8.7.1",
+    "husky": "^8.0.1",
+    "lint-staged": "^12.4.1",
     "postcss": "^8.4.13",
     "postcss-import": "^14.1.0",
+    "prettier": "^2.6.2",
     "tailwindcss": "^3.0.24",
     "vite": "^2.9.9"
+  },
+  "lint-staged": {
+    "*.{js,vue,css}": "prettier --write"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ruleenginejs/ruleengine-editor.git"
   },
+  "keywords": [
+    "ruleengine",
+    "editor",
+    "vue"
+  ],
   "author": "Nikolay Naumenkov <nikolas.it.web@gmail.com>",
   "license": "MIT",
   "bugs": {
