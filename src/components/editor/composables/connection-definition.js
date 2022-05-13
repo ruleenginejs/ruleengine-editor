@@ -1,4 +1,4 @@
-import { isPlainObject } from "@/utils/types";
+import { isPlainObject } from '@/utils/types';
 
 export class ConnectionDefinition {
   constructor(from, to) {
@@ -19,10 +19,7 @@ export class ConnectionDefinition {
   }
 
   isValid() {
-    return this.fromNodeId &&
-      this.outPort &&
-      this.toNodeId &&
-      this.inPort;
+    return this.fromNodeId && this.outPort && this.toNodeId && this.inPort;
   }
 
   toJSON() {
@@ -35,7 +32,7 @@ export class ConnectionDefinition {
         nodeId: this.toNodeId,
         inPort: this.inPort
       }
-    }
+    };
   }
 
   toString() {
@@ -44,9 +41,11 @@ export class ConnectionDefinition {
 
   equals(other) {
     if (!other) return false;
-    return this.fromNodeId === other.fromNodeId &&
+    return (
+      this.fromNodeId === other.fromNodeId &&
       this.outPort === other.outPort &&
       this.toNodeId === other.toNodeId &&
-      this.inPort === other.inPort;
+      this.inPort === other.inPort
+    );
   }
 }

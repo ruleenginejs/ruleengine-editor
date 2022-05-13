@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import { VLayout } from "@ruleenginejs/ui";
+import { VLayout } from '@ruleenginejs/ui';
 
 export default {
-  name: "v-editor-empty",
+  name: 'v-editor-empty',
   components: {
     VLayout
   }
@@ -18,5 +18,5 @@ export default {
 </script>
 
 <style>
-@import "editor-empty";
+@import 'editor-empty';
 </style>

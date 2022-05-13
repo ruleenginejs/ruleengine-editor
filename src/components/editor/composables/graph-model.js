@@ -1,13 +1,13 @@
-import { computed } from "vue"
-import { isDefined, isPlainObject, notEmptyString } from "@/utils/types";
-import { applyEditCommands } from "@/utils/edit-command";
-import { createNode, GraphNodeModel } from "./graph-node-model";
-import { createConnection } from "./graph-connection-model";
-import { SelectableModel } from "./selectable-model";
-import { DEFAULT_PORT } from "./graph-port-model";
-import { createInstance } from "./graph-base-model";
-import { GraphPortType } from "./graph-port-type";
-import { GraphNodeType } from "./graph-node-type";
+import { computed } from 'vue';
+import { isDefined, isPlainObject, notEmptyString } from '@/utils/types';
+import { applyEditCommands } from '@/utils/edit-command';
+import { createNode, GraphNodeModel } from './graph-node-model';
+import { createConnection } from './graph-connection-model';
+import { SelectableModel } from './selectable-model';
+import { DEFAULT_PORT } from './graph-port-model';
+import { createInstance } from './graph-base-model';
+import { GraphPortType } from './graph-port-type';
+import { GraphNodeType } from './graph-node-type';
 
 export class GraphModel extends SelectableModel {
   constructor(value) {
@@ -40,34 +40,42 @@ export class GraphModel extends SelectableModel {
 
     this.selectedObject = computed(() => this._findSelectedObject());
 
-    this.nodesById = computed(() => this.nodes.reduce((res, node) => {
-      res[node.id] = node;
-      return res;
-    }, {}));
+    this.nodesById = computed(() =>
+      this.nodes.reduce((res, node) => {
+        res[node.id] = node;
+        return res;
+      }, {})
+    );
 
-    this.connectionsById = computed(() => this.connections.reduce((res, node) => {
-      res[node.id] = node;
-      return res;
-    }, {}));
+    this.connectionsById = computed(() =>
+      this.connections.reduce((res, node) => {
+        res[node.id] = node;
+        return res;
+      }, {})
+    );
 
-    this.navNodes = computed(() => this.getNodesByType(
-      GraphNodeType.Start,
-      GraphNodeType.End,
-      GraphNodeType.Error
-    ));
+    this.navNodes = computed(() =>
+      this.getNodesByType(
+        GraphNodeType.Start,
+        GraphNodeType.End,
+        GraphNodeType.Error
+      )
+    );
 
-    this.stepNodes = computed(() => this.getNodesByType(
-      GraphNodeType.Single,
-      GraphNodeType.Composite
-    ));
+    this.stepNodes = computed(() =>
+      this.getNodesByType(GraphNodeType.Single, GraphNodeType.Composite)
+    );
 
     this.startNode = computed(
-      () => this.getNodesByType(GraphNodeType.Start)[0]);
+      () => this.getNodesByType(GraphNodeType.Start)[0]
+    );
     this.errorNode = computed(
-      () => this.getNodesByType(GraphNodeType.Error)[0]);
+      () => this.getNodesByType(GraphNodeType.Error)[0]
+    );
 
     this.isEmptyValue = computed(
-      () => this.nodes.length === 0 && this.connections.length === 0);
+      () => this.nodes.length === 0 && this.connections.length === 0
+    );
   }
 
   _buildValue() {
@@ -84,13 +92,16 @@ export class GraphModel extends SelectableModel {
   }
 
   _buildConnections(steps) {
-    const connectionValuesBySrcNodeId = this.connections.reduce((res, connection) => {
-      if (!res[connection.srcNode.id]) {
-        res[connection.srcNode.id] = [];
-      }
-      res[connection.srcNode.id].push(connection.getValue());
-      return res;
-    }, {});
+    const connectionValuesBySrcNodeId = this.connections.reduce(
+      (res, connection) => {
+        if (!res[connection.srcNode.id]) {
+          res[connection.srcNode.id] = [];
+        }
+        res[connection.srcNode.id].push(connection.getValue());
+        return res;
+      },
+      {}
+    );
 
     for (let i = 0, len = steps.length; i < len; i++) {
       const step = steps[i];
@@ -113,8 +124,8 @@ export class GraphModel extends SelectableModel {
       }
       return;
     }
-    if (typeof value !== "string") {
-      this.error = new Error("Argument value must be a string");
+    if (typeof value !== 'string') {
+      this.error = new Error('Argument value must be a string');
       return;
     }
     if (!value.length) {
@@ -125,7 +136,7 @@ export class GraphModel extends SelectableModel {
       if (isPlainObject(data)) {
         this._parseData(data);
       } else {
-        this.error = new Error("The value must contain an object");
+        this.error = new Error('The value must contain an object');
       }
     } catch (err) {
       this.error = err;
@@ -135,10 +146,10 @@ export class GraphModel extends SelectableModel {
   _parseData(data) {
     const { title, description, steps } = data;
 
-    if (typeof title === "string" && title.length > 0) {
+    if (typeof title === 'string' && title.length > 0) {
       this.title = title;
     }
-    if (typeof description === "string" && description.length > 0) {
+    if (typeof description === 'string' && description.length > 0) {
       this.description = description;
     }
 
@@ -201,10 +212,9 @@ export class GraphModel extends SelectableModel {
           continue;
         }
 
-        this.connections.push(createConnection(
-          srcNode, srcPort,
-          destNode, destPort
-        ));
+        this.connections.push(
+          createConnection(srcNode, srcPort, destNode, destPort)
+        );
       }
     }
   }
@@ -264,8 +274,11 @@ export class GraphModel extends SelectableModel {
     const state = {
       selectedNodeId: null,
       isModelSelected: this.selected
-    }
-    if (!state.isModelSelected && this.selectedObject instanceof GraphNodeModel) {
+    };
+    if (
+      !state.isModelSelected &&
+      this.selectedObject instanceof GraphNodeModel
+    ) {
       state.selectedNodeId = this.selectedObject.id;
     }
     this._states.push(state);
@@ -354,7 +367,10 @@ export class GraphModel extends SelectableModel {
     const result = [];
     for (let i = 0, len = this.connections.length; i < len; i++) {
       const connection = this.connections[i];
-      if (connection.srcNode.id === nodeId || connection.destNode.id === nodeId) {
+      if (
+        connection.srcNode.id === nodeId ||
+        connection.destNode.id === nodeId
+      ) {
         result.push(connection);
       }
     }
@@ -370,15 +386,18 @@ export class GraphModel extends SelectableModel {
     const out = portType === GraphPortType.OUT;
     const both = !isDefined(portType);
 
-    return (connection) => (
-      (both && connection.isSrcOrDest(nodeId, portId))
-      || (out && connection.isSrc(nodeId, portId))
-      || (_in && connection.isDest(nodeId, portId))
-    );
+    return connection =>
+      (both && connection.isSrcOrDest(nodeId, portId)) ||
+      (out && connection.isSrc(nodeId, portId)) ||
+      (_in && connection.isDest(nodeId, portId));
   }
 
   getConnectionByNodeAndPort(nodeId, portId, portType = null) {
-    const predicate = this._createConnectionByNodeAndPortPredicate(nodeId, portId, portType);
+    const predicate = this._createConnectionByNodeAndPortPredicate(
+      nodeId,
+      portId,
+      portType
+    );
     for (let i = 0, len = this.connections.length; i < len; i++) {
       const connection = this.connections[i];
       if (predicate(connection)) {
@@ -390,7 +409,11 @@ export class GraphModel extends SelectableModel {
 
   getConnectionsByNodeAndPort(nodeId, portId, portType = null) {
     const result = [];
-    const predicate = this._createConnectionByNodeAndPortPredicate(nodeId, portId, portType);
+    const predicate = this._createConnectionByNodeAndPortPredicate(
+      nodeId,
+      portId,
+      portType
+    );
     for (let i = 0, len = this.connections.length; i < len; i++) {
       const connection = this.connections[i];
       if (predicate(connection)) {
@@ -403,7 +426,10 @@ export class GraphModel extends SelectableModel {
   outConnectionExistsByPortName(nodeId, outPortName) {
     for (let i = 0, len = this.connections.length; i < len; i++) {
       const connection = this.connections[i];
-      if (connection.srcNode.id === nodeId && connection.srcPort.name === outPortName) {
+      if (
+        connection.srcNode.id === nodeId &&
+        connection.srcPort.name === outPortName
+      ) {
         return true;
       }
     }
@@ -413,7 +439,10 @@ export class GraphModel extends SelectableModel {
   inConnectionExistsByPortName(nodeId, inPortName) {
     for (let i = 0, len = this.connections.length; i < len; i++) {
       const connection = this.connections[i];
-      if (connection.destNode.id === nodeId && connection.destPort.name === inPortName) {
+      if (
+        connection.destNode.id === nodeId &&
+        connection.destPort.name === inPortName
+      ) {
         return true;
       }
     }
@@ -478,7 +507,7 @@ export class GraphModel extends SelectableModel {
   }
 
   addChangeListener(listener) {
-    if (typeof listener === "function") {
+    if (typeof listener === 'function') {
       this._changeListeners.push(listener);
     }
   }
@@ -500,7 +529,7 @@ export class GraphModel extends SelectableModel {
       listener({
         changes,
         versionId: this.versionId
-      })
+      });
     }
   }
 }

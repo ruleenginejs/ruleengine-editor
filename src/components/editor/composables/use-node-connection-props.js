@@ -1,21 +1,25 @@
-import { computed } from "vue";
-import { DeleteConnectionById } from "./commands/delete-connection-by-id";
-import { createEditHandler } from "./edit-handler";
+import { computed } from 'vue';
+import { DeleteConnectionById } from './commands/delete-connection-by-id';
+import { createEditHandler } from './edit-handler';
 
 const connectionDirection = Object.freeze({
-  IN: "in",
-  OUT: "out"
-})
+  IN: 'in',
+  OUT: 'out'
+});
 
 export default function useNodeConnectionProps({ nodeModel, emit }) {
   const inFilter = getConnectionFilter(connectionDirection.IN);
   const outFilter = getConnectionFilter(connectionDirection.OUT);
 
-  const inConnections = computed(() => nodeModel.value.connections.filter(inFilter).map(toEditModel));
-  const outConnections = computed(() => nodeModel.value.connections.filter(outFilter).map(toEditModel));
+  const inConnections = computed(() =>
+    nodeModel.value.connections.filter(inFilter).map(toEditModel)
+  );
+  const outConnections = computed(() =>
+    nodeModel.value.connections.filter(outFilter).map(toEditModel)
+  );
 
   const removeConnectionHandler = createEditHandler(
-    (connectionId) => DeleteConnectionById.createDef(connectionId),
+    connectionId => DeleteConnectionById.createDef(connectionId),
     emit
   );
 
@@ -32,7 +36,7 @@ export default function useNodeConnectionProps({ nodeModel, emit }) {
       to,
       fromOptions: [{ text: from, value: from }],
       toOptions: [{ text: to, value: to }]
-    }
+    };
   }
 
   function getConnectionFilter(direction) {
@@ -55,5 +59,5 @@ export default function useNodeConnectionProps({ nodeModel, emit }) {
     inConnections,
     outConnections,
     onConnectionRemove
-  }
+  };
 }

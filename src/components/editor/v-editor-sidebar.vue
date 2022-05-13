@@ -16,17 +16,17 @@
 </template>
 
 <script>
-import { toRefs } from "vue";
-import { VSidebar, VContent } from "@ruleenginejs/ui";
-import VEditorSidebarNoAction from "./v-editor-sidebar-no-action.vue";
-import VEditorNodeProps from "./v-editor-node-props.vue";
-import VEditorConnectionProps from "./v-editor-connection-props.vue";
-import VEditorPortProps from "./v-editor-port-props.vue";
-import { GraphModelType } from "./composables/graph-model-util";
-import useSidebar from "./composables/use-sidebar";
+import { toRefs } from 'vue';
+import { VSidebar, VContent } from '@ruleenginejs/ui';
+import VEditorSidebarNoAction from './v-editor-sidebar-no-action.vue';
+import VEditorNodeProps from './v-editor-node-props.vue';
+import VEditorConnectionProps from './v-editor-connection-props.vue';
+import VEditorPortProps from './v-editor-port-props.vue';
+import { GraphModelType } from './composables/graph-model-util';
+import useSidebar from './composables/use-sidebar';
 
 export default {
-  name: "v-editor-sidebar",
+  name: 'v-editor-sidebar',
   components: {
     VSidebar,
     VContent,
@@ -50,14 +50,14 @@ export default {
     },
     sidebarScroll: {
       type: String,
-      default: "sm"
+      default: 'sm'
     },
     sidebarBorder: {
       type: Boolean,
       default: false
     }
   },
-  emits: ["edit"],
+  emits: ['edit'],
   setup(props, { emit }) {
     const { selectedObject } = toRefs(props);
 

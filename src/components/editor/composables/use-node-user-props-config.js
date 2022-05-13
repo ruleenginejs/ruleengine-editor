@@ -1,21 +1,30 @@
-import { computed, watch, ref, onUnmounted, toRaw } from "vue";
-import debounce from "debounce";
-import { isDefined } from "@/utils/types";
-import { createEditHandler } from "./edit-handler";
-import { ChangeNodeUserProp } from "./commands/change-node-user-prop";
+import { computed, watch, ref, onUnmounted, toRaw } from 'vue';
+import debounce from 'debounce';
+import { isDefined } from '@/utils/types';
+import { createEditHandler } from './edit-handler';
+import { ChangeNodeUserProp } from './commands/change-node-user-prop';
 
-export default function useNodeUserPropsConfig({ nodeModel, editScriptFile, provider, emit }) {
+export default function useNodeUserPropsConfig({
+  nodeModel,
+  editScriptFile,
+  provider,
+  emit
+}) {
   const propsConfig = ref({});
-  const updateDelay = computed(() => provider.value?.getUserPropsUpdateDelay?.());
+  const updateDelay = computed(() =>
+    provider.value?.getUserPropsUpdateDelay?.()
+  );
   const updateConfigHandler = computed(() =>
     isDefined(updateDelay.value)
       ? debounce(updateConfigAndResetProps, updateDelay.value)
       : updateConfigAndResetProps
   );
 
-  const batchChangePropHandler = createEditHandler((params) =>
-    params.map(({ nodeId, propName, value }) =>
-      ChangeNodeUserProp.createDef(nodeId, propName, value)),
+  const batchChangePropHandler = createEditHandler(
+    params =>
+      params.map(({ nodeId, propName, value }) =>
+        ChangeNodeUserProp.createDef(nodeId, propName, value)
+      ),
     emit
   );
 
@@ -25,7 +34,7 @@ export default function useNodeUserPropsConfig({ nodeModel, editScriptFile, prov
     }
   });
 
-  watch(editScriptFile, (newValue) => {
+  watch(editScriptFile, newValue => {
     updateConfigHandler.value(newValue);
   });
 
@@ -58,5 +67,5 @@ export default function useNodeUserPropsConfig({ nodeModel, editScriptFile, prov
   return {
     userPropsConfig: propsConfig,
     resetUserProps: resetProps
-  }
+  };
 }

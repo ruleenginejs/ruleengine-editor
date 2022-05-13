@@ -7,12 +7,12 @@
 </template>
 
 <script>
-import { computed, toRefs } from "vue";
-import localize from "@/utils/localize";
-import { VLayout } from "@ruleenginejs/ui";
+import { computed, toRefs } from 'vue';
+import localize from '@/utils/localize';
+import { VLayout } from '@ruleenginejs/ui';
 
 export default {
-  name: "v-editor-error",
+  name: 'v-editor-error',
   components: {
     VLayout
   },
@@ -30,10 +30,10 @@ export default {
     });
 
     const message = computed(() => {
-      let msg = localize("editor.errorMessage");
+      let msg = localize('editor.errorMessage');
       if (detailsMessage.value) {
-        msg += " ";
-        msg += localize("editor.errorDetails", detailsMessage.value);
+        msg += ' ';
+        msg += localize('editor.errorDetails', detailsMessage.value);
       }
       return msg;
     });
@@ -46,5 +46,5 @@ export default {
 </script>
 
 <style>
-@import "editor-error";
+@import 'editor-error';
 </style>

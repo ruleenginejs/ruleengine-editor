@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import { VLayout } from "@ruleenginejs/ui";
+import { VLayout } from '@ruleenginejs/ui';
 
 export default {
-  name: "v-editor-sidebar-no-action",
+  name: 'v-editor-sidebar-no-action',
   components: {
     VLayout
   },
@@ -24,5 +24,5 @@ export default {
 </script>
 
 <style>
-@import "editor-sidebar-no-action";
+@import 'editor-sidebar-no-action';
 </style>

@@ -1,12 +1,14 @@
-export const PACKAGE_PREFIX = "~";
-export const RELATIVE_PREFIX = "./";
+export const PACKAGE_PREFIX = '~';
+export const RELATIVE_PREFIX = './';
 
-const BACKSLASH = new RegExp("\\\\", 'g');
-// eslint-disable-next-line no-useless-escape
-const SPLIT_DEVICE_RE = /^([a-zA-Z]:|[\\\/]{2}[^\\\/]+[\\\/]+[^\\\/]+)?([\\\/])?([\s\S]*?)$/;
+const BACKSLASH = new RegExp('\\\\', 'g');
+
+const SPLIT_DEVICE_RE =
+  // eslint-disable-next-line no-useless-escape
+  /^([a-zA-Z]:|[\\\/]{2}[^\\\/]+[\\\/]+[^\\\/]+)?([\\\/])?([\s\S]*?)$/;
 
 export function replaceBackslash(path) {
-  return path.replace(BACKSLASH, "/");
+  return path.replace(BACKSLASH, '/');
 }
 
 export function posixIsAbsolute(path) {

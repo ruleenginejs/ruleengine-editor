@@ -1,7 +1,7 @@
 <script>
 export default {
-  name: "v-editor-node-connections"
-}
+  name: 'v-editor-node-connections'
+};
 </script>
 
 <script setup>
@@ -11,8 +11,8 @@ import {
   VActionItem,
   VSelectBox,
   VLabel
-} from "@ruleenginejs/ui";
-import localize from "@/utils/localize";
+} from '@ruleenginejs/ui';
+import localize from '@/utils/localize';
 
 defineProps({
   label: {
@@ -24,10 +24,10 @@ defineProps({
     default: () => []
   }
 });
-const emit = defineEmits(["remove"]);
+const emit = defineEmits(['remove']);
 
 function onRemove(connection) {
-  emit("remove", connection);
+  emit('remove', connection);
 }
 
 const t = localize;
@@ -43,12 +43,18 @@ const t = localize;
       </v-field-layout>
       <v-field-layout v-for="connection in connections" :key="connection.id">
         <template #label>
-          <v-select-box :model-value="connection.from" :items="connection.fromOptions" />
+          <v-select-box
+            :model-value="connection.from"
+            :items="connection.fromOptions"
+          />
         </template>
         <template #value>
           <v-layout gutter="sm" h-center>
             <v-layout all-distr no-flex>
-              <v-select-box :model-value="connection.to" :items="connection.toOptions" />
+              <v-select-box
+                :model-value="connection.to"
+                :items="connection.toOptions"
+              />
             </v-layout>
             <v-layout not-shrink>
               <v-action-item

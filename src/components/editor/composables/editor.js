@@ -1,6 +1,6 @@
-import { ref, watch, watchEffect } from "vue";
-import { EditorOperations } from "./editor-operations";
-import { createModel } from "./graph-model";
+import { ref, watch, watchEffect } from 'vue';
+import { EditorOperations } from './editor-operations';
+import { createModel } from './graph-model';
 
 class Editor {
   constructor({
@@ -53,18 +53,20 @@ class Editor {
     });
 
     watch(this.viewportModel, () => {
-      this.emit("update:viewport", this.viewportModel.value);
+      this.emit('update:viewport', this.viewportModel.value);
     });
 
     watch(this.zoomModel, () => {
-      this.emit("update:zoom", this.zoomModel.value);
+      this.emit('update:zoom', this.zoomModel.value);
     });
 
     watchEffect(() => {
-      this.emit("change-selection", this.model.value.selectedObject);
+      this.emit('change-selection', this.model.value.selectedObject);
     });
 
-    watchEffect(() => { this.focusWhenChangeSelection(); });
+    watchEffect(() => {
+      this.focusWhenChangeSelection();
+    });
   }
 
   getModel() {
@@ -121,7 +123,13 @@ class Editor {
     );
   }
 
-  newNodeInCurrentViewWithCascade(type, startOffset, cascadeOffset, nodeData, notify) {
+  newNodeInCurrentViewWithCascade(
+    type,
+    startOffset,
+    cascadeOffset,
+    nodeData,
+    notify
+  ) {
     this.operations.createNodeInCurrentViewWithCascade(
       type,
       this.getViewport(),
@@ -132,7 +140,13 @@ class Editor {
     );
   }
 
-  newNodeInCurrentViewByMousePosition(type, mousePoint, offsetPoint, nodeData, notify) {
+  newNodeInCurrentViewByMousePosition(
+    type,
+    mousePoint,
+    offsetPoint,
+    nodeData,
+    notify
+  ) {
     const canvasInstance = this.getGraph()?.getCanvasInstance();
     if (canvasInstance) {
       this.operations.newNodeInCurrentViewByMousePosition(
@@ -178,11 +192,11 @@ class Editor {
       this.fitCanvas(this.zoomModel.value);
     }
 
-    this.emit("graph-created", this.getGraph());
+    this.emit('graph-created', this.getGraph());
   }
 
   onChangeModelContent(e) {
-    this.emit("change-value", e);
+    this.emit('change-value', e);
   }
 
   onFocusIn() {

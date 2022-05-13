@@ -1,6 +1,6 @@
-import { CreateNewConnection } from "./commands/create-new-connection";
-import { ConnectionDefinition } from "./connection-definition";
-import { GraphPortType } from "./graph-port-type";
+import { CreateNewConnection } from './commands/create-new-connection';
+import { ConnectionDefinition } from './connection-definition';
+import { GraphPortType } from './graph-port-type';
 
 export function createNewConnection(model, from, to) {
   if (!from || !to) return;
@@ -44,13 +44,16 @@ export function createNewConnection(model, from, to) {
     to = tmp;
   }
 
-  const connectionDef = new ConnectionDefinition({
-    nodeId: from.node.id,
-    outPort: from.port.name
-  }, {
-    nodeId: to.node.id,
-    inPort: to.port.name
-  });
+  const connectionDef = new ConnectionDefinition(
+    {
+      nodeId: from.node.id,
+      outPort: from.port.name
+    },
+    {
+      nodeId: to.node.id,
+      inPort: to.port.name
+    }
+  );
 
   model.applyEdits([CreateNewConnection.createDef(connectionDef)]);
 }

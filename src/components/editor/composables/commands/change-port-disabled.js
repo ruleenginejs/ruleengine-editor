@@ -1,7 +1,7 @@
-import { ChangePortProperty } from "./change-port-property";
+import { ChangePortProperty } from './change-port-property';
 
 export class ChangePortDisabled extends ChangePortProperty {
-  static NAME = "change-port-disabled";
+  static NAME = 'change-port-disabled';
 
   constructor(payload) {
     super(ChangePortDisabled.NAME, payload);
@@ -12,10 +12,11 @@ export class ChangePortDisabled extends ChangePortProperty {
   }
 
   static createDef(nodeId, portId, value) {
-    return ChangePortProperty.createDef(ChangePortDisabled.NAME,
+    return ChangePortProperty.createDef(
+      ChangePortDisabled.NAME,
       nodeId,
       portId,
       value
-    )
+    );
   }
 }

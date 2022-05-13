@@ -3,11 +3,9 @@ class EditorProvider {
     this.impl = implementation;
   }
 
-  findFilePath() {
+  findFilePath() {}
 
-  }
-
-  openNewFile() { }
+  openNewFile() {}
 }
 
 export default EditorProvider;

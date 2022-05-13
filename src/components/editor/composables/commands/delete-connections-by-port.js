@@ -1,8 +1,12 @@
-import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
-import { CreateNewConnection } from "./create-new-connection";
+import {
+  createChanges,
+  createDefinition,
+  EditCommand
+} from '@/utils/edit-command';
+import { CreateNewConnection } from './create-new-connection';
 
 export class DeleteConnectionsByPort extends EditCommand {
-  static NAME = "delete-connections-by-port";
+  static NAME = 'delete-connections-by-port';
 
   constructor(payload) {
     super(DeleteConnectionsByPort.NAME, payload);
@@ -18,13 +22,19 @@ export class DeleteConnectionsByPort extends EditCommand {
     const port = node.getPortById(portId);
     if (!port) return null;
 
-    const connections = model.getConnectionsByNodeAndPort(node.id, port.id, port.type);
+    const connections = model.getConnectionsByNodeAndPort(
+      node.id,
+      port.id,
+      port.type
+    );
     if (connections.length === 0) return null;
 
     const changes = [];
     for (let connection of connections) {
       model.deleteConnectionById(connection.id);
-      changes.push(this._createChanges(node.id, port.id, connection.definition));
+      changes.push(
+        this._createChanges(node.id, port.id, connection.definition)
+      );
     }
     return changes;
   }
@@ -33,13 +43,13 @@ export class DeleteConnectionsByPort extends EditCommand {
     return createChanges(
       DeleteConnectionsByPort.createDef(nodeId, portId),
       CreateNewConnection.createDef(connectionDef)
-    )
+    );
   }
 
   static createDef(nodeId, portId) {
     return createDefinition(DeleteConnectionsByPort.NAME, {
       nodeId,
       portId
-    })
+    });
   }
 }

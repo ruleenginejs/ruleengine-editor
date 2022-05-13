@@ -1,5 +1,5 @@
-import { GraphNodeType } from "./graph-node-type";
-import { GraphPortType } from "./graph-port-type";
+import { GraphNodeType } from './graph-node-type';
+import { GraphPortType } from './graph-port-type';
 
 export function validateLink(model, from, to) {
   if (!from || !to) return false;
@@ -16,7 +16,11 @@ export function validateLink(model, from, to) {
     return false;
   }
 
-  if (from.node.isNavNode && to.node.isNavNode && from.node.type === to.node.type) {
+  if (
+    from.node.isNavNode &&
+    to.node.isNavNode &&
+    from.node.type === to.node.type
+  ) {
     return false;
   }
 

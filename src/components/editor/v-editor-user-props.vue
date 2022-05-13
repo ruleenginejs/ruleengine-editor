@@ -1,18 +1,18 @@
 <script>
 export default {
-  name: "v-editor-user-props"
+  name: 'v-editor-user-props'
 };
 </script>
 
 <script setup>
-import { toRefs } from "vue";
+import { toRefs } from 'vue';
 import {
   VFieldLayout,
   VLabel,
   VInput,
   VCheckbox,
   VSelectBox
-} from "@ruleenginejs/ui";
+} from '@ruleenginejs/ui';
 
 const props = defineProps({
   fields: {
@@ -21,26 +21,24 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits([
-  "update"
-]);
+const emit = defineEmits(['update']);
 
 const { fields } = toRefs(props);
 
 function isInput({ type }) {
-  return type === "string";
+  return type === 'string';
 }
 
 function isCheckbox({ type }) {
-  return type === "boolean";
+  return type === 'boolean';
 }
 
 function isEnum({ type, enumOptions }) {
-  return type === "string" && enumOptions.length > 0;
+  return type === 'string' && enumOptions.length > 0;
 }
 
 function onUpdate(field, newValue) {
-  emit("update", field, newValue);
+  emit('update', field, newValue);
 }
 </script>
 

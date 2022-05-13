@@ -1,7 +1,7 @@
-import { ChangeNodeProperty } from "./change-node-property";
+import { ChangeNodeProperty } from './change-node-property';
 
 export class ChangeNodeHandlerFile extends ChangeNodeProperty {
-  static NAME = "change-node-handler-file";
+  static NAME = 'change-node-handler-file';
 
   constructor(payload) {
     super(ChangeNodeHandlerFile.NAME, payload);
@@ -12,6 +12,10 @@ export class ChangeNodeHandlerFile extends ChangeNodeProperty {
   }
 
   static createDef(nodeId, value) {
-    return ChangeNodeProperty.createDef(ChangeNodeHandlerFile.NAME, nodeId, value);
+    return ChangeNodeProperty.createDef(
+      ChangeNodeHandlerFile.NAME,
+      nodeId,
+      value
+    );
   }
 }

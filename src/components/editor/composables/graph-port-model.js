@@ -1,18 +1,18 @@
-import { isDefined, notEmptyString } from "@/utils/types";
-import { computed } from "vue";
-import { createInstance } from "./graph-base-model";
-import { GraphPortType } from "./graph-port-type";
-import { SelectableModel } from "./selectable-model";
+import { isDefined, notEmptyString } from '@/utils/types';
+import { computed } from 'vue';
+import { createInstance } from './graph-base-model';
+import { GraphPortType } from './graph-port-type';
+import { SelectableModel } from './selectable-model';
 
-export const DEFAULT_PORT = "default";
-export const ERROR_PORT = "error";
+export const DEFAULT_PORT = 'default';
+export const ERROR_PORT = 'error';
 
 export class GraphPortModel extends SelectableModel {
   constructor(nodeId, name, type) {
     super();
 
     if (!isDefined(nodeId)) {
-      throw new Error("Argument nodeId is required");
+      throw new Error('Argument nodeId is required');
     }
 
     this.nodeId = nodeId;

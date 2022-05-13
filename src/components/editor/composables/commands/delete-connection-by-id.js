@@ -1,8 +1,12 @@
-import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
-import { CreateNewConnection } from "./create-new-connection";
+import {
+  createChanges,
+  createDefinition,
+  EditCommand
+} from '@/utils/edit-command';
+import { CreateNewConnection } from './create-new-connection';
 
 export class DeleteConnectionById extends EditCommand {
-  static NAME = "delete-connection-by-id";
+  static NAME = 'delete-connection-by-id';
 
   constructor(payload) {
     super(DeleteConnectionById.NAME, payload);
@@ -23,12 +27,12 @@ export class DeleteConnectionById extends EditCommand {
     return createChanges(
       DeleteConnectionById.createDef(connectionId),
       CreateNewConnection.createDef(connectionDef)
-    )
+    );
   }
 
   static createDef(connectionId) {
     return createDefinition(DeleteConnectionById.NAME, {
       connectionId
-    })
+    });
   }
 }

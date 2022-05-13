@@ -1,7 +1,11 @@
-import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
+import {
+  createChanges,
+  createDefinition,
+  EditCommand
+} from '@/utils/edit-command';
 
 export class ChangeNodeUserProp extends EditCommand {
-  static NAME = "change-node-user-prop";
+  static NAME = 'change-node-user-prop';
 
   constructor(payload) {
     super(ChangeNodeUserProp.NAME, payload);
@@ -30,6 +34,6 @@ export class ChangeNodeUserProp extends EditCommand {
       nodeId,
       propName,
       value
-    })
+    });
   }
 }

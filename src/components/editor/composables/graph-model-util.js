@@ -1,14 +1,14 @@
-import { isDefined } from "@/utils/types";
-import { GraphConnectionModel } from "./graph-connection-model";
-import { GraphModel } from "./graph-model";
-import { GraphNodeModel } from "./graph-node-model";
-import { GraphPortModel } from "./graph-port-model";
+import { isDefined } from '@/utils/types';
+import { GraphConnectionModel } from './graph-connection-model';
+import { GraphModel } from './graph-model';
+import { GraphNodeModel } from './graph-node-model';
+import { GraphPortModel } from './graph-port-model';
 
 export const GraphModelType = Object.freeze({
-  Graph: "graph",
-  Node: "node",
-  Port: "port",
-  Connection: "connection"
+  Graph: 'graph',
+  Node: 'node',
+  Port: 'port',
+  Connection: 'connection'
 });
 
 export function getModelType(model) {

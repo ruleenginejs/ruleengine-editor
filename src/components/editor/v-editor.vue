@@ -30,18 +30,18 @@
 </template>
 
 <script>
-import { toRefs } from "vue";
-import VEditorGraph from "./v-editor-graph.vue";
-import VEditorError from "./v-editor-error.vue";
-import VEditorEmpty from "./v-editor-empty.vue";
-import useEditor from "./composables/use-editor";
+import { toRefs } from 'vue';
+import VEditorGraph from './v-editor-graph.vue';
+import VEditorError from './v-editor-error.vue';
+import VEditorEmpty from './v-editor-empty.vue';
+import useEditor from './composables/use-editor';
 
 const defaultEdgeScrollSizes = Object.freeze({
   edgeBottomSize: { in: 10, out: 0 }
 });
 
 export default {
-  name: "v-editor",
+  name: 'v-editor',
   components: {
     VEditorGraph,
     VEditorError,
@@ -98,22 +98,15 @@ export default {
     }
   },
   emits: [
-    "change-value",
-    "change-selection",
-    "graph-created",
-    "update:viewport",
-    "update:zoom"
+    'change-value',
+    'change-selection',
+    'graph-created',
+    'update:viewport',
+    'update:zoom'
   ],
   setup(props, { emit }) {
-    const {
-      value,
-      provider,
-      editable,
-      viewport,
-      zoom,
-      autoFit,
-      keyboard
-    } = toRefs(props);
+    const { value, provider, editable, viewport, zoom, autoFit, keyboard } =
+      toRefs(props);
 
     const editor = useEditor({
       value,
@@ -157,5 +150,5 @@ export default {
 </script>
 
 <style>
-@import "editor";
+@import 'editor';
 </style>

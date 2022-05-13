@@ -1,18 +1,21 @@
-import { computed, ref, reactive, watch } from "vue";
-import debounce from "debounce";
-import localize from "@/utils/localize";
-import { getNodeTypeName, GraphNodeType } from "./graph-node-type";
-import { ChangeNodeName } from "./commands/change-node-name";
-import { ChangeNodeHandlerFile } from "./commands/change-node-handler-file";
-import { createEditHandler } from "./edit-handler";
-import { getColorPreset, isColorFromPreset } from "./graph-node-color";
-import { EMPTY_STRING, ucFirst } from "@/utils/strings";
-import { ChangeNodeColor } from "./commands/change-node-color";
-import { isDefined } from "@/utils/types";
+import { computed, ref, reactive, watch } from 'vue';
+import debounce from 'debounce';
+import localize from '@/utils/localize';
+import { getNodeTypeName, GraphNodeType } from './graph-node-type';
+import { ChangeNodeName } from './commands/change-node-name';
+import { ChangeNodeHandlerFile } from './commands/change-node-handler-file';
+import { createEditHandler } from './edit-handler';
+import { getColorPreset, isColorFromPreset } from './graph-node-color';
+import { EMPTY_STRING, ucFirst } from '@/utils/strings';
+import { ChangeNodeColor } from './commands/change-node-color';
+import { isDefined } from '@/utils/types';
 
 export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   const sectionName = computed(() => {
-    return localize("editor.sidebar.nodeSection", getNodeTypeName(nodeModel.value.nodeType));
+    return localize(
+      'editor.sidebar.nodeSection',
+      getNodeTypeName(nodeModel.value.nodeType)
+    );
   });
 
   const useCustomColor = ref(false);
@@ -20,9 +23,15 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
 
   const scriptFile = ref(nodeModel.value.handlerFile);
   const isScriptFileExists = ref(false);
-  const scriptFileDataSource = computed(() => provider.value?.suggestScriptFiles);
-  const scriptFileSearchDelay = computed(() => provider.value?.getCompletionDelay?.());
-  const scriptFileExistsDelay = computed(() => provider.value?.getCheckExistsDelay?.());
+  const scriptFileDataSource = computed(
+    () => provider.value?.suggestScriptFiles
+  );
+  const scriptFileSearchDelay = computed(() =>
+    provider.value?.getCompletionDelay?.()
+  );
+  const scriptFileExistsDelay = computed(() =>
+    provider.value?.getCheckExistsDelay?.()
+  );
   const scriptFileExistsHandler = computed(() =>
     isDefined(scriptFileExistsDelay.value)
       ? debounce(updateScriptFileExists, scriptFileExistsDelay.value)
@@ -30,7 +39,9 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   );
 
   const canShowName = computed(() => !nodeModel.value.isNavNode);
-  const canShowHandler = computed(() => nodeModel.value.nodeType === GraphNodeType.Single);
+  const canShowHandler = computed(
+    () => nodeModel.value.nodeType === GraphNodeType.Single
+  );
   const canShowColor = computed(() => !nodeModel.value.isNavNode);
   const canShowPorts = ref(true);
   const canShowConnections = ref(true);
@@ -41,9 +52,12 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
   const editColorHandler = createHandler(ChangeNodeColor, false);
   const delayEditColorHandler = createHandler(ChangeNodeColor, true);
 
-  watch(() => nodeModel.value.handlerFile, () => {
-    scriptFile.value = nodeModel.value.handlerFile;
-  });
+  watch(
+    () => nodeModel.value.handlerFile,
+    () => {
+      scriptFile.value = nodeModel.value.handlerFile;
+    }
+  );
 
   watch(scriptFile, () => {
     scriptFileExistsHandler.value(scriptFile.value);
@@ -51,12 +65,14 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
 
   const editName = computed({
     get: () => nodeModel.value.name,
-    set: (val) => { editNameHandler(val); }
+    set: val => {
+      editNameHandler(val);
+    }
   });
 
   const editScriptFile = computed({
     get: () => scriptFile.value,
-    set: (val) => {
+    set: val => {
       scriptFile.value = val;
       editFileHandler(val);
     }
@@ -64,7 +80,7 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
 
   const editColor = computed({
     get: () => nodeModel.value.headerColor ?? EMPTY_STRING,
-    set: (val) => {
+    set: val => {
       if (useCustomColor.value) {
         delayEditColorHandler(val);
       } else {
@@ -75,7 +91,7 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
 
   const editUseCustomColor = computed({
     get: () => useCustomColor.value,
-    set: (val) => {
+    set: val => {
       useCustomColor.value = val;
       if (!val && isCustomHeaderColor()) {
         const { headerColor } = nodeModel.value;
@@ -89,19 +105,21 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
 
   function createHandler(commandCtor, withDelay = false) {
     return createEditHandler(
-      (val) => commandCtor.createDef(nodeModel.value.id, val),
-      emit, withDelay ? editDelay.value : null)
+      val => commandCtor.createDef(nodeModel.value.id, val),
+      emit,
+      withDelay ? editDelay.value : null
+    );
   }
 
   function isCustomHeaderColor() {
     const { headerColor } = nodeModel.value;
-    return headerColor && !isColorFromPreset(headerColor)
+    return headerColor && !isColorFromPreset(headerColor);
   }
 
   function getColorOptions() {
     const result = [
       {
-        text: localize("editor.default"),
+        text: localize('editor.default'),
         value: EMPTY_STRING
       },
       ...getColorPreset().map(value => ({
@@ -114,13 +132,15 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
       result.push({
         text: headerColor,
         value: headerColor
-      })
+      });
     }
     return result;
   }
 
   function pushUniqueColorOption(option) {
-    const optionExists = colorOptions.find(({ value }) => value === option.value);
+    const optionExists = colorOptions.find(
+      ({ value }) => value === option.value
+    );
     if (!optionExists) {
       colorOptions.push(option);
     }
@@ -173,5 +193,5 @@ export default function useNodeProps({ nodeModel, emit, editDelay, provider }) {
     isScriptFileExists,
     onScriptFileClick,
     genElementId
-  }
+  };
 }

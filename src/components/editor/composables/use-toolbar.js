@@ -1,33 +1,36 @@
-import { reactive, computed, ref, onUnmounted, watch, nextTick } from "vue";
-import { registerActionHandler, unregisterActionHandler } from "./toolbar-actions";
-import { defaultActionDefinitions } from "./toolbar-defaults";
-import localize from "@/utils/localize";
+import { reactive, computed, ref, onUnmounted, watch, nextTick } from 'vue';
+import {
+  registerActionHandler,
+  unregisterActionHandler
+} from './toolbar-actions';
+import { defaultActionDefinitions } from './toolbar-defaults';
+import localize from '@/utils/localize';
 
 const settingsActionKey = Object.freeze({
-  toggleVertical: "toggleVertical",
-  toggleLabel: "toggleLabel"
+  toggleVertical: 'toggleVertical',
+  toggleLabel: 'toggleLabel'
 });
 
 const settingsActionDefinitions = [
   {
     id: settingsActionKey.toggleLabel,
-    icon: "list-selection",
-    title: localize("editor.action.toggleLabel"),
-    label: localize("editor.action.toggleLabel"),
+    icon: 'list-selection',
+    title: localize('editor.action.toggleLabel'),
+    label: localize('editor.action.toggleLabel'),
     disabled: false,
     visible: true,
     order: 1000
   },
   {
     id: settingsActionKey.toggleVertical,
-    icon: "grabber",
-    title: localize("editor.action.toggleVertical"),
-    label: localize("editor.action.toggleVertical"),
+    icon: 'grabber',
+    title: localize('editor.action.toggleVertical'),
+    label: localize('editor.action.toggleVertical'),
     disabled: false,
     visible: true,
     order: 1010
-  },
-]
+  }
+];
 
 export default function useToolbar({
   initActions,
@@ -43,10 +46,12 @@ export default function useToolbar({
 
   const actions = computed(() => {
     if (preserveDefaultActions.value) {
-      return reactive(defaultActionDefinitions
-        .concat(settingsActionDefinitions)
-        .concat(initActions.value)
-        .sort(compareAction))
+      return reactive(
+        defaultActionDefinitions
+          .concat(settingsActionDefinitions)
+          .concat(initActions.value)
+          .sort(compareAction)
+      );
     } else {
       const copy = [...initActions.value];
       return copy.sort(compareAction);
@@ -61,7 +66,7 @@ export default function useToolbar({
   });
 
   watch(vertical, () => {
-    emit("update:vertical", vertical.value);
+    emit('update:vertical', vertical.value);
   });
 
   watch(initShowActionLabel, () => {
@@ -69,7 +74,7 @@ export default function useToolbar({
   });
 
   watch(showActionLabel, () => {
-    emit("update:showActionLabel", showActionLabel.value);
+    emit('update:showActionLabel', showActionLabel.value);
 
     nextTick(() => {
       invalidate.value = true;
@@ -81,7 +86,7 @@ export default function useToolbar({
   });
 
   watch(invalidate, () => {
-    emit("update:invalidate", invalidate.value);
+    emit('update:invalidate', invalidate.value);
   });
 
   onUnmounted(() => {
@@ -90,7 +95,7 @@ export default function useToolbar({
   });
 
   function onActionClick(action, e) {
-    emit("action-click", action, e);
+    emit('action-click', action, e);
   }
 
   function compareAction(a, b) {
@@ -117,7 +122,7 @@ export default function useToolbar({
   }
 
   function isString(value) {
-    return typeof value === "string";
+    return typeof value === 'string';
   }
 
   return {
@@ -129,5 +134,5 @@ export default function useToolbar({
     enableAction,
     isString,
     onActionClick
-  }
+  };
 }

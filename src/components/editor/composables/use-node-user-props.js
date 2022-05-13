@@ -1,12 +1,17 @@
-import { computed, watch, ref, toRaw } from "vue";
-import { createEditHandler } from "./edit-handler";
-import { ChangeNodeUserProp } from "./commands/change-node-user-prop";
-import { notEmptyString } from "@/utils/types";
-import { spltCamelCase, ucFirst } from "@/utils/strings";
+import { computed, watch, ref, toRaw } from 'vue';
+import { createEditHandler } from './edit-handler';
+import { ChangeNodeUserProp } from './commands/change-node-user-prop';
+import { notEmptyString } from '@/utils/types';
+import { spltCamelCase, ucFirst } from '@/utils/strings';
 
-const UNKNOWN_FIELD_LABEL = "Unknown";
+const UNKNOWN_FIELD_LABEL = 'Unknown';
 
-export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, editDelay }) {
+export default function useNodeUserProps({
+  nodeModel,
+  userPropsConfig,
+  emit,
+  editDelay
+}) {
   const fieldsByKey = ref({});
   const sortedFields = computed(() => {
     const array = Object.values(fieldsByKey.value);
@@ -14,8 +19,9 @@ export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, edi
     return array;
   });
 
-  const changePropHandler = createEditHandler((nodeId, propName, value) =>
-    ChangeNodeUserProp.createDef(nodeId, propName, value),
+  const changePropHandler = createEditHandler(
+    (nodeId, propName, value) =>
+      ChangeNodeUserProp.createDef(nodeId, propName, value),
     emit,
     editDelay.value
   );
@@ -24,8 +30,8 @@ export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, edi
   watch(() => JSON.stringify(nodeModel.value.props), updatePropValues);
 
   function updateUserFields() {
-    fieldsByKey.value = Object.entries(toRaw(userPropsConfig.value))
-      .reduce((res, curr) => {
+    fieldsByKey.value = Object.entries(toRaw(userPropsConfig.value)).reduce(
+      (res, curr) => {
         let [propName, conf] = curr;
         res[propName] = {
           type: conf.type,
@@ -34,9 +40,11 @@ export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, edi
           value: getPropValue(propName, conf.default),
           order: conf.order ?? 0,
           enumOptions: toEnumOptions(conf.enum)
-        }
+        };
         return res;
-      }, {});
+      },
+      {}
+    );
   }
 
   function updatePropValues() {
@@ -74,7 +82,7 @@ export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, edi
     return enumArray.map(val => ({
       text: val,
       value: val
-    }))
+    }));
   }
 
   function onUpdateUserField(field, newValue) {
@@ -85,5 +93,5 @@ export default function useNodeUserProps({ nodeModel, userPropsConfig, emit, edi
   return {
     userFields: sortedFields,
     onUpdateUserField
-  }
+  };
 }

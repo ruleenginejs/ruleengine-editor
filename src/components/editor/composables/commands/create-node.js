@@ -1,9 +1,13 @@
-import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
-import { GraphNodeType } from "../graph-node-type";
-import { DeleteNode } from "./delete-node";
+import {
+  createChanges,
+  createDefinition,
+  EditCommand
+} from '@/utils/edit-command';
+import { GraphNodeType } from '../graph-node-type';
+import { DeleteNode } from './delete-node';
 
 export class CreateNode extends EditCommand {
-  static NAME = "create-node";
+  static NAME = 'create-node';
 
   constructor(payload) {
     super(CreateNode.NAME, payload);
@@ -28,10 +32,10 @@ export class CreateNode extends EditCommand {
     return createChanges(
       CreateNode.createDef(node.toJSON()),
       DeleteNode.createDef(node.id)
-    )
+    );
   }
 
   static createDef(nodeData) {
-    return createDefinition(CreateNode.NAME, nodeData)
+    return createDefinition(CreateNode.NAME, nodeData);
   }
 }

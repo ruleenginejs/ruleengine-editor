@@ -1,5 +1,9 @@
-import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
-import { notImplemented } from "@/utils/errors";
+import {
+  createChanges,
+  createDefinition,
+  EditCommand
+} from '@/utils/edit-command';
+import { notImplemented } from '@/utils/errors';
 
 export class ChangePortProperty extends EditCommand {
   doApply(model, payload) {
@@ -33,6 +37,6 @@ export class ChangePortProperty extends EditCommand {
       nodeId,
       portId,
       value
-    })
+    });
   }
 }

@@ -1,7 +1,7 @@
-import { ChangeNodeProperty } from "./change-node-property";
+import { ChangeNodeProperty } from './change-node-property';
 
 export class ChangeNodeName extends ChangeNodeProperty {
-  static NAME = "change-node-name";
+  static NAME = 'change-node-name';
 
   constructor(payload) {
     super(ChangeNodeName.NAME, payload);

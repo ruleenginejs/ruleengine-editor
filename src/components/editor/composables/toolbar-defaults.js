@@ -1,11 +1,11 @@
-import { markRaw } from "vue";
-import localize from "@/utils/localize";
-import { GraphNodeType } from "./graph-node-type";
-import { registerActionHandler } from "./toolbar-actions";
-import VIconStartNode from "../icons/v-icon-start-node.vue";
-import VIconEndNode from "../icons/v-icon-end-node.vue";
-import VIconErrorNode from "../icons/v-icon-error-node.vue";
-import VIconSingleNode from "../icons//v-icon-single-node.vue";
+import { markRaw } from 'vue';
+import localize from '@/utils/localize';
+import { GraphNodeType } from './graph-node-type';
+import { registerActionHandler } from './toolbar-actions';
+import VIconStartNode from '../icons/v-icon-start-node.vue';
+import VIconEndNode from '../icons/v-icon-end-node.vue';
+import VIconErrorNode from '../icons/v-icon-error-node.vue';
+import VIconSingleNode from '../icons//v-icon-single-node.vue';
 
 const NEW_NODE_START_OFFSET = [20, 20];
 const NEW_NODE_CASCADE_OFFSET = [15, 15];
@@ -16,23 +16,23 @@ const NEW_NODE_OFFSET = [90, 105];
 const NEW_NODE_DEFAULT_OFFSET = [0, 0];
 
 export const defaultActionKey = Object.freeze({
-  zoomIn: "zoomIn",
-  zoomOut: "zoomOut",
-  remove: "remove",
-  fitCanvas: "fitCanvas",
-  addStart: "addStart",
-  addEnd: "addEnd",
-  addError: "addError",
-  addSingle: "addSingle",
-  addComposite: "addComposite"
+  zoomIn: 'zoomIn',
+  zoomOut: 'zoomOut',
+  remove: 'remove',
+  fitCanvas: 'fitCanvas',
+  addStart: 'addStart',
+  addEnd: 'addEnd',
+  addError: 'addError',
+  addSingle: 'addSingle',
+  addComposite: 'addComposite'
 });
 
 export const defaultActionDefinitions = [
   {
     id: defaultActionKey.addStart,
     icon: markRaw(VIconStartNode),
-    title: localize("editor.action.addStart"),
-    label: localize("editor.action.addStart"),
+    title: localize('editor.action.addStart'),
+    label: localize('editor.action.addStart'),
     disabled: false,
     visible: true,
     draggable: true,
@@ -41,8 +41,8 @@ export const defaultActionDefinitions = [
   {
     id: defaultActionKey.addError,
     icon: markRaw(VIconErrorNode),
-    title: localize("editor.action.addError"),
-    label: localize("editor.action.addError"),
+    title: localize('editor.action.addError'),
+    label: localize('editor.action.addError'),
     disabled: false,
     visible: true,
     draggable: true,
@@ -51,8 +51,8 @@ export const defaultActionDefinitions = [
   {
     id: defaultActionKey.addSingle,
     icon: markRaw(VIconSingleNode),
-    title: localize("editor.action.addSingle"),
-    label: localize("editor.action.addSingle"),
+    title: localize('editor.action.addSingle'),
+    label: localize('editor.action.addSingle'),
     disabled: false,
     visible: true,
     draggable: true,
@@ -61,8 +61,8 @@ export const defaultActionDefinitions = [
   {
     id: defaultActionKey.addEnd,
     icon: markRaw(VIconEndNode),
-    title: localize("editor.action.addEnd"),
-    label: localize("editor.action.addEnd"),
+    title: localize('editor.action.addEnd'),
+    label: localize('editor.action.addEnd'),
     disabled: false,
     visible: true,
     draggable: true,
@@ -70,9 +70,9 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.fitCanvas,
-    icon: "move",
-    title: localize("editor.action.fitCanvas"),
-    label: localize("editor.action.fitCanvas"),
+    icon: 'move',
+    title: localize('editor.action.fitCanvas'),
+    label: localize('editor.action.fitCanvas'),
     disabled: false,
     visible: true,
     draggable: false,
@@ -80,9 +80,9 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.zoomIn,
-    icon: "zoom-in",
-    title: localize("editor.action.zoomIn"),
-    label: localize("editor.action.zoomIn"),
+    icon: 'zoom-in',
+    title: localize('editor.action.zoomIn'),
+    label: localize('editor.action.zoomIn'),
     disabled: false,
     visible: true,
     draggable: false,
@@ -90,9 +90,9 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.zoomOut,
-    icon: "zoom-out",
-    title: localize("editor.action.zoomOut"),
-    label: localize("editor.action.zoomOut"),
+    icon: 'zoom-out',
+    title: localize('editor.action.zoomOut'),
+    label: localize('editor.action.zoomOut'),
     disabled: false,
     visible: true,
     draggable: false,
@@ -100,9 +100,9 @@ export const defaultActionDefinitions = [
   },
   {
     id: defaultActionKey.remove,
-    icon: "trash",
-    title: localize("editor.action.remove"),
-    label: localize("editor.action.remove"),
+    icon: 'trash',
+    title: localize('editor.action.remove'),
+    label: localize('editor.action.remove'),
     disabled: false,
     visible: true,
     draggable: false,
@@ -142,8 +142,8 @@ function handleAddTypedNode(editorInstance, actionId, args = null) {
   const isDragged = args?.event && args?.isClick === false;
   if (isDragged) {
     const mousePoint = {
-      x: (args.event.clientX ?? 0),
-      y: (args.event.clientY ?? 0)
+      x: args.event.clientX ?? 0,
+      y: args.event.clientY ?? 0
     };
     const offsetPoint = {
       x: offset[0],
@@ -187,12 +187,12 @@ function getNodeOptionsFromAction(actionId) {
       break;
     case defaultActionKey.addSingle:
       type = GraphNodeType.Single;
-      name = localize("editor.action.newNode");
+      name = localize('editor.action.newNode');
       offset = NEW_NODE_OFFSET;
       break;
     case defaultActionKey.addComposite:
       type = GraphNodeType.Composite;
-      name = localize("editor.action.newNode");
+      name = localize('editor.action.newNode');
       offset = NEW_NODE_OFFSET;
       break;
   }

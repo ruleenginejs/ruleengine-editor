@@ -1,5 +1,9 @@
-import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
-import { notImplemented } from "@/utils/errors";
+import {
+  createChanges,
+  createDefinition,
+  EditCommand
+} from '@/utils/edit-command';
+import { notImplemented } from '@/utils/errors';
 
 export class ChangeNodeProperty extends EditCommand {
   doApply(model, payload) {
@@ -29,6 +33,6 @@ export class ChangeNodeProperty extends EditCommand {
     return createDefinition(commandName, {
       nodeId,
       value
-    })
+    });
   }
 }

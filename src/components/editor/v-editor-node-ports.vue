@@ -1,7 +1,7 @@
 <script>
 export default {
-  name: "v-editor-node-ports"
-}
+  name: 'v-editor-node-ports'
+};
 </script>
 
 <script setup>
@@ -12,8 +12,8 @@ import {
   VCheckbox,
   VLayout,
   VActionItem
-} from "@ruleenginejs/ui";
-import localize from "@/utils/localize";
+} from '@ruleenginejs/ui';
+import localize from '@/utils/localize';
 
 const props = defineProps({
   ports: {
@@ -29,26 +29,22 @@ const props = defineProps({
     default: false
   }
 });
-const emit = defineEmits([
-  "update-name",
-  "update-disabled",
-  "remove"
-]);
+const emit = defineEmits(['update-name', 'update-disabled', 'remove']);
 
 function getLabel(index) {
-  return index === 0 ? props.label : "";
+  return index === 0 ? props.label : '';
 }
 
 function onUpdateDisabled(port, newValue) {
-  emit("update-disabled", port, newValue);
+  emit('update-disabled', port, newValue);
 }
 
 function onUpdateName(port, newValue) {
-  emit("update-name", port, newValue);
+  emit('update-name', port, newValue);
 }
 
 function onRemove(port) {
-  emit("remove", port);
+  emit('remove', port);
 }
 
 const t = localize;

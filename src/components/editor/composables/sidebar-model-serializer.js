@@ -1,6 +1,6 @@
-import { toRaw } from "vue";
-import { isDefined } from "@/utils/types";
-import { getModelType, GraphModelType } from "./graph-model-util";
+import { toRaw } from 'vue';
+import { isDefined } from '@/utils/types';
+import { getModelType, GraphModelType } from './graph-model-util';
 
 const serializers = {
   [GraphModelType.Node]: serializeNodeModel,
@@ -10,7 +10,7 @@ const serializers = {
 
 function serializeModel(rootModel, selectedModel = null) {
   if (!isDefined(rootModel)) {
-    throw new Error("Argument rootModel is required.");
+    throw new Error('Argument rootModel is required.');
   }
 
   const modelType = getModelType(selectedModel);
@@ -29,7 +29,8 @@ function serializeModel(rootModel, selectedModel = null) {
 function serializeNodeModel(rootModel, nodeModel) {
   const model = createNodeModel(nodeModel);
   model.ports = nodeModel.ports.map(createPortModel);
-  model.connections = rootModel.getConnectionsForNode(nodeModel.id)
+  model.connections = rootModel
+    .getConnectionsForNode(nodeModel.id)
     .map(createConnectionModel);
   return model;
 }
@@ -58,7 +59,7 @@ function createNodeModel(nodeModel) {
     handlerFile: nodeModel.handlerFile,
     headerColor: nodeModel.headerColor,
     props: toRaw(nodeModel.props)
-  }
+  };
 }
 
 function createPortModel(portModel) {
@@ -69,8 +70,8 @@ function createPortModel(portModel) {
     nodeId: portModel.nodeId,
     portType: portModel.type,
     disabled: portModel.disabled,
-    isErrorPort: portModel.isErrorPort,
-  }
+    isErrorPort: portModel.isErrorPort
+  };
 }
 
 function createConnectionModel(connectionModel) {
@@ -78,13 +79,12 @@ function createConnectionModel(connectionModel) {
     id: connectionModel.id,
     type: GraphModelType.Connection,
     definition: connectionModel.definition.toJSON()
-  }
+  };
 }
 
 function findPorts(node, excludePortId, portType) {
   if (!node) return [];
-  return node.getPortsByType(portType)
-    .filter(p => p.id !== excludePortId);
+  return node.getPortsByType(portType).filter(p => p.id !== excludePortId);
 }
 
 export default serializeModel;

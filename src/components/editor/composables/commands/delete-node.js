@@ -1,8 +1,12 @@
-import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
-import { CreateNode } from "./create-node";
+import {
+  createChanges,
+  createDefinition,
+  EditCommand
+} from '@/utils/edit-command';
+import { CreateNode } from './create-node';
 
 export class DeleteNode extends EditCommand {
-  static NAME = "delete-node";
+  static NAME = 'delete-node';
 
   constructor(payload) {
     super(DeleteNode.NAME, payload);
@@ -26,10 +30,10 @@ export class DeleteNode extends EditCommand {
     return createChanges(
       DeleteNode.createDef(node.id),
       CreateNode.createDef(node.toJSON())
-    )
+    );
   }
 
   static createDef(nodeId) {
-    return createDefinition(DeleteNode.NAME, { nodeId })
+    return createDefinition(DeleteNode.NAME, { nodeId });
   }
 }

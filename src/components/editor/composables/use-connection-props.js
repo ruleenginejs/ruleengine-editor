@@ -1,15 +1,15 @@
-import { computed, ref } from "vue";
-import localize from "@/utils/localize";
+import { computed, ref } from 'vue';
+import localize from '@/utils/localize';
 
 export default function useConnectionProps({ connectionModel }) {
-  const sectionName = ref(localize("editor.sidebar.connectionSection"));
+  const sectionName = ref(localize('editor.sidebar.connectionSection'));
 
   const editFromNode = computed({
     get: () => {
       const { from } = connectionModel.value.definition;
       return createPair(from.nodeId, from.outPort);
     },
-    set: () => { }
+    set: () => {}
   });
 
   const editToNode = computed({
@@ -17,7 +17,7 @@ export default function useConnectionProps({ connectionModel }) {
       const { to } = connectionModel.value.definition;
       return createPair(to.nodeId, to.inPort);
     },
-    set: () => { }
+    set: () => {}
   });
 
   const fromNodeOptions = computed(() => {
@@ -28,7 +28,7 @@ export default function useConnectionProps({ connectionModel }) {
         text: value,
         value
       }
-    ]
+    ];
   });
 
   const toNodeOptions = computed(() => {
@@ -39,7 +39,7 @@ export default function useConnectionProps({ connectionModel }) {
         text: value,
         value
       }
-    ]
+    ];
   });
 
   function createPair(nodeId, portName) {
@@ -52,5 +52,5 @@ export default function useConnectionProps({ connectionModel }) {
     editToNode,
     fromNodeOptions,
     toNodeOptions
-  }
+  };
 }

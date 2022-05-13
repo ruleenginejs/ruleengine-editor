@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive } from 'vue';
 
 let _nextUid = 0;
 export function generateUid() {
@@ -37,7 +37,7 @@ export class GraphBaseModel {
     return {};
   }
 
-  _initComputed() { }
+  _initComputed() {}
 
-  _initWatchers() { }
+  _initWatchers() {}
 }

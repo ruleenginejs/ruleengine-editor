@@ -1,5 +1,5 @@
-import logger from "./logger";
-import { isPlainObject } from "./types";
+import logger from './logger';
+import { isPlainObject } from './types';
 
 export class EditCommand {
   constructor(name, payload) {
@@ -19,7 +19,7 @@ export class EditCommand {
   }
 
   // eslint-disable-next-line no-unused-vars
-  doApply(model, payload) { }
+  doApply(model, payload) {}
 
   doError(err) {
     logger.error(`Error apply command: ${this.name}`, err);
@@ -47,7 +47,7 @@ export class EditCommandsRegistry {
 
     const toUnbind = () => {
       this.commands.delete(commandId);
-    }
+    };
 
     return toUnbind;
   }
@@ -65,14 +65,14 @@ export function createDefinition(name, payload) {
   return {
     name,
     payload
-  }
+  };
 }
 
 export function createChanges(appliedCommandDef, reverseCommandDef) {
   return {
     applied: appliedCommandDef,
     reverse: reverseCommandDef
-  }
+  };
 }
 
 export function applyEditCommands(model, editCommandDefs) {
@@ -88,18 +88,20 @@ export function createEditCommands(editCommandDefs) {
     return [];
   }
 
-  return editCommandDefs.map((command) => {
-    if (!command) {
-      return null;
-    }
+  return editCommandDefs
+    .map(command => {
+      if (!command) {
+        return null;
+      }
 
-    return createCommand(command.name, command.payload);
-  }).filter(val => !!val);
+      return createCommand(command.name, command.payload);
+    })
+    .filter(val => !!val);
 }
 
 export function createCommand(name, payload) {
   const ctor = EditCommandsRegistry.current.getCommand(name);
-  if (typeof ctor === "function") {
+  if (typeof ctor === 'function') {
     return new ctor(payload);
   }
   return null;

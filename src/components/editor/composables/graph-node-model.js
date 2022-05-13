@@ -1,23 +1,40 @@
-import { computed, nextTick } from "vue"
-import localize from "@/utils/localize";
-import { round } from "@/utils/numbers";
-import { emptyString, isBoolean, isDefined, isPlainObject, isString, notEmptyString } from "@/utils/types";
-import { GraphNodeType, isNavNodeType, validateNodeType } from "./graph-node-type";
-import { createPort, DEFAULT_PORT } from "./graph-port-model";
-import { SelectableModel } from "./selectable-model";
-import { GraphPortType } from "./graph-port-type";
-import { createInstance, updateNextUid } from "./graph-base-model";
-import { PACKAGE_PREFIX, posixIsAbsolute, RELATIVE_PREFIX, replaceBackslash, winIsAbsolute } from "@/utils/path";
+import { computed, nextTick } from 'vue';
+import localize from '@/utils/localize';
+import { round } from '@/utils/numbers';
+import {
+  emptyString,
+  isBoolean,
+  isDefined,
+  isPlainObject,
+  isString,
+  notEmptyString
+} from '@/utils/types';
+import {
+  GraphNodeType,
+  isNavNodeType,
+  validateNodeType
+} from './graph-node-type';
+import { createPort, DEFAULT_PORT } from './graph-port-model';
+import { SelectableModel } from './selectable-model';
+import { GraphPortType } from './graph-port-type';
+import { createInstance, updateNextUid } from './graph-base-model';
+import {
+  PACKAGE_PREFIX,
+  posixIsAbsolute,
+  RELATIVE_PREFIX,
+  replaceBackslash,
+  winIsAbsolute
+} from '@/utils/path';
 
 export class GraphNodeModel extends SelectableModel {
   constructor(options) {
     super();
     options = options || {};
 
-    if (notEmptyString(options.id) || typeof options.id === "number") {
+    if (notEmptyString(options.id) || typeof options.id === 'number') {
       this.id = options.id;
 
-      if (typeof this.id === "number") {
+      if (typeof this.id === 'number') {
         updateNextUid(this.id);
       }
     }
@@ -83,8 +100,12 @@ export class GraphNodeModel extends SelectableModel {
       this.inPorts = computed(() => [this.ports[0]]);
       this.outPorts = computed(() => [this.ports[0]]);
     } else {
-      this.inPorts = computed(() => this.ports.filter(p => p.type === GraphPortType.IN));
-      this.outPorts = computed(() => this.ports.filter(p => p.type === GraphPortType.OUT));
+      this.inPorts = computed(() =>
+        this.ports.filter(p => p.type === GraphPortType.IN)
+      );
+      this.outPorts = computed(() =>
+        this.ports.filter(p => p.type === GraphPortType.OUT)
+      );
     }
   }
 
@@ -92,7 +113,7 @@ export class GraphNodeModel extends SelectableModel {
     const value = {
       id: this.id,
       type: this.type
-    }
+    };
 
     if (this.name) {
       value.name = this.name;
@@ -117,11 +138,8 @@ export class GraphNodeModel extends SelectableModel {
 
   _buildCanvas() {
     const value = {
-      position: [
-        round(this.positionX, 2),
-        round(this.positionY, 2)
-      ]
-    }
+      position: [round(this.positionX, 2), round(this.positionY, 2)]
+    };
     if (isDefined(this.headerColor)) {
       value.color = this.headerColor;
     }
@@ -137,13 +155,9 @@ export class GraphNodeModel extends SelectableModel {
 
   _buildPorts() {
     return {
-      in: this.inPorts
-        .map(port => port.getValue())
-        .filter(isDefined),
-      out: this.outPorts
-        .map(port => port.getValue())
-        .filter(isDefined)
-    }
+      in: this.inPorts.map(port => port.getValue()).filter(isDefined),
+      out: this.outPorts.map(port => port.getValue()).filter(isDefined)
+    };
   }
 
   _buildHandlerFile() {
@@ -153,7 +167,10 @@ export class GraphNodeModel extends SelectableModel {
       return this.handlerFile.slice(PACKAGE_PREFIX.length);
     } else if (this.handlerFile.startsWith(RELATIVE_PREFIX)) {
       return this.handlerFile;
-    } else if (posixIsAbsolute(this.handlerFile) || winIsAbsolute(this.handlerFile)) {
+    } else if (
+      posixIsAbsolute(this.handlerFile) ||
+      winIsAbsolute(this.handlerFile)
+    ) {
       return this.handlerFile;
     } else {
       return `${RELATIVE_PREFIX}${this.handlerFile}`;
@@ -183,11 +200,13 @@ export class GraphNodeModel extends SelectableModel {
       }
     }
 
-    const _in = [...inPorts].map(
-      name => createPort(nodeId, name, GraphPortType.IN));
+    const _in = [...inPorts].map(name =>
+      createPort(nodeId, name, GraphPortType.IN)
+    );
 
-    const out = [...outPorts].map(
-      name => createPort(nodeId, name, GraphPortType.OUT));
+    const out = [...outPorts].map(name =>
+      createPort(nodeId, name, GraphPortType.OUT)
+    );
 
     const result = {
       in: _in,
@@ -252,12 +271,12 @@ export class GraphNodeModel extends SelectableModel {
     }
 
     let x = point[0];
-    if (typeof x !== "number") {
+    if (typeof x !== 'number') {
       x = 0;
     }
 
     let y = point[1];
-    if (typeof y !== "number") {
+    if (typeof y !== 'number') {
       y = 0;
     }
 
@@ -267,11 +286,11 @@ export class GraphNodeModel extends SelectableModel {
   _getNameFromType(type) {
     switch (type) {
       case GraphNodeType.Start:
-        return localize("editor.startNode");
+        return localize('editor.startNode');
       case GraphNodeType.End:
-        return localize("editor.endNode");
+        return localize('editor.endNode');
       case GraphNodeType.Error:
-        return localize("editor.errorNode");
+        return localize('editor.errorNode');
       default:
         return null;
     }
@@ -362,8 +381,10 @@ export class GraphNodeModel extends SelectableModel {
 
   inPosition(x, y, tolerance = null) {
     if (isDefined(tolerance)) {
-      return Math.abs(this.positionX - x) < tolerance &&
-        Math.abs(this.positionY - y) < tolerance;
+      return (
+        Math.abs(this.positionX - x) < tolerance &&
+        Math.abs(this.positionY - y) < tolerance
+      );
     } else {
       return this.positionX === x && this.positionY === y;
     }
@@ -410,7 +431,7 @@ export class GraphNodeModel extends SelectableModel {
     } else {
       this.headerColor = null;
     }
-    return { oldValue, newValue: this.headerColor }
+    return { oldValue, newValue: this.headerColor };
   }
 
   changeUserProp(propName, newValue) {
@@ -420,7 +441,7 @@ export class GraphNodeModel extends SelectableModel {
     } else {
       delete this.props[propName];
     }
-    return { oldValue, newValue: this.props[propName] }
+    return { oldValue, newValue: this.props[propName] };
   }
 }
 

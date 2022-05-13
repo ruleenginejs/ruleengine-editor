@@ -67,7 +67,8 @@
             :selected="port.selected"
             @update:selected="onObjectSelected(port, $event)"
             @new-link="onNewLink"
-          >{{ port.name }}</v-graph-port>
+            >{{ port.name }}</v-graph-port
+          >
         </template>
         <template #right>
           <v-graph-port
@@ -82,7 +83,8 @@
             :selected="port.selected"
             @update:selected="onObjectSelected(port, $event)"
             @new-link="onNewLink"
-          >{{ port.name }}</v-graph-port>
+            >{{ port.name }}</v-graph-port
+          >
         </template>
       </v-graph-node>
     </template>
@@ -110,12 +112,12 @@ import {
   VGraphConnection,
   VIconDocText,
   VIconScript
-} from "@ruleenginejs/ui";
-import { toRefs } from "vue";
-import useEditorGraph from "./composables/use-editor-graph";
+} from '@ruleenginejs/ui';
+import { toRefs } from 'vue';
+import useEditorGraph from './composables/use-editor-graph';
 
 export default {
-  name: "v-editor-graph",
+  name: 'v-editor-graph',
   components: {
     VGraphCanvas,
     VGraphCircleNode,
@@ -155,18 +157,9 @@ export default {
       default: undefined
     }
   },
-  emits: [
-    "update:viewport",
-    "update:zoom",
-    "created"
-  ],
+  emits: ['update:viewport', 'update:zoom', 'created'],
   setup(props, { emit }) {
-    const {
-      model,
-      viewport,
-      zoom,
-      resizeDelay
-    } = toRefs(props);
+    const { model, viewport, zoom, resizeDelay } = toRefs(props);
 
     const graph = useEditorGraph({
       model,

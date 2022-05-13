@@ -1,7 +1,7 @@
 <script>
 export default {
-  name: "v-editor-node-props"
-}
+  name: 'v-editor-node-props'
+};
 </script>
 
 <script setup>
@@ -17,18 +17,18 @@ import {
   VLayout,
   VActionList,
   VActionItem
-} from "@ruleenginejs/ui";
-import { toRefs } from "vue";
-import useNodeProps from "./composables/use-node-props";
-import useNodePortProps from "./composables/use-node-port-props";
-import useNodeConnectionProps from "./composables/use-node-connection-props";
-import useNodeUserProps from "./composables/use-node-user-props";
-import localize from "@/utils/localize";
-import { GraphPortType } from "./composables/graph-port-type";
-import VEditorNodePorts from "./v-editor-node-ports.vue";
-import VEditorNodeConnnections from "./v-editor-node-connections.vue";
-import VEditorUserProps from "./v-editor-user-props.vue";
-import useNodeUserPropsConfig from "./composables/use-node-user-props-config";
+} from '@ruleenginejs/ui';
+import { toRefs } from 'vue';
+import useNodeProps from './composables/use-node-props';
+import useNodePortProps from './composables/use-node-port-props';
+import useNodeConnectionProps from './composables/use-node-connection-props';
+import useNodeUserProps from './composables/use-node-user-props';
+import localize from '@/utils/localize';
+import { GraphPortType } from './composables/graph-port-type';
+import VEditorNodePorts from './v-editor-node-ports.vue';
+import VEditorNodeConnnections from './v-editor-node-connections.vue';
+import VEditorUserProps from './v-editor-user-props.vue';
+import useNodeUserPropsConfig from './composables/use-node-user-props-config';
 
 const props = defineProps({
   model: {
@@ -44,13 +44,9 @@ const props = defineProps({
     default: null
   }
 });
-const emit = defineEmits(["edit"]);
+const emit = defineEmits(['edit']);
 
-const {
-  model,
-  editDelay,
-  provider
-} = toRefs(props);
+const { model, editDelay, provider } = toRefs(props);
 
 const {
   sectionName,
@@ -92,30 +88,21 @@ const {
   editDelay
 });
 
-const {
-  inConnections,
-  outConnections,
-  onConnectionRemove,
-} = useNodeConnectionProps({
-  nodeModel: model,
-  emit,
-  editDelay
-});
+const { inConnections, outConnections, onConnectionRemove } =
+  useNodeConnectionProps({
+    nodeModel: model,
+    emit,
+    editDelay
+  });
 
-const {
-  userPropsConfig,
-  resetUserProps
-} = useNodeUserPropsConfig({
+const { userPropsConfig, resetUserProps } = useNodeUserPropsConfig({
   nodeModel: model,
   editScriptFile,
   provider,
   emit
 });
 
-const {
-  userFields,
-  onUpdateUserField
-} = useNodeUserProps({
+const { userFields, onUpdateUserField } = useNodeUserProps({
   nodeModel: model,
   userPropsConfig,
   emit,
@@ -137,7 +124,7 @@ const t = localize;
     <v-fieldset :label="t('editor.sidebar.attributes')" b-border>
       <v-field-layout v-if="canShowName">
         <template #label>
-          <v-label truncate>{{ t("editor.hint.name") }}</v-label>
+          <v-label truncate>{{ t('editor.hint.name') }}</v-label>
         </template>
         <template #value>
           <v-input v-model="editName" />
@@ -145,7 +132,7 @@ const t = localize;
       </v-field-layout>
       <v-field-layout v-if="canShowColor">
         <template #label>
-          <v-label truncate>{{ t("editor.hint.color") }}</v-label>
+          <v-label truncate>{{ t('editor.hint.color') }}</v-label>
         </template>
         <template #value>
           <v-input v-if="useCustomColor" v-model="editColor" />
@@ -166,21 +153,26 @@ const t = localize;
               <v-label
                 truncate
                 :for="genElementId('checkbox', 'use-custom-color')"
-              >{{ t("editor.hint.useCustomColor") }}</v-label>
+                >{{ t('editor.hint.useCustomColor') }}</v-label
+              >
             </v-layout>
           </v-layout>
         </template>
       </v-field-layout>
       <v-field-layout>
         <template #label>
-          <v-label truncate>{{ t("editor.hint.id") }}</v-label>
+          <v-label truncate>{{ t('editor.hint.id') }}</v-label>
         </template>
         <template #value>
           <v-label truncate>{{ model.id }}</v-label>
         </template>
       </v-field-layout>
     </v-fieldset>
-    <v-fieldset v-if="canShowHandler" :label="t('editor.sidebar.behavior')" b-border>
+    <v-fieldset
+      v-if="canShowHandler"
+      :label="t('editor.sidebar.behavior')"
+      b-border
+    >
       <v-field-layout>
         <template #label>
           <v-label truncate>{{ t('editor.hint.script') }}</v-label>
@@ -204,7 +196,11 @@ const t = localize;
                 class="codicon codicon-go-to-file"
                 :title="t('editor.sidebar.openFile')"
               ></span>
-              <span v-else class="codicon codicon-new-file" :title="t('editor.sidebar.newFile')"></span>
+              <span
+                v-else
+                class="codicon codicon-new-file"
+                :title="t('editor.sidebar.newFile')"
+              ></span>
             </template>
           </v-autocomplete>
         </template>
@@ -217,12 +213,14 @@ const t = localize;
             icon="add"
             :title="t('editor.sidebar.addPort')"
             @click="onPortAdd(GraphPortType.IN)"
-          >{{ t('editor.sidebar.addInPort') }}</v-action-item>
+            >{{ t('editor.sidebar.addInPort') }}</v-action-item
+          >
           <v-action-item
             icon="add"
             :title="t('editor.sidebar.addPort')"
             @click="onPortAdd(GraphPortType.OUT)"
-          >{{ t('editor.sidebar.addOutPort') }}</v-action-item>
+            >{{ t('editor.sidebar.addOutPort') }}</v-action-item
+          >
         </v-action-list>
       </template>
       <v-editor-node-ports
@@ -242,7 +240,11 @@ const t = localize;
         @remove="onPortRemove"
       />
     </v-fieldset>
-    <v-fieldset v-if="canShowConnections" :label="t('editor.sidebar.connections')" b-border>
+    <v-fieldset
+      v-if="canShowConnections"
+      :label="t('editor.sidebar.connections')"
+      b-border
+    >
       <v-editor-node-connnections
         v-if="inConnections.length"
         :connections="inConnections"

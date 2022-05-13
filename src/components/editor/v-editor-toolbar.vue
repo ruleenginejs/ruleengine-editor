@@ -1,7 +1,7 @@
 <script>
 export default {
-  name: "v-editor-toolbar"
-}
+  name: 'v-editor-toolbar'
+};
 </script>
 
 <script setup>
@@ -9,10 +9,10 @@ import {
   VFloatingToolbar,
   VActionList,
   VActionItem,
-  VDraggable,
-} from "@ruleenginejs/ui";
-import useToolbar from "./composables/use-toolbar";
-import { toRefs } from "vue";
+  VDraggable
+} from '@ruleenginejs/ui';
+import useToolbar from './composables/use-toolbar';
+import { toRefs } from 'vue';
 
 const props = defineProps({
   actions: {
@@ -53,10 +53,10 @@ const props = defineProps({
   }
 });
 const emit = defineEmits([
-  "action-click",
-  "update:invalidate",
-  "update:vertical",
-  "update:showActionLabel"
+  'action-click',
+  'update:invalidate',
+  'update:vertical',
+  'update:showActionLabel'
 ]);
 
 const {
@@ -116,7 +116,9 @@ defineExpose({
             :title="action.title"
             :disabled="action.disabled"
           >
-            <template v-if="showActionLabel" #default>{{ action.label }}</template>
+            <template v-if="showActionLabel" #default>{{
+              action.label
+            }}</template>
             <template v-if="action.icon && !isString(action.icon)" #icon>
               <component :is="action.icon" />
             </template>
@@ -130,7 +132,9 @@ defineExpose({
           :disabled="action.disabled"
           @click="onActionClick(action, $event)"
         >
-          <template v-if="showActionLabel" #default>{{ action.label }}</template>
+          <template v-if="showActionLabel" #default>{{
+            action.label
+          }}</template>
           <template v-if="action.icon && !isString(action.icon)" #icon>
             <component :is="action.icon" />
           </template>
@@ -141,5 +145,5 @@ defineExpose({
 </template>
 
 <style>
-@import "editor-toolbar";
+@import 'editor-toolbar';
 </style>

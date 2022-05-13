@@ -1,8 +1,12 @@
-import { createChanges, createDefinition, EditCommand } from "@/utils/edit-command";
-import { CreatePort } from "./create-port";
+import {
+  createChanges,
+  createDefinition,
+  EditCommand
+} from '@/utils/edit-command';
+import { CreatePort } from './create-port';
 
 export class DeletePort extends EditCommand {
-  static NAME = "delete-port";
+  static NAME = 'delete-port';
 
   constructor(payload) {
     super(DeletePort.NAME, payload);
@@ -31,10 +35,10 @@ export class DeletePort extends EditCommand {
     return createChanges(
       DeletePort.createDef(port.nodeId, port.id),
       CreatePort.createDef(port.nodeId, port.type, port.name, port.disabled)
-    )
+    );
   }
 
   static createDef(nodeId, portId) {
-    return createDefinition(DeletePort.NAME, { nodeId, portId })
+    return createDefinition(DeletePort.NAME, { nodeId, portId });
   }
 }

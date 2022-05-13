@@ -1,5 +1,5 @@
-import { isDefined } from "@/utils/types";
-import debounce from "debounce";
+import { isDefined } from '@/utils/types';
+import debounce from 'debounce';
 
 function createHandler(func, delay = null) {
   if (!isDefined(delay)) {
@@ -10,7 +10,7 @@ function createHandler(func, delay = null) {
 }
 
 function notifyEdit(editCommand, emit) {
-  emit("edit", Array.isArray(editCommand) ? editCommand : [editCommand]);
+  emit('edit', Array.isArray(editCommand) ? editCommand : [editCommand]);
 }
 
 export function createEditHandler(func, emit, editDelay = null) {

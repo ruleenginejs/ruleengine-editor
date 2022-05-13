@@ -1,7 +1,7 @@
-import { ChangeNodeProperty } from "./change-node-property";
+import { ChangeNodeProperty } from './change-node-property';
 
 export class ChangeNodeColor extends ChangeNodeProperty {
-  static NAME = "change-node-color";
+  static NAME = 'change-node-color';
 
   constructor(payload) {
     super(ChangeNodeColor.NAME, payload);

@@ -1,13 +1,13 @@
 <script>
 export default {
-  name: "v-editor-port-props"
+  name: 'v-editor-port-props'
 };
 </script>
 
 <script setup>
-import { toRefs } from "vue";
+import { toRefs } from 'vue';
 import usePortProps from './composables/use-port-props';
-import localize from "@/utils/localize";
+import localize from '@/utils/localize';
 import {
   VSidebarSection,
   VFieldset,
@@ -16,7 +16,7 @@ import {
   VInput,
   VCheckbox,
   VLayout
-} from "@ruleenginejs/ui";
+} from '@ruleenginejs/ui';
 
 const props = defineProps({
   model: {
@@ -31,8 +31,8 @@ const props = defineProps({
     type: Object,
     default: null
   }
-})
-const emit = defineEmits(["edit"])
+});
+const emit = defineEmits(['edit']);
 
 const { model, editDelay } = toRefs(props);
 const {
@@ -67,7 +67,11 @@ const t = localize;
           <v-label truncate>{{ t('editor.hint.name') }}</v-label>
         </template>
         <template #value>
-          <v-input v-model="editName" :error="validation.error" :message="validation.message" />
+          <v-input
+            v-model="editName"
+            :error="validation.error"
+            :message="validation.message"
+          />
         </template>
       </v-field-layout>
       <v-field-layout>
@@ -77,7 +81,9 @@ const t = localize;
         <template #value>
           <v-layout gutter="sm" h-center>
             <v-checkbox :id="checkboxId('disabled')" v-model="editDisabled" />
-            <v-label :for="checkboxId('disabled')">{{ t('editor.hint.disabled') }}</v-label>
+            <v-label :for="checkboxId('disabled')">{{
+              t('editor.hint.disabled')
+            }}</v-label>
           </v-layout>
         </template>
       </v-field-layout>
@@ -87,11 +93,14 @@ const t = localize;
         </template>
         <template #value>
           <v-layout gutter="sm" h-center>
-            <v-checkbox :id="checkboxId('error')" :disabled="!canEditError" v-model="editIsError" />
-            <v-label
+            <v-checkbox
+              :id="checkboxId('error')"
               :disabled="!canEditError"
-              :for="checkboxId('error')"
-            >{{ t('editor.hint.error') }}</v-label>
+              v-model="editIsError"
+            />
+            <v-label :disabled="!canEditError" :for="checkboxId('error')">{{
+              t('editor.hint.error')
+            }}</v-label>
           </v-layout>
         </template>
       </v-field-layout>

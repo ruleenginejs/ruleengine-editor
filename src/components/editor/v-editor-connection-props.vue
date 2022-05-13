@@ -1,20 +1,20 @@
 <script>
 export default {
-  name: "v-editor-connection-props"
+  name: 'v-editor-connection-props'
 };
 </script>
 
 <script setup>
-import { toRefs } from "vue";
+import { toRefs } from 'vue';
 import useConnectionProps from './composables/use-connection-props';
-import localize from "@/utils/localize";
+import localize from '@/utils/localize';
 import {
   VSidebarSection,
   VFieldset,
   VFieldLayout,
   VLabel,
   VSelectBox
-} from "@ruleenginejs/ui";
+} from '@ruleenginejs/ui';
 
 const props = defineProps({
   model: {
@@ -29,8 +29,8 @@ const props = defineProps({
     type: Object,
     default: null
   }
-})
-const emit = defineEmits(["edit"])
+});
+const emit = defineEmits(['edit']);
 
 const { model, editDelay } = toRefs(props);
 const {
