@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 import path from 'path';
 
 const globals = {
-  'vue': 'Vue',
-  'debounce': 'Debounce',
+  vue: 'Vue',
+  debounce: 'Debounce',
   '@ruleenginejs/ui': 'RuleEngineUI',
   'is-plain-object': 'IsPlainObject'
 };
@@ -20,7 +20,7 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/index.js'),
       name: 'RuleEngineEditor',
-      fileName: (format) => `ruleengine-editor.${format}.js`
+      fileName: format => `ruleengine-editor.${format}.js`
     },
     rollupOptions: {
       external: Object.keys(globals),
@@ -30,4 +30,4 @@ export default defineConfig({
       }
     }
   }
-})
+});
