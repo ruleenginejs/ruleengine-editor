@@ -13,11 +13,10 @@
     "lint": "eslint . --ext .vue,.js --fix --ignore-path .gitignore",
     "format": "prettier --write \"src/**/*.{js,vue,css}\"",
     "postversion": "npm run push",
-    "push": "git push origin master --tags",
-    "prepare": "husky install"
+    "push": "git push origin master --tags"
   },
   "peerDependencies": {
-    "@ruleenginejs/ui": "^1.2.4",
+    "@ruleenginejs/ui": "^1.2.5",
     "@vscode/codicons": "^0.0.32",
     "vue": "^3.2.38"
   },
